@@ -68,27 +68,37 @@ analyze_changes() {
             package.json|pnpm-lock.yaml|requirements.txt|Gemfile|Gemfile.lock)
                 types+=("deps")
                 ;;
-            *test*|*spec*|*.test.sh|*.spec.sh)
+            *.test.sh|*.spec.sh|*test.sh|*spec.sh)
                 types+=("test")
                 ;;
-            *.md|*.txt|*.rst|docs/*|README*)
+            *test*|*spec*)
+                # Only if not already caught by specific test patterns
+                if [[ ! "$file" =~ \.(test|spec)\.sh$ ]]; then
+                    types+=("test")
+                fi
+                ;;
+            *.md|*.txt|*.rst|README*|**/docs/*|_docs/*)
                 types+=("docs")
                 ;;
             *.json|*.yml|*.yaml|*.toml|*.ini|.env*|Dockerfile|docker-compose*)
                 types+=("config")
                 ;;
-            *.sh|*.bash|*.zsh|_scripts/*)
-                types+=("script")
+            *.sh|*.bash|*.zsh|_scripts/*|**/scripts/*)
+                # Exclude test scripts
+                if [[ ! "$file" =~ \.(test|spec)\.sh$ ]]; then
+                    types+=("script")
+                fi
                 ;;
-            .gitignore|.gitattributes|.github/*)
+            .gitignore|.gitattributes|.github/*|**/.github/*)
                 types+=("ci")
                 ;;
             *.css|*.scss|*.sass|*.less|*.styl)
                 types+=("style")
                 ;;
             *)
+                # Check if it's a new file or modified file
                 if git diff --cached --name-only | grep -q "^$file$"; then
-                    if git diff --cached "$file" | grep -q "^+.*function\|^+.*def\|^+.*class"; then
+                    if git diff --cached "$file" | grep -q "^+.*function\|^+.*def\|^+.*class\|^+.*export"; then
                         types+=("feat")
                     else
                         types+=("fix")
@@ -118,11 +128,17 @@ generate_commit_message() {
         if [[ "$file" =~ ^modulo[0-9]+/ ]]; then
             scope="module$(echo "$file" | sed 's/modulo\([0-9]\+\).*/\1/')"
             break
-        elif [[ "$file" =~ ^_scripts/ ]]; then
+        elif [[ "$file" =~ ^_scripts/ ]] || [[ "$file" =~ scripts/ ]]; then
             scope="scripts"
             break
-        elif [[ "$file" =~ ^_docs/ ]]; then
+        elif [[ "$file" =~ ^_docs/ ]] || [[ "$file" =~ docs/ ]]; then
             scope="docs"
+            break
+        elif [[ "$file" =~ ejercicios/ ]]; then
+            scope="exercises"
+            break
+        elif [[ "$file" =~ proyectos/ ]]; then
+            scope="projects"
             break
         fi
     done
@@ -145,13 +161,23 @@ generate_commit_message() {
             ;;
         "docs")
             if [[ ${#files[@]} -eq 1 ]]; then
-                description="update $(basename "${files[0]}")"
+                local filename
+                filename=$(basename "${files[0]}")
+                if [[ "$filename" == "README.md" ]]; then
+                    description="update README documentation"
+                else
+                    description="update $(basename "${files[0]}")"
+                fi
             else
-                description="update documentation"
+                description="update documentation files"
             fi
             ;;
         "test")
-            description="add/update tests"
+            if [[ ${#files[@]} -eq 1 ]]; then
+                description="add/update test in $(basename "${files[0]}")"
+            else
+                description="add/update test suite"
+            fi
             ;;
         "config")
             description="update configuration files"
