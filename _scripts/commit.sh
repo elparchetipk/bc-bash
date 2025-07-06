@@ -32,8 +32,8 @@ show_help() {
     echo "  $0 status    # Check current status"
     echo "  $0 setup     # Initial setup"
     echo ""
-    echo "Configuration file: scripts/commit-config.json"
-    echo "Documentation: scripts/README.md"
+    echo "Configuration file: _scripts/commit-config.json"
+    echo "Documentation: _scripts/README.md"
 }
 
 show_status() {

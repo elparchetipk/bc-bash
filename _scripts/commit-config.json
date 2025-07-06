@@ -18,8 +18,8 @@
     "modulo1": "module1",
     "modulo2": "module2",
     "modulo3": "module3",
-    "scripts": "scripts",
-    "docs": "docs",
+    "_scripts": "scripts",
+    "_docs": "docs",
     "ejercicios": "exercises",
     "proyectos": "projects"
   },

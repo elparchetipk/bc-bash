@@ -5,42 +5,50 @@ Automated commit generation with conventional commit standards and best practice
 ## Scripts
 
 ### `auto-commit.sh`
+
 Main auto-commit script that analyzes changes and generates conventional commits automatically.
 
 **Features:**
+
 - Automatic commit type detection based on file patterns
 - Conventional commit format (type(scope): description)
 - Smart batching for large commits
 - Configurable via JSON configuration
 
 **Usage:**
+
 ```bash
-./scripts/auto-commit.sh
+./_scripts/auto-commit.sh
 ```
 
 ### `quick-commit.sh`
+
 Interactive commit script for manual commit type selection.
 
 **Usage:**
+
 ```bash
-./scripts/quick-commit.sh          # Interactive mode
-./scripts/quick-commit.sh auto     # Use auto-commit
+./_scripts/quick-commit.sh          # Interactive mode
+./_scripts/quick-commit.sh auto     # Use auto-commit
 ```
 
 ### `smart-commit.sh`
+
 Future AI-enhanced commit script (placeholder).
 
 ### `setup-auto-commit.sh`
+
 Setup script for configuration and git hooks.
 
 **Usage:**
+
 ```bash
-./scripts/setup-auto-commit.sh
+./_scripts/setup-auto-commit.sh
 ```
 
 ## Configuration
 
-Configuration is stored in `scripts/commit-config.json`:
+Configuration is stored in `_scripts/commit-config.json`:
 
 ```json
 {
@@ -79,13 +87,15 @@ Following conventional commit standards:
 ## Examples
 
 ### Automatic Detection
+
 ```bash
 # Changes to modulo1/README.md -> docs(module1): update README.md
-# Changes to scripts/deploy.sh -> script(scripts): update deploy.sh
+# Changes to _scripts/deploy.sh -> script(scripts): update deploy.sh
 # Multiple files -> feat: add new features and components
 ```
 
 ### Manual Override
+
 ```bash
 git add specific-files
 git commit -m "feat(module2): add new exercise solution"
@@ -102,6 +112,7 @@ git commit -m "feat(module2): add new exercise solution"
 ## Dependencies
 
 Optional dependencies for enhanced functionality:
+
 - `jq`: JSON parsing for configuration
 - `shfmt`: Shell script formatting
 - `git`: Version control (required)
@@ -109,16 +120,19 @@ Optional dependencies for enhanced functionality:
 ## Installation
 
 1. Make scripts executable:
+
 ```bash
-chmod +x scripts/*.sh
+chmod +x _scripts/*.sh
 ```
 
 2. Run setup:
+
 ```bash
-./scripts/setup-auto-commit.sh
+./_scripts/setup-auto-commit.sh
 ```
 
 3. Start using:
+
 ```bash
-./scripts/auto-commit.sh
+./_scripts/auto-commit.sh
 ```

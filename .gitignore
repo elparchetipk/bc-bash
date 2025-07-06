@@ -64,8 +64,8 @@ docs/_build/
 
 # Archivos específicos del proyecto
 # (descomenta según necesites)
-# secrets/
-# private/
+# _docs/private/
+# _scripts/secrets/
 # local/
 
 # Node modules si usas herramientas de Node.js con pnpm

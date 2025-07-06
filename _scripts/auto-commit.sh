@@ -77,7 +77,7 @@ analyze_changes() {
             *.json|*.yml|*.yaml|*.toml|*.ini|.env*|Dockerfile|docker-compose*)
                 types+=("config")
                 ;;
-            *.sh|*.bash|*.zsh|scripts/*)
+            *.sh|*.bash|*.zsh|_scripts/*)
                 types+=("script")
                 ;;
             .gitignore|.gitattributes|.github/*)
@@ -118,10 +118,10 @@ generate_commit_message() {
         if [[ "$file" =~ ^modulo[0-9]+/ ]]; then
             scope="module$(echo "$file" | sed 's/modulo\([0-9]\+\).*/\1/')"
             break
-        elif [[ "$file" =~ ^scripts/ ]]; then
+        elif [[ "$file" =~ ^_scripts/ ]]; then
             scope="scripts"
             break
-        elif [[ "$file" =~ ^docs?/ ]]; then
+        elif [[ "$file" =~ ^_docs/ ]]; then
             scope="docs"
             break
         fi

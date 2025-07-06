@@ -74,7 +74,7 @@ create_config() {
     "*.sh": "script",
     "*.bash": "script",
     "*.zsh": "script",
-    "scripts/*": "script",
+    "_scripts/*": "script",
     ".gitignore": "ci",
     ".gitattributes": "ci",
     ".github/*": "ci",
@@ -356,12 +356,12 @@ main() {
     success "Auto-commit system setup completed!"
     echo ""
     echo "Usage:"
-    echo "  ./scripts/auto-commit.sh      # Automatic commits"
-    echo "  ./scripts/quick-commit.sh     # Interactive commits"
-    echo "  ./scripts/smart-commit.sh     # AI-enhanced commits (coming soon)"
+    echo "  ./_scripts/auto-commit.sh      # Automatic commits"
+    echo "  ./_scripts/quick-commit.sh     # Interactive commits"
+    echo "  ./_scripts/smart-commit.sh     # AI-enhanced commits (coming soon)"
     echo ""
-    echo "Configuration: scripts/commit-config.json"
-    echo "Documentation: scripts/README.md"
+    echo "Configuration: _scripts/commit-config.json"
+    echo "Documentation: _scripts/README.md"
 }
 
 main "$@"
