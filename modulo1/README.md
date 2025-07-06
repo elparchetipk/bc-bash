@@ -103,11 +103,11 @@ Vamos a crear nuestra primera estructura de trabajo:
 cd ~
 
 # Crear estructura para el bootcamp
-mkdir -p bootcamp-bash/modulo1/ejercicios
-mkdir -p bootcamp-bash/modulo1/proyectos
+mkdir -p bc-bash/modulo1/ejercicios
+mkdir -p bc-bash/modulo1/proyectos
 
 # Navegar a la estructura creada
-cd bootcamp-bash/modulo1
+cd bc-bash/modulo1
 
 # Verificar la estructura
 ```bash
