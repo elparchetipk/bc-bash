@@ -72,10 +72,30 @@ add_cron_job() {
     echo -e "${BLUE}Expresión cron:${NC} $cron_expression"
     echo -e "${BLUE}Script:${NC} $CRON_SCRIPT"
     
-    # Verify cron service is running
-    if ! systemctl is-active --quiet cron 2>/dev/null && ! systemctl is-active --quiet cronie 2>/dev/null; then
-        echo -e "${YELLOW}⚠️  Advertencia: El servicio cron podría no estar ejecutándose${NC}"
-        echo -e "${YELLOW}   Ejecuta: sudo systemctl start cron${NC}"
+    # Verify cron service is running (detect different distributions)
+    local cron_service=""
+    if systemctl is-active --quiet crond 2>/dev/null; then
+        cron_service="crond"
+    elif systemctl is-active --quiet cron 2>/dev/null; then
+        cron_service="cron"
+    elif systemctl is-active --quiet cronie 2>/dev/null; then
+        cron_service="cronie"
+    fi
+    
+    if [[ -n "$cron_service" ]]; then
+        echo -e "${GREEN}✅ Servicio cron ($cron_service) está ejecutándose${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Advertencia: El servicio cron no está ejecutándose${NC}"
+        # Detect distribution and suggest correct command
+        if [[ -f /etc/fedora-release ]] || [[ -f /etc/redhat-release ]]; then
+            echo -e "${YELLOW}   Ejecuta: sudo systemctl start crond${NC}"
+            echo -e "${YELLOW}   Para habilitarlo: sudo systemctl enable crond${NC}"
+        elif [[ -f /etc/debian_version ]]; then
+            echo -e "${YELLOW}   Ejecuta: sudo systemctl start cron${NC}"
+            echo -e "${YELLOW}   Para habilitarlo: sudo systemctl enable cron${NC}"
+        else
+            echo -e "${YELLOW}   Ejecuta: sudo systemctl start crond o sudo systemctl start cron${NC}"
+        fi
     fi
 }
 

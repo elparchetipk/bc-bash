@@ -7,8 +7,9 @@ Se ha implementado un sistema completo de auto-commit optimizado específicament
 ### ⚡ Intervalos Ultra-Rápidos
 
 **Intervalos disponibles:**
+
 - **1 minuto** - Competencia extrema (hackathons)
-- **2 minutos** - Competencia intensa 
+- **2 minutos** - Competencia intensa
 - **5 minutos** - Desarrollo sprint
 - **10 minutos** - Desarrollo activo
 - **15 minutos** - Trabajo normal
@@ -17,27 +18,33 @@ Se ha implementado un sistema completo de auto-commit optimizado específicament
 ### 🏆 Perfiles de Competencia
 
 #### 1. Perfil HACKATHON 🏃‍♂️
+
 ```bash
 ./_scripts/competition-setup.sh hackathon
 ```
+
 - ✅ Commits cada **1 minuto**
 - ✅ Hasta **20 archivos** por commit
 - ✅ Máxima velocidad
 - ✅ Mínima interrupción
 
 #### 2. Perfil SPRINT ⚡
+
 ```bash
 ./_scripts/competition-setup.sh sprint
 ```
+
 - ✅ Commits cada **5 minutos**
 - ✅ Hasta **15 archivos** por commit
 - ✅ Balance velocidad/calidad
 - ✅ Confirmación rápida
 
 #### 3. Perfil COLABORATIVO 🤝
+
 ```bash
 ./_scripts/competition-setup.sh collaborative
 ```
+
 - ✅ Commits cada **10 minutos**
 - ✅ Hasta **10 archivos** por commit
 - ✅ Enfoque en calidad
@@ -53,18 +60,21 @@ Se ha implementado un sistema completo de auto-commit optimizado específicament
 ### 📊 Características Avanzadas
 
 #### Configuración Dinámica
+
 - Ajuste automático de `max_files_per_commit` según el perfil
 - Nuevos tipos de commit: `wip`, `quick`
 - Timeout de notificaciones optimizado
 - Modo competencia en configuración JSON
 
 #### Interfaz Mejorada
+
 - Emojis y colores para identificación rápida
 - Menús contextuales por tipo de competencia
 - Recomendaciones automáticas por escenario
 - Información clara de configuración activa
 
 #### Integración Cron Robusta
+
 - Manejo de bloqueos (lock files)
 - Notificaciones desktop automáticas
 - Apertura de terminal GUI cuando es necesario
@@ -86,12 +96,12 @@ graph TD
 
 ### 📈 Comparación de Intervalos
 
-| Contexto | Intervalo | Archivos/Commit | Velocidad | Calidad |
-|----------|-----------|-----------------|-----------|---------|
-| Hackathon | 1 min | 20 | 🚀🚀🚀🚀🚀 | ⭐⭐ |
-| Sprint | 5 min | 15 | 🚀🚀🚀🚀 | ⭐⭐⭐ |
-| Colaborativo | 10 min | 10 | 🚀🚀🚀 | ⭐⭐⭐⭐⭐ |
-| Normal | 15-30 min | 10 | 🚀🚀 | ⭐⭐⭐⭐⭐ |
+| Contexto     | Intervalo | Archivos/Commit | Velocidad  | Calidad    |
+| ------------ | --------- | --------------- | ---------- | ---------- |
+| Hackathon    | 1 min     | 20              | 🚀🚀🚀🚀🚀 | ⭐⭐       |
+| Sprint       | 5 min     | 15              | 🚀🚀🚀🚀   | ⭐⭐⭐     |
+| Colaborativo | 10 min    | 10              | 🚀🚀🚀     | ⭐⭐⭐⭐⭐ |
+| Normal       | 15-30 min | 10              | 🚀🚀       | ⭐⭐⭐⭐⭐ |
 
 ### 🎮 Comandos Esenciales para Competencia
 
@@ -115,16 +125,19 @@ graph TD
 ### 💡 Recomendaciones de Uso
 
 #### Para Hackathons (24-48 horas)
+
 - Usar perfil `hackathon` (1-2 min)
 - Commits frecuentes con mensajes automáticos
 - Focus en velocidad sobre perfección
 
 #### Para Sprints (1-2 semanas)
+
 - Usar perfil `sprint` (5 min)
 - Balance entre velocidad y calidad
 - Commits descriptivos pero rápidos
 
 #### Para Trabajo Colaborativo
+
 - Usar perfil `collaborative` (10 min)
 - Commits bien documentados
 - Coordinación con el equipo
