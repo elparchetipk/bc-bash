@@ -49,11 +49,11 @@ load_config() {
     fi
     
     if command -v jq > /dev/null 2>&1; then
-        MAX_FILES=$(jq -r '.max_files_per_commit // 10' "$CONFIG_FILE")
+        MAX_FILES=$(jq -r '.max_files_per_commit // 30' "$CONFIG_FILE")
         AUTO_PUSH=$(jq -r '.auto_push // false' "$CONFIG_FILE")
     else
         warning "jq not found, using default values"
-        MAX_FILES=10
+        MAX_FILES=30
         AUTO_PUSH=false
     fi
 }

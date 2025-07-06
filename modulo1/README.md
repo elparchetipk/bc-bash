@@ -705,7 +705,8 @@ ls -la enlaces_rapidos/
 
 Los enlaces simbólicos son especialmente útiles en proyectos grandes porque permiten acceder rápidamente a archivos profundamente anidados sin tener que navegar por múltiples niveles de directorios. Piensa en ellos como atajos inteligentes que siempre apuntan al archivo correcto, incluso si lo mueves.
 
-Fase 5: Implementación de Funcionalidades de Búsqueda
+*Fase 5: Implementación de Funcionalidades de Búsqueda*
+
 Vamos a crear herramientas que faciliten encontrar archivos específicos en nuestro proyecto. Esto es especialmente valioso cuando el proyecto crece:
 
 ```bash
@@ -758,9 +759,12 @@ chmod +x buscar_archivos.sh
 # Probar el script de búsqueda
 echo "Probando búsqueda de archivos .md:"
 find . -name "*.md" -type f
+```
+
 Este script de búsqueda demuestra cómo combinar múltiples conceptos aprendidos: condicionales básicas, lectura de input del usuario, y comandos de búsqueda avanzados. Es un ejemplo perfecto de cómo las herramientas básicas se pueden combinar para crear soluciones más complejas.
 
-Fase 6: Documentación y Validación Final
+*Fase 6: Documentación y Validación Final*
+
 Finalmente, vamos a crear documentación sobre la estructura que hemos creado y validar que todo funcione correctamente:
 
 ```bash
@@ -886,7 +890,10 @@ chmod +x validar_proyecto.sh
 
 # Ejecutar la validación
 ./validar_proyecto.sh
-Reflexión y Mejores Prácticas Aplicadas
+```
+
+*Reflexión y Mejores Prácticas Aplicadas*
+
 Este proyecto práctico integra todos los conceptos fundamentales del Módulo 1 de manera coherente. Hemos aplicado varias mejores prácticas importantes que debes recordar para proyectos futuros:
 
 La planificación previa de la estructura de directorios es fundamental porque es mucho más difícil reorganizar un proyecto una vez que comienza a crecer. La aplicación consistente de permisos siguiendo el principio de menor privilegio protege la seguridad del sistema. El uso de enlaces simbólicos mejora la eficiencia del flujo de trabajo, y la documentación clara facilita el mantenimiento y colaboración.
