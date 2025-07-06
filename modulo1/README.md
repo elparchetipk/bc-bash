@@ -142,20 +142,24 @@ Los directorios principales incluyen:
 
 Los permisos en Unix/Linux siguen un modelo simple pero poderoso. Cada archivo y directorio tiene tres tipos de permisos para tres tipos de usuarios:
 
-Tipos de permisos:
+*Tipos de permisos:*
 
 r (read): Lectura
 w (write): Escritura
 x (execute): Ejecución
-Tipos de usuarios:
+
+*Tipos de usuarios:*
 
 Propietario (owner): quien creó el archivo
 Grupo (group): usuarios que pertenecen al mismo grupo
 Otros (others): todos los demás usuarios
+
 Cuando ejecutas ls -l, verás algo como:
 
 ```bash
 -rwxr-xr-- 1 usuario grupo 1024 Mar 15 10:30 archivo.txt
+```
+
 Vamos a desglosar esto:
 
 El primer carácter indica el tipo (- para archivo, d para directorio)
@@ -163,6 +167,7 @@ Los siguientes 9 caracteres son los permisos en grupos de 3
 rwx para el propietario
 r-x para el grupo
 r-- para otros
+
 Modificando Permisos con chmod
 
 El comando chmod (change mode) te permite modificar permisos. Puedes usar notación simbólica o numérica:
@@ -176,11 +181,15 @@ chmod g-w archivo.txt
 
 # Dar permisos de lectura a todos
 chmod a+r archivo.txt
+```
+
 La notación numérica es más eficiente una vez que la dominas:
 
 ```bash
 # rwx = 7, r-x = 5, r-- = 4
 chmod 754 archivo.sh
+```
+
 Ejercicio Práctico 1.2:
 
 Vamos a practicar con permisos:
@@ -203,45 +212,25 @@ ls -l test_permisos.txt
 # Cambiar permisos usando notación numérica
 chmod 755 test_permisos.txt
 ls -l test_permisos.txt
-Mejores Prácticas de Seguridad:
+```
+
+*Mejores Prácticas de Seguridad:*
 
 Nunca uses chmod 777 indiscriminadamente. Este comando da todos los permisos a todos los usuarios y es un riesgo de seguridad grave. Siempre aplica el principio de menor privilegio: da solo los permisos mínimos necesarios.
 
-¿Te gustaría que continuemos con la Lección 1.3 o prefieres profundizar más en algún aspecto específico de lo que hemos visto hasta ahora?
-
-
-Considerando dividir respuesta para no saturar chat
-4s
-
-
-
-
-
-
-
-
-Reintentar
-vamos con la lección 1.3
-
-Editar
-
-Planificó lección detallada de manipulación de archivos en ```bash.
-7s
-
-
-
-
+---
 
 ¡Perfecto! Continuemos con la Lección 1.3: Manipulación de Archivos. Esta lección es especialmente importante porque aquí comenzamos a interactuar realmente con el contenido de los archivos, no solo con su estructura y permisos.
 
-Lección 1.3: Manipulación de Archivos
-Objetivos de aprendizaje:
+## Lección 1.3: Manipulación de Archivos
 
-Dominar la creación y edición básica de archivos
-Entender las diferencias entre copiar, mover y enlazar archivos
-Aprender técnicas eficientes de visualización de contenido
-Desarrollar habilidades de búsqueda de archivos en el sistema
-Creación y Edición: Los Fundamentos
+*Objetivos de aprendizaje:*
+
+- Dominar la creación y edición básica de archivos
+- Entender las diferencias entre copiar, mover y enlazar archivos
+- Aprender técnicas eficientes de visualización de contenido
+- Desarrollar habilidades de búsqueda de archivos en el sistema
+- Creación y Edición: Los Fundamentos
 
 Piensa en la manipulación de archivos como aprender a usar herramientas básicas en un taller. Primero necesitas saber cómo crear el material de trabajo, luego cómo modificarlo y finalmente cómo organizarlo eficientemente.
 
@@ -256,6 +245,8 @@ touch archivo1.txt archivo2.txt archivo3.txt
 
 # Verificar que se crearon
 ls -la
+```
+
 La belleza de touch radica en su simplicidad y seguridad. Nunca sobrescribe contenido existente, solo actualiza las fechas de acceso y modificación si el archivo ya existe.
 
 Editores de Texto: Nano para Principiantes
@@ -265,6 +256,8 @@ Para editar archivos, comenzaremos con nano, que es como usar un editor de texto
 ```bash
 # Abrir nano para editar un archivo
 nano mi_primer_script.sh
+```
+
 Cuando estés dentro de nano, verás que en la parte inferior aparecen combinaciones como ^X (que significa Ctrl+X para salir) y ^O (Ctrl+O para guardar). Esta interfaz amigable hace que nano sea ideal para quienes están comenzando.
 
 Introducción a Vim: El Editor Poderoso
@@ -276,14 +269,16 @@ Vim tiene diferentes modos de operación, lo cual es un concepto único que debe
 ```bash
 # Abrir vim
 vim mi_archivo.txt
+```
+
 Los modos principales son:
 
-Modo Normal: Para navegar y ejecutar comandos (modo por defecto)
-Modo Inserción: Para escribir texto (presiona i para entrar)
-Modo Comando: Para ejecutar comandos como guardar o salir (presiona : para entrar)
-Para salir de vim sin guardar cambios, usa :q!. Para guardar y salir, usa :wq. Estos comandos son fundamentales porque muchos principiantes se "quedan atrapados" en vim sin saber cómo salir.
+- Modo Normal: Para navegar y ejecutar comandos (modo por defecto)
+- Modo Inserción: Para escribir texto (presiona i para entrar)
+- Modo Comando: Para ejecutar comandos como guardar o salir (presiona : para entrar)
+- Para salir de vim sin guardar cambios, usa :q!. Para guardar y salir, usa :wq. Estos comandos son fundamentales porque muchos principiantes se "quedan atrapados" en vim sin saber cómo salir.
 
-Copia y Movimiento: Organizando tu Workspace
+*Copia y Movimiento: Organizando tu Workspace*
 
 El comando cp (copy) es como usar una fotocopiadora. Crea una copia exacta del archivo original manteniendo el original intacto:
 
@@ -296,6 +291,8 @@ cp archivo.txt /ruta/destino/
 
 # Copiar un directorio completo (recursivo)
 cp -r directorio_origen directorio_destino
+```
+
 La opción -r (recursive) es crucial cuando trabajas con directorios porque le dice a cp que copie no solo el directorio, sino todo su contenido incluyendo subdirectorios.
 
 El comando mv (move) es más versátil de lo que su nombre sugiere. No solo mueve archivos, sino que también los renombra:
@@ -309,7 +306,9 @@ mv nombre_viejo.txt nombre_nuevo.txt
 
 # Mover y renombrar al mismo tiempo
 mv archivo.txt /nueva/ubicacion/nuevo_nombre.txt
-Enlaces: Creando Conexiones Inteligentes
+```
+
+*Enlaces: Creando Conexiones Inteligentes*
 
 Los enlaces son como crear accesos directos inteligentes. Hay dos tipos principales:
 
