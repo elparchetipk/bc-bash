@@ -1,26 +1,17 @@
+**¡Excelente! Vamos a desarrollar el MÓDULO 1: Fundamentos del Sistema de nuestro bootcamp de Bash Scripting. Este módulo es crucial porque establece las bases sólidas sobre las cuales construiremos todo el conocimiento posterior.*
 
-Bootcamp bash scripting /
-de acuerdo con el contexto, iniciemos el desarrollo del bootcamp, lo hacemos por módulos, vamos con: MÓDULO 1: Fundamentos del Sistema (Semana 1)
+# MÓDULO 1: Fundamentos del Sistema (Semana 1)
 
-Editar
+## Lección 1.1: Introducción al Terminal y la Shell
 
-Planificó desarrollo detallado del bootcamp de Bash Scripting.
-4s
-
-
-
-
-¡Excelente! Vamos a desarrollar el MÓDULO 1: Fundamentos del Sistema de nuestro bootcamp de Bash Scripting. Este módulo es crucial porque establece las bases sólidas sobre las cuales construiremos todo el conocimiento posterior.
-
-MÓDULO 1: Fundamentos del Sistema (Semana 1)
-Lección 1.1: Introducción al Terminal y la Shell
 Objetivos de aprendizaje:
 
-Entender la diferencia entre terminal, consola y shell
-Conocer la historia y importancia de Bash
-Configurar correctamente el entorno de trabajo
-Dominar la navegación básica del sistema de archivos
-Conceptos Fundamentales
+- Entender la diferencia entre terminal, consola y shell
+- Conocer la historia y importancia de Bash
+- Configurar correctamente el entorno de trabajo
+- Dominar la navegación básica del sistema de archivos
+
+*Conceptos Fundamentales*
 
 Antes de sumergirnos en el mundo del scripting, necesitamos entender claramente qué herramientas estamos usando. Muchas personas confunden los términos "terminal", "consola" y "shell", pero cada uno tiene un propósito específico:
 
