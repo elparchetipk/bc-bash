@@ -317,12 +317,16 @@ Los enlaces simbólicos (soft links) son como accesos directos que apuntan a la 
 ```bash
 # Crear un enlace simbólico
 ln -s /ruta/completa/al/archivo.txt enlace_simbolico.txt
+```
+
 Los enlaces duros (hard links) son como tener múltiples nombres para el mismo archivo físico:
 
 ```bash
 # Crear un enlace duro
 ln archivo_original.txt enlace_duro.txt
-Visualización de Contenido: Diferentes Herramientas para Diferentes Necesidades
+```
+
+*Visualización de Contenido: Diferentes Herramientas para Diferentes Necesidades*
 
 La visualización de archivos es como tener diferentes tipos de ventanas para ver el mismo paisaje. Cada herramienta tiene su propósito específico.
 
@@ -337,11 +341,15 @@ cat archivo1.txt archivo2.txt
 
 # Mostrar contenido con números de línea
 cat -n archivo.txt
+```
+
 Para archivos grandes, less es como usar un telescopio con zoom. Te permite navegar por el contenido sin cargar todo en memoria:
 
 ```bash
 # Abrir archivo con less
 less archivo_grande.txt
+```
+
 Dentro de less, puedes usar las teclas de dirección para navegar, q para salir, y /palabra para buscar texto específico.
 
 Los comandos head y tail son como espiar por el principio y el final de un libro:
@@ -358,7 +366,9 @@ tail archivo.txt
 
 # Seguir un archivo en tiempo real (útil para logs)
 tail -f archivo.log
-Búsqueda de Archivos: Encontrando Agujas en el Pajar
+```
+
+*Búsqueda de Archivos: Encontrando Agujas en el Pajar*
 
 La búsqueda de archivos es como tener un detector de metales sofisticado. Diferentes herramientas son mejores para diferentes tipos de búsqueda.
 
@@ -376,6 +386,8 @@ find /ruta/busqueda -type d -name "proyecto*"
 
 # Buscar archivos modificados en los últimos 7 días
 find /ruta/busqueda -mtime -7
+```
+
 El comando locate es como usar un índice de biblioteca. Es muy rápido porque usa una base de datos precompilada:
 
 ```bash
@@ -384,22 +396,26 @@ locate ```bash
 
 # Actualizar la base de datos (como root)
 sudo updatedb
+```
+
 Los comandos which y whereis son específicos para encontrar programas ejecutables:
 
 ```bash
 # Encontrar la ubicación de un comando
-which ```bash
+which bash
 which python
 
 # Encontrar archivos relacionados con un comando
-whereis ```bash
-Ejercicio Práctico Integral 1.3:
+whereis bash
+```
+
+*Ejercicio Práctico Integral 1.3:*
 
 Vamos a poner en práctica todo lo aprendido creando un pequeño proyecto:
 
 ```bash
 # Navegar a nuestro directorio de trabajo
-cd ~/bootcamp_```bash/modulo1/ejercicios
+cd ~/bootcamp_bash/modulo1/ejercicios
 
 # Crear varios archivos de prueba
 touch notas.txt ideas.txt borrador.txt
@@ -431,46 +447,37 @@ tail -n 3 notas.txt
 
 # Buscar archivos .txt en el directorio actual
 find . -name "*.txt" -type f
-Mejores Prácticas de Manipulación de Archivos:
+```
+
+*Mejores Prácticas de Manipulación de Archivos:*
 
 Siempre haz copias de seguridad antes de hacer cambios importantes. Es como tener un seguro para tu trabajo. Usa nombres descriptivos para tus archivos y mantén una estructura de directorios lógica. Cuando uses mv, ten especial cuidado porque a diferencia de cp, no conserva el original.
 
 Pregunta de Reflexión: ¿En qué situaciones crees que sería más útil usar less en lugar de cat para visualizar un archivo? ¿Puedes pensar en un ejemplo práctico donde los enlaces simbólicos serían especialmente útiles?
 
-¿Te sientes cómodo con estos conceptos o hay algún aspecto específico que te gustaría que profundicemos antes de continuar con el proyecto práctico del módulo?
-
-
-
-
-Reintentar
-vamos con el proyecto práctico del módulo
-
-Editar
-
-Mapped out practical project for module one's file management skills
-6s
-
-
-
-
+---
 
 ¡Excelente! Ahora vamos a consolidar todo lo aprendido en el Módulo 1 con un proyecto práctico integral que simule un escenario del mundo real. Este proyecto te permitirá aplicar todos los conceptos de navegación, permisos y manipulación de archivos de manera cohesiva.
 
-Proyecto Práctico 1: Sistema de Gestión de Archivos para un Equipo de Desarrollo
-Contexto del Proyecto
-Imagina que eres el administrador de sistemas de una pequeña empresa de desarrollo de software. Tu tarea es crear una estructura de archivos organizada para un nuevo proyecto, establecer los permisos correctos para diferentes tipos de usuarios y preparar los archivos iniciales del proyecto. Este es exactamente el tipo de situación que enfrentarás en el mundo real como especialista en ```bash.
+**Proyecto Práctico 1: Sistema de Gestión de Archivos para un Equipo de Desarrollo**
 
-Objetivos del Proyecto
+*Contexto del Proyecto*
+
+Imagina que eres el administrador de sistemas de una pequeña empresa de desarrollo de software. Tu tarea es crear una estructura de archivos organizada para un nuevo proyecto, establecer los permisos correctos para diferentes tipos de usuarios y preparar los archivos iniciales del proyecto. Este es exactamente el tipo de situación que enfrentarás en el mundo real como especialista en bash.
+
+*Objetivos del Proyecto*
+
 Al finalizar este proyecto, habrás creado un sistema completo de gestión de archivos que incluye estructura jerárquica, permisos de seguridad apropiados y documentación básica. Más importante aún, habrás aplicado cada concepto aprendido en situaciones prácticas que reflejan desafíos reales.
 
-Fase 1: Planificación y Estructura Base
+*Fase 1: Planificación y Estructura Base*
+
 Antes de comenzar a crear archivos y directorios, necesitamos planificar la estructura. Esta fase de planificación es crucial porque una estructura bien pensada desde el inicio te ahorrará mucho tiempo y problemas posteriormente.
 
 Vamos a crear una estructura para un proyecto llamado "WebApp-Ecommerce" que incluirá diferentes áreas de trabajo para desarrolladores, documentación, copias de seguridad y archivos de configuración:
 
 ```bash
 # Primero, navegamos a nuestro directorio de trabajo del bootcamp
-cd ~/bootcamp_```bash/modulo1/proyectos
+cd ~/bootcamp_bash/modulo1/proyectos
 
 # Crear la estructura principal del proyecto
 mkdir -p WebApp-Ecommerce/{src,docs,config,backups,logs,tests}
@@ -486,11 +493,15 @@ mkdir -p WebApp-Ecommerce/backups/{daily,weekly,monthly}
 
 # Verificar la estructura creada
 tree WebApp-Ecommerce
+
 # Si tree no está disponible, usar find:
 find WebApp-Ecommerce -type d
+```
+
 La razón por la que usamos la opción -p con mkdir es una mejor práctica fundamental. Esta opción crea automáticamente todos los directorios padre necesarios, evitando errores si algún directorio intermedio no existe. Es como construir una casa asegurándote de que primero existan los cimientos.
 
-Fase 2: Creación de Archivos Iniciales
+*Fase 2: Creación de Archivos Iniciales*
+
 Ahora vamos a poblar nuestra estructura con archivos iniciales que representan el contenido típico de un proyecto de desarrollo. Cada archivo tendrá un propósito específico y contenido relevante:
 
 ```bash
@@ -605,9 +616,12 @@ done
 
 echo "=== Pruebas completadas ==="
 EOF
+```
+
 La técnica que usamos aquí con cat > archivo << 'EOF' se llama "here document" y es una forma elegante de crear archivos con múltiples líneas de contenido. Es especialmente útil en scripts porque permite incluir texto formateado sin necesidad de usar múltiples comandos echo.
 
-Fase 3: Configuración de Permisos de Seguridad
+*Fase 3: Configuración de Permisos de Seguridad*
+
 Esta es la fase más crítica del proyecto porque los permisos incorrectos pueden crear vulnerabilidades de seguridad graves. Vamos a aplicar el principio de menor privilegio, dando a cada archivo solo los permisos mínimos necesarios para su función:
 
 ```bash
@@ -653,9 +667,12 @@ echo "=== Permisos de archivos importantes ==="
 ls -la src/scripts/start.sh
 ls -la config/app.conf
 ls -la logs/app.log
+```
+
 La lógica detrás de estos permisos es fundamental para la seguridad. Los archivos de configuración tienen permisos 644 (lectura para propietario, lectura para grupo, lectura para otros) porque necesitan ser leídos por la aplicación pero no modificados por usuarios no autorizados. Los scripts tienen permisos 755 para ser ejecutables. Los backups tienen permisos 700 porque contienen datos sensibles que solo el propietario debería acceder.
 
-Fase 4: Creación de Enlaces y Accesos Rápidos
+*Fase 4: Creación de Enlaces y Accesos Rápidos*
+
 Los enlaces nos permiten crear accesos eficientes a archivos y directorios frecuentemente usados, mejorando la productividad del equipo:
 
 ```bash
@@ -684,6 +701,8 @@ echo "=== Verificación de enlaces ==="
 ls -la inicio_rapido.sh
 ls -la configuracion.conf
 ls -la enlaces_rapidos/
+```
+
 Los enlaces simbólicos son especialmente útiles en proyectos grandes porque permiten acceder rápidamente a archivos profundamente anidados sin tener que navegar por múltiples niveles de directorios. Piensa en ellos como atajos inteligentes que siempre apuntan al archivo correcto, incluso si lo mueves.
 
 Fase 5: Implementación de Funcionalidades de Búsqueda
