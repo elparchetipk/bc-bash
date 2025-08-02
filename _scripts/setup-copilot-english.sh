@@ -121,13 +121,13 @@ echo -e "${GREEN}✅ Configuración de tareas creada (.vscode/tasks.json)${NC}"
 echo -e "${BLUE}🔧 Configurando Git para entorno en inglés...${NC}"
 
 # Set git editor with English locale
-git config core.editor "code --wait --locale=en" 2>/dev/null || {
+/usr/bin/git config core.editor "code --wait --locale=en" 2>/dev/null || {
     echo -e "${YELLOW}⚠️  No se pudo configurar VS Code como editor de git${NC}"
 }
 
 # Set git commit encoding
-git config i18n.commitencoding utf-8
-git config i18n.logoutputencoding utf-8
+/usr/bin/git config i18n.commitencoding utf-8
+/usr/bin/git config i18n.logoutputencoding utf-8
 
 echo -e "${GREEN}✅ Configuración de Git completada${NC}"
 

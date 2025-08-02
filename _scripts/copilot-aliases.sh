@@ -30,17 +30,17 @@ bc-commit() {
 
 # Función para configurar git en inglés globalmente
 git-config-english() {
-    git config --global core.editor "code --wait --locale=en"
-    git config --global i18n.commitencoding utf-8
-    git config --global i18n.logoutputencoding utf-8
+    /usr/bin/git config --global core.editor "code --wait --locale=en"
+    /usr/bin/git config --global i18n.commitencoding utf-8
+    /usr/bin/git config --global i18n.logoutputencoding utf-8
     echo "✅ Git configurado para inglés globalmente"
 }
 
 # Función para configurar git en inglés solo para el proyecto actual
 git-config-english-local() {
-    git config core.editor "code --wait --locale=en"
-    git config i18n.commitencoding utf-8
-    git config i18n.logoutputencoding utf-8
+    /usr/bin/git config core.editor "code --wait --locale=en"
+    /usr/bin/git config i18n.commitencoding utf-8
+    /usr/bin/git config i18n.logoutputencoding utf-8
     echo "✅ Git configurado para inglés en el proyecto actual"
 }
 
@@ -55,7 +55,7 @@ check-copilot-config() {
     echo "   LC_ALL=${LC_ALL:-"(no establecido)"}"
     echo
     echo "🔧 Configuración de Git:"
-    git config --list | grep -E "(core.editor|i18n)" || echo "   No hay configuración i18n"
+    /usr/bin/git config --list | grep -E "(core.editor|i18n)" || echo "   No hay configuración i18n"
     echo
     echo "📁 Archivos de configuración VS Code:"
     if [[ -f ".vscode/settings.json" ]]; then
@@ -88,14 +88,16 @@ check-copilot-config() {
 
 # Función para setup rápido en cualquier proyecto
 setup-copilot-english-project() {
-    local script_path="$HOME/Documentos/epti-dev/bc-bash/_scripts/setup-copilot-english.sh"
+    local script_path="/home/epti/Documentos/epti-dev/bc-bash/_scripts/setup-copilot-english.sh"
+    local current_dir
+    current_dir="$(pwd)"
     
     if [[ -f "$script_path" ]]; then
         echo "🔧 Configurando GitHub Copilot en inglés para el proyecto actual..."
         
         # Create minimal .vscode/settings.json
-        mkdir -p .vscode
-        cat > .vscode/settings.json << 'EOF'
+        /usr/bin/mkdir -p "$current_dir/.vscode"
+        /usr/bin/cat > "$current_dir/.vscode/settings.json" << 'EOF'
 {
     "github.copilot.chat.localeOverride": "en-US",
     "github.copilot.enable": {

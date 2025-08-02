@@ -2,11 +2,11 @@
 
 ## Project Overview
 
-This is a comprehensive 5-module Bash scripting bootcamp project designed for learning shell scripting fundamentals through practical exercises and projects.
+This is a comprehensive 8-module Bash scripting bootcamp project designed for learning shell scripting fundamentals through practical exercises and projects.
 
 ## Project Structure
 
-- **5 modules**: `modulo1/` through `modulo5/`
+- **8 modules**: `modulo1/` through `modulo8/`
 - **Documentation**: All documentation files go in `_docs/`
 - **Scripts**: All utility and automation scripts go in `_scripts/`
 - **Exercises**: Each module contains `/ejercicios/` subdirectory
@@ -22,10 +22,13 @@ bc_bash/
 │   ├── ejercicios/           # Hands-on exercises
 │   ├── proyectos/            # Module projects
 │   └── README.md            # Module overview
-├── modulo2/                  # Module 2: Variables and Control Flow
-├── modulo3/                  # Module 3: Functions and Arrays
-├── modulo4/                  # Module 4: File Operations and Text Processing
-├── modulo5/                  # Module 5: Advanced Topics and Automation
+├── modulo2/                  # Module 2: Advanced Commands and Pipes
+├── modulo3/                  # Module 3: Variables and Control Flow
+├── modulo4/                  # Module 4: Functions and Arrays
+├── modulo5/                  # Module 5: File Operations and Text Processing
+├── modulo6/                  # Module 6: Advanced Data Manipulation
+├── modulo7/                  # Module 7: Optimization and Debugging
+├── modulo8/                  # Module 8: Advanced Projects and Automation
 └── README.md                # Main project README
 ```
 
@@ -99,28 +102,49 @@ Each module and project should include:
 - Introduction to variables and command substitution
 - Basic error handling concepts
 
-### Module 2: Variables and Control Flow
+### Module 2: Advanced Commands and Pipes
+
+- Command chaining and redirection
+- Text processing tools and filters
+- Wildcards and pattern matching
+- Complex pipe operations
+
+### Module 3: Variables and Control Flow
 
 - Environment variables and parameter expansion
 - Conditional statements (if/else, case)
 - Loops (for, while, until)
 - Script arguments and option parsing
 
-### Module 3: Functions and Arrays
+### Module 4: Functions and Arrays
 
 - Function definition and parameter passing
 - Local vs global variables
 - Array operations and string manipulation
 - Function libraries and sourcing
 
-### Module 4: File Operations and Text Processing
+### Module 5: File Operations and Text Processing
 
 - File system operations and permissions
 - Text processing with grep, sed, awk
 - Regular expressions in Bash
 - Data parsing and transformation
 
-### Module 5: Advanced Topics and Automation
+### Module 6: Advanced Data Manipulation
+
+- Complex data structures and processing
+- CSV, JSON, and XML handling
+- Advanced parsing techniques
+- Data transformation pipelines
+
+### Module 7: Optimization and Debugging
+
+- Performance optimization techniques
+- Debugging and profiling methods
+- Security best practices
+- Code quality and testing
+
+### Module 8: Advanced Projects and Automation
 
 - Process management and job control
 - Debugging and profiling techniques
@@ -169,7 +193,7 @@ This project uses automated conventional commits:
 
 ### Scope Mapping
 
-- `module1` through `module5`: Module-specific changes
+- `module1` through `module8`: Module-specific changes
 - `docs`: Documentation in `_docs/`
 - `scripts`: Utility scripts in `_scripts/`
 - `exercises`: Exercise-related changes

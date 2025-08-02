@@ -2,11 +2,11 @@
 
 ## Descripción General
 
-Este es un bootcamp completo de scripting en Bash dividido en 5 módulos progresivos, diseñado para enseñar los fundamentos de shell scripting a través de ejercicios prácticos y proyectos reales.
+Este es un bootcamp completo de scripting en Bash dividido en 8 módulos progresivos, diseñado para enseñar los fundamentos de shell scripting a través de ejercicios prácticos y proyectos reales.
 
 ## Estructura del Proyecto
 
-```
+```text
 bc_bash/
 ├── _docs/                    # 📚 Toda la documentación del proyecto
 ├── _scripts/                 # 🔧 Scripts de utilidad y automatización
@@ -14,10 +14,13 @@ bc_bash/
 │   ├── ejercicios/           # 💪 Ejercicios prácticos
 │   ├── proyectos/            # 🚀 Proyectos del módulo
 │   └── README.md            # 📋 Descripción del módulo
-├── modulo2/                  # 📖 Módulo 2: Variables y Control de Flujo
-├── modulo3/                  # 📖 Módulo 3: Funciones y Arrays
-├── modulo4/                  # 📖 Módulo 4: Operaciones de Archivos
-├── modulo5/                  # 📖 Módulo 5: Temas Avanzados
+├── modulo2/                  # 📖 Módulo 2: Comandos Avanzados y Pipes
+├── modulo3/                  # 📖 Módulo 3: Variables y Control de Flujo
+├── modulo4/                  # 📖 Módulo 4: Funciones y Arrays
+├── modulo5/                  # 📖 Módulo 5: Operaciones de Archivos y Texto
+├── modulo6/                  # 📖 Módulo 6: Manipulación Avanzada de Datos
+├── modulo7/                  # 📖 Módulo 7: Optimización y Debugging
+├── modulo8/                  # 📖 Módulo 8: Proyectos y Automatización
 └── README.md                # 📖 README principal del proyecto
 ```
 
@@ -26,32 +29,50 @@ bc_bash/
 ### Módulo 1: Fundamentos de Bash
 
 - **Objetivo**: Introducir comandos básicos y sintaxis de Bash
-- **Contenido**: Variables, entrada/salida, comandos básicos
-- **Proyecto**: Calculadora simple en Bash
+- **Contenido**: Terminal, shell, navegación, permisos de archivos
+- **Proyecto**: Sistema de Gestión de Archivos
 
-### Módulo 2: Variables y Control de Flujo
+### Módulo 2: Comandos Avanzados y Pipes
 
-- **Objetivo**: Dominar variables y estructuras de control
-- **Contenido**: Condicionales, bucles, parámetros de script
-- **Proyecto**: Sistema de menús interactivo
+- **Objetivo**: Dominar comandos avanzados y procesamiento de texto
+- **Contenido**: Pipes, redirección, wildcards, filtros de texto
+- **Proyecto**: Procesador de Logs Avanzado
 
-### Módulo 3: Funciones y Arrays
+### Módulo 3: Variables y Control de Flujo
+
+- **Objetivo**: Manejar variables y estructuras de control
+- **Contenido**: Variables, condicionales, bucles, entrada/salida
+- **Proyecto**: Sistema de Menús Interactivo
+
+### Módulo 4: Funciones y Arrays
 
 - **Objetivo**: Organizar código con funciones y manejar arrays
-- **Contenido**: Definición de funciones, arrays, manipulación de strings
-- **Proyecto**: Biblioteca de funciones reutilizables
+- **Contenido**: Funciones, arrays, códigos de salida, logging
+- **Proyecto**: Gestor Interactivo de Archivos
 
-### Módulo 4: Operaciones de Archivos y Procesamiento de Texto
+### Módulo 5: Operaciones de Archivos y Texto
 
-- **Objetivo**: Automatizar tareas de archivos y texto
-- **Contenido**: grep, sed, awk, permisos, expresiones regulares
-- **Proyecto**: Analizador de logs del sistema
+- **Objetivo**: Automatizar manipulación avanzada de archivos
+- **Contenido**: Expresiones regulares, sed, awk, análisis de datos
+- **Proyecto**: Analizador de Logs con Reportes
 
-### Módulo 5: Temas Avanzados y Automatización
+### Módulo 6: Manipulación Avanzada de Datos
 
-- **Objetivo**: Técnicas avanzadas y automatización
-- **Contenido**: Procesos, debugging, integración con servicios
-- **Proyecto**: Sistema de backup automatizado
+- **Objetivo**: Procesamiento sofisticado de datos estructurados
+- **Contenido**: CSV, JSON, XML, parsing complejo, transformaciones
+- **Proyecto**: Procesador de Datos Empresariales
+
+### Módulo 7: Optimización y Debugging
+
+- **Objetivo**: Técnicas de optimización y resolución de problemas
+- **Contenido**: Debugging, profiling, optimización, seguridad
+- **Proyecto**: Monitor de Sistema Avanzado
+
+### Módulo 8: Proyectos Avanzados y Automatización
+
+- **Objetivo**: Integración empresarial y automatización completa
+- **Contenido**: APIs, Docker, Git, CI/CD, automatización empresarial
+- **Proyecto**: Sistema de Backup y Deploy Automatizado
 
 ## Documentación Disponible
 
@@ -117,11 +138,25 @@ El directorio `_scripts/` contiene herramientas para facilitar el desarrollo:
 
 ## Progresión del Aprendizaje
 
-1. **Módulo 1**: Conceptos básicos, familiarización con la terminal
-2. **Módulo 2**: Control de flujo, toma de decisiones en scripts
-3. **Módulo 3**: Organización de código, reutilización
-4. **Módulo 4**: Automatización práctica, manipulación de datos
-5. **Módulo 5**: Integración con sistemas, mejores prácticas
+### 🎯 Semanas 1-2: Fundamentos Sólidos
+
+1. **Módulo 1**: Conceptos básicos, navegación y permisos
+2. **Módulo 2**: Comandos avanzados, pipes y procesamiento de texto
+
+### 🚀 Semanas 3-4: Programación Estructurada
+
+1. **Módulo 3**: Variables, control de flujo e interactividad
+2. **Módulo 4**: Funciones, arrays y organización de código
+
+### 💪 Semanas 5-6: Manipulación Avanzada
+
+1. **Módulo 5**: Operaciones de archivos y análisis de texto
+2. **Módulo 6**: Procesamiento de datos estructurados y complejos
+
+### 🏆 Semanas 7-8: Maestría Profesional
+
+1. **Módulo 7**: Optimización, debugging y mejores prácticas
+2. **Módulo 8**: Automatización empresarial y proyectos avanzados
 
 ## Requisitos Previos
 

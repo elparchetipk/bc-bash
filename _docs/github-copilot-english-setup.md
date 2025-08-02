@@ -26,7 +26,7 @@ Agrega las siguientes configuraciones a tu `settings.json`:
 }
 ```
 
-### 2. Configuración Global vs Workspace
+### Configuración Global vs Workspace
 
 #### Configuración Global (para todos los proyectos)
 
@@ -47,7 +47,7 @@ Archivo: `~/.config/Code/User/settings.json` (Linux) o `%APPDATA%\Code\User\sett
 
 #### Configuración de Workspace (solo para este proyecto)
 
-Archivo: `.vscode/settings.json` en la raíz del proyecto
+Archivo: `/home/epti/Documentos/epti-dev/bc-bash/.vscode/settings.json` en la raíz del proyecto
 
 ```json
 {
@@ -64,18 +64,18 @@ Archivo: `.vscode/settings.json` en la raíz del proyecto
 
 ```bash
 # Establecer idioma del sistema para git
-git config --global core.commentChar "#"
-git config --global i18n.commitencoding utf-8
-git config --global i18n.logoutputencoding utf-8
+/usr/bin/git config --global core.commentChar "#"
+/usr/bin/git config --global i18n.commitencoding utf-8
+/usr/bin/git config --global i18n.logoutputencoding utf-8
 
 # Establecer editor con configuración de idioma
-git config --global core.editor "code --wait --locale=en"
+/usr/bin/git config --global core.editor "code --wait --locale=en"
 ```
 
 #### Variables de Entorno
 
 ```bash
-# En tu .bashrc, .zshrc, o .profile
+# En tu ~/.bashrc, ~/.zshrc, o ~/.profile
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export GIT_EDITOR="code --wait --locale=en"
@@ -102,7 +102,7 @@ Archivo: `.vscode/copilot-prompts.json`
 
 ### Configuración Recomendada
 
-Crea el archivo `.vscode/settings.json` en la raíz del proyecto:
+Crea el archivo `/home/epti/Documentos/epti-dev/bc-bash/.vscode/settings.json` en la raíz del proyecto:
 
 ```json
 {
@@ -128,7 +128,7 @@ Crea el archivo `.vscode/settings.json` en la raíz del proyecto:
 
 ### Configuración de Workspace específica
 
-Archivo: `.vscode/tasks.json`
+Archivo: `/home/epti/Documentos/epti-dev/bc-bash/.vscode/tasks.json`
 
 ```json
 {
@@ -171,13 +171,13 @@ Archivo: `.vscode/tasks.json`
 
 ```bash
 # En la terminal de VS Code
-code --list-extensions | grep -i copilot
+/usr/bin/code --list-extensions | grep -i copilot
 ```
 
 ### 2. Verificar configuración de Git
 
 ```bash
-git config --list | grep -i core
+/usr/bin/git config --list | grep -i core
 ```
 
 ### 3. Probar generación de commits
@@ -195,10 +195,10 @@ git config --list | grep -i core
 
 ```bash
 # Verificar configuración actual
-locale
+/usr/bin/locale
 
 # Cambiar temporalmente para VS Code
-LANG=en_US.UTF-8 code
+LANG=en_US.UTF-8 /usr/bin/code /home/epti/Documentos/epti-dev/bc-bash
 ```
 
 **Solución 2**: Reinstalar extensión de Copilot
@@ -243,11 +243,15 @@ En la Command Palette (`Ctrl+Shift+P`):
 #!/bin/bash
 # setup-copilot-english.sh
 
+# Definir ruta del proyecto
+PROJECT_DIR="/home/epti/Documentos/epti-dev/bc-bash"
+cd "$PROJECT_DIR" || exit 1
+
 # Crear directorio .vscode si no existe
-mkdir -p .vscode
+/usr/bin/mkdir -p "$PROJECT_DIR/.vscode"
 
 # Crear configuración de settings
-cat > .vscode/settings.json << 'EOF'
+/usr/bin/cat > "$PROJECT_DIR/.vscode/settings.json" << 'EOF'
 {
     "github.copilot.chat.localeOverride": "en-US",
     "github.copilot.enable": {
@@ -263,7 +267,7 @@ cat > .vscode/settings.json << 'EOF'
 EOF
 
 # Configurar git para inglés
-git config core.editor "code --wait --locale=en"
+/usr/bin/git config core.editor "code --wait --locale=en"
 
 echo "✅ GitHub Copilot configurado para commits en inglés"
 echo "✅ Reinicia VS Code para aplicar los cambios"
@@ -273,10 +277,10 @@ echo "✅ Reinicia VS Code para aplicar los cambios"
 
 ```bash
 # Hacer ejecutable
-chmod +x setup-copilot-english.sh
+/usr/bin/chmod +x /home/epti/Documentos/epti-dev/bc-bash/setup-copilot-english.sh
 
-# Ejecutar
-./setup-copilot-english.sh
+# Ejecutar desde el directorio del proyecto
+cd /home/epti/Documentos/epti-dev/bc-bash && ./setup-copilot-english.sh
 ```
 
 ## Resultado Esperado
@@ -292,14 +296,14 @@ Después de aplicar esta configuración:
 
 ```bash
 # Verificar configuración actual de VS Code
-code --list-extensions
-code --show-versions
+/usr/bin/code --list-extensions
+/usr/bin/code --show-versions
 
 # Verificar configuración de git
-git config --list | grep -E "(core|i18n)"
+/usr/bin/git config --list | grep -E "(core|i18n)"
 
-# Abrir VS Code con idioma específico
-LANG=en_US.UTF-8 code .
+# Abrir VS Code con idioma específico en el proyecto
+cd /home/epti/Documentos/epti-dev/bc-bash && LANG=en_US.UTF-8 /usr/bin/code .
 ```
 
 ---

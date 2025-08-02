@@ -1,6 +1,6 @@
 # 🎓 Bootcamp Bash (bc_bash)
 
-Un bootcamp completo de scripting en Bash dividido en 5 módulos progresivos, con sistema de commits automáticos integrado.
+Un bootcamp completo de scripting en Bash dividido en 8 módulos progresivos, con sistema de commits automáticos integrado.
 
 ## 🚀 Sistema de Auto-Commit Incluido
 
@@ -25,26 +25,54 @@ Este proyecto incluye un **sistema de commits automáticos profesional** que pue
 
 ### Estructura del Proyecto
 
-```
+```text
 bc_bash/
 ├── _docs/          # 📚 Documentación completa
 ├── _scripts/       # 🔧 Scripts de automatización
 ├── modulo1/        # 📖 Fundamentos de Bash
-├── modulo2/        # 📖 Variables y Control de Flujo
-├── modulo3/        # 📖 Funciones y Arrays
-├── modulo4/        # 📖 Operaciones de Archivos
-└── modulo5/        # 📖 Temas Avanzados
+├── modulo2/        # 📖 Comandos Avanzados y Pipes
+├── modulo3/        # 📖 Variables y Control de Flujo
+├── modulo4/        # 📖 Funciones y Arrays
+├── modulo5/        # 📖 Operaciones de Archivos y Texto
+├── modulo6/        # 📖 Manipulación Avanzada de Datos
+├── modulo7/        # 📖 Optimización y Debugging
+└── modulo8/        # 📖 Proyectos Avanzados y Automatización
 ```
 
 ### Módulos del Bootcamp
 
-| Módulo | Tema                      | Proyecto Principal      |
-| ------ | ------------------------- | ----------------------- |
-| **1**  | Fundamentos de Bash       | Calculadora Simple      |
-| **2**  | Variables y Control       | Sistema de Menús        |
-| **3**  | Funciones y Arrays        | Biblioteca de Funciones |
-| **4**  | Archivos y Texto          | Analizador de Logs      |
-| **5**  | Avanzado y Automatización | Sistema de Backup       |
+| Módulo | Tema                         | Proyecto Principal                |
+| ------ | ---------------------------- | --------------------------------- |
+| **1**  | Fundamentos de Bash          | Sistema de Gestión de Archivos    |
+| **2**  | Comandos Avanzados y Pipes   | Procesador de Logs Avanzado       |
+| **3**  | Variables y Control de Flujo | Sistema de Menús Interactivo      |
+| **4**  | Funciones y Arrays           | Gestor Interactivo de Archivos    |
+| **5**  | Operaciones de Archivos      | Analizador de Logs con Reportes   |
+| **6**  | Manipulación Avanzada Datos  | Procesador de Datos Empresariales |
+| **7**  | Optimización y Debugging     | Monitor de Sistema Avanzado       |
+| **8**  | Proyectos y Automatización   | Sistema de Backup y Deploy        |
+
+## 📋 Progresión de Aprendizaje
+
+### 🎯 Semanas 1-2: Fundamentos
+
+- **Módulo 1**: Conceptos básicos de Bash y scripting
+- **Módulo 2**: Comandos avanzados y procesamiento de texto
+
+### 🚀 Semanas 3-4: Programación
+
+- **Módulo 3**: Variables, condicionales y bucles
+- **Módulo 4**: Funciones y estructuras de datos
+
+### 💪 Semanas 5-6: Aplicaciones
+
+- **Módulo 5**: Manipulación de archivos y directorios
+- **Módulo 6**: Procesamiento avanzado de datos
+
+### 🏆 Semanas 7-8: Maestría
+
+- **Módulo 7**: Optimización, debugging y mejores prácticas
+- **Módulo 8**: Proyectos complejos y automatización empresarial
 
 ## 🎯 Características Destacadas
 
