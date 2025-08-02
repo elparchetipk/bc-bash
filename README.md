@@ -1,3 +1,12 @@
+<div align="center">
+
+![Bootcamp Bash Logo](assets/logo-bootcamp-bash.svg)
+
+![Open Source](assets/badge-open-source.svg)
+![MIT License](assets/badge-mit-license.svg)
+
+</div>
+
 # 🎓 Bootcamp Bash (bc_bash)
 
 Un bootcamp completo de scripting en Bash dividido en 8 módulos progresivos, con sistema de commits automáticos integrado.

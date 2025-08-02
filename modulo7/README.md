@@ -1,3 +1,8 @@
+<div align="center">
+  <img src="../assets/module-7-logo.svg" alt="Módulo 7: Optimización y Debugging" width="300">
+</div>
+
+# MÓDULO 7: Optimización y Debugging
 
 Bootcamp bash scripting /
 de acuerdo con el contexto, kb; vamos con: MÓDULO 7: Optimización y Debugging
@@ -7,21 +12,13 @@ Editar
 Planificó módulo de optimización y debugging de Bash Scripting.
 3s
 
-
-
-
-
 ¡Perfecto! Vamos a desarrollar el MÓDULO 7: Optimización y Debugging del bootcamp. Este es uno de los módulos más críticos, ya que aquí transformaremos a los estudiantes de programadores de scripts básicos a desarrolladores de Bash profesionales.
 
-
 MÓDULO 7: Optimización y Debugging - Bash Scripting Bootcamp
-Documento 
+Documento
 
 Desglosó lección de debugging con estrategias y herramientas avanzadas.
 4s
-
-
-
 
 ¡Excelente! He desarrollado la Lección 7.1: Debugging y Troubleshooting de manera completa y práctica. Esta lección cubre todos los aspectos fundamentales que un desarrollador de Bash profesional debe dominar.
 
@@ -52,9 +49,6 @@ Principios de menor privilegio
 
 ¡La estructura pedagógica está diseñada para ser modular, así que podemos ajustarnos a tu ritmo de aprendizaje! 🚀
 
-
-
-
 Reintentar
 vamos con la lección 7.2 Optimización de Performance
 
@@ -63,19 +57,13 @@ Editar
 Plotted comprehensive lesson on bash script performance optimization.
 2s
 
-
-
 ¡Perfecto! Continuemos con la Lección 7.2: Optimización de Performance. Esta es una de las lecciones más importantes para convertirse en un desarrollador de Bash profesional, ya que aquí aprenderemos a escribir scripts que no solo funcionen, sino que sean rápidos y eficientes.
 
-
 MÓDULO 7: Optimización y Debugging - Bash Scripting Bootcamp
-Documento ∙ Versión 2 
+Documento ∙ Versión 2
 
 Estructuró lección completa sobre optimización de rendimiento en scripts.
 4s
-
-
-
 
 ¡Excelente! He completado la Lección 7.2: Optimización de Performance con un enfoque muy práctico y profesional. Esta lección es fundamental porque marca la diferencia entre un scripter amateur y un desarrollador de Bash profesional.
 
@@ -121,9 +109,6 @@ Opción D: Ver el Proyecto Práctico 7 (refactorización completa de un script)
 
 ¡Estamos en la recta final del módulo más técnico del bootcamp! 🏆
 
-
-
-
 Reintentar
 vamos la 7.3 seguridad en scripts
 
@@ -132,20 +117,13 @@ Editar
 Planificó lección detallada sobre seguridad en scripts.
 2s
 
-
-
 ¡Perfecto! Continuemos con la Lección 7.3: Seguridad en Scripts. Esta es una lección crítica, ya que los scripts mal escritos pueden ser vectores de ataque. Aquí aprenderemos a escribir código Bash que no solo sea funcional y eficiente, sino también seguro.
 
-
 MÓDULO 7: Optimización y Debugging - Bash Scripting Bootcamp
-Documento ∙ Versión 3 
+Documento ∙ Versión 3
 
 Desglosó estrategias de seguridad para scripts Bash profesionales.
 11s
-
-
-
-
 
 ¡Excelente! 🎉 Has completado la Lección 7.3: Seguridad en Scripts y con ello todo el MÓDULO 7: Optimización y Debugging. Este ha sido uno de los módulos más técnicos y críticos del bootcamp.
 
@@ -199,5 +177,3 @@ Como mentor, sugiero el MÓDULO 8 para completar tu transformación de "Zero to 
 ¿Qué prefieres? También puedo crear un mini-proyecto de transición que combine debugging + optimización + seguridad si quieres consolidar antes de avanzar.
 
 ¡Estás a solo un módulo de convertirte oficialmente en un Bash Hero! 🦸‍♂️
-
-

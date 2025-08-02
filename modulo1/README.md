@@ -1,4 +1,8 @@
-**¡Excelente! Vamos a desarrollar el MÓDULO 1: Fundamentos del Sistema de nuestro bootcamp de bash Scripting. Este módulo es crucial porque establece las bases sólidas sobre las cuales construiremos todo el conocimiento posterior.*
+<div align="center">
+  <img src="../assets/module-1-logo.svg" alt="Módulo 1: Fundamentos de Bash" width="300">
+</div>
+
+**¡Excelente! Vamos a desarrollar el MÓDULO 1: Fundamentos del Sistema de nuestro bootcamp de bash Scripting. Este módulo es crucial porque establece las bases sólidas sobre las cuales construiremos todo el conocimiento posterior.**
 
 # MÓDULO 1: Fundamentos del Sistema (Semana 1)
 
@@ -11,7 +15,7 @@ Objetivos de aprendizaje:
 - Configurar correctamente el entorno de trabajo
 - Dominar la navegación básica del sistema de archivos
 
-*Conceptos Fundamentales*
+_Conceptos Fundamentales_
 
 Antes de sumergirnos en el mundo del scripting, necesitamos entender claramente qué herramientas estamos usando. Muchas personas confunden los términos "terminal", "consola" y "shell", pero cada uno tiene un propósito específico:
 
@@ -19,7 +23,7 @@ La consola es el hardware físico o virtual donde interactúas con el sistema. P
 
 bash, que significa "Bourne Again SHell", es una evolución de la shell original de Unix creada por Stephen Bourne. ```bash se convirtió en el estándar porque combina la funcionalidad de la shell original con características avanzadas como autocompletado, historial de comandos y scripting robusto.
 
-*Configuración del Entorno*
+_Configuración del Entorno_
 
 Para comenzar correctamente, necesitamos configurar nuestro entorno de trabajo. Si estás en Linux o macOS, bash ya está instalado. En Windows, puedes usar WSL (Windows Subsystem for Linux) o Git bash.
 
@@ -29,10 +33,9 @@ Primero, vamos a verificar qué shell estamos usando:
 echo $SHELL
 ```
 
-Este comando debería mostrar algo como /bin/bash. Si no es así, puedes cambiar a bash temporalmente escribiendo:  bash
+Este comando debería mostrar algo como /bin/bash. Si no es así, puedes cambiar a bash temporalmente escribiendo: bash
 
-
-*Navegación Básica: Los Primeros Pasos*
+_Navegación Básica: Los Primeros Pasos_
 
 La navegación en el sistema de archivos es como aprender a caminar antes de correr. Vamos a dominar los comandos esenciales:
 
@@ -62,7 +65,7 @@ La opción -a muestra archivos ocultos (que comienzan con punto):
 ls -la
 ```
 
-*Mejores Prácticas para la Navegación:*
+_Mejores Prácticas para la Navegación:_
 
 Siempre usa ls -la cuando explores un directorio nuevo, porque los archivos ocultos a menudo contienen configuraciones importantes.
 
@@ -78,7 +81,7 @@ cd ~ o simplemente cd te lleva a tu directorio home
 cd .. sube un nivel en la jerarquía
 cd - regresa al directorio anterior
 
-*Creación de Directorios*
+_Creación de Directorios_
 
 Para crear directorios usamos mkdir (make directory):
 
@@ -98,7 +101,7 @@ Esta es una práctica excelente porque evita errores si los directorios padre no
 
 Vamos a crear nuestra primera estructura de trabajo:
 
-```bash
+````bash
 # Navegar al directorio home
 cd ~
 
@@ -112,21 +115,21 @@ cd bc-bash/modulo1
 # Verificar la estructura
 ```bash
 ls -la
-```
+````
 
-*Pregunta de Reflexión:* ¿Por qué crees que es importante usar nombres descriptivos para los directorios y evitar espacios en los nombres?
+_Pregunta de Reflexión:_ ¿Por qué crees que es importante usar nombres descriptivos para los directorios y evitar espacios en los nombres?
 
 ---
 
 ## Lección 1.2: Sistema de Archivos y Permisos
 
-*Objetivos de aprendizaje:*
+_Objetivos de aprendizaje:_
 
 - Entender la jerarquía del sistema de archivos Unix/Linux
 - Dominar el sistema de permisos
 - Usar comandos de gestión de permisos eficientemente
 
-*La Jerarquía del Sistema de Archivos*
+_La Jerarquía del Sistema de Archivos_
 
 El sistema de archivos Unix/Linux es como un árbol invertido donde todo comienza desde la raíz /. Esta estructura es fundamental para entender cómo organizar y acceder a los archivos.
 
@@ -138,17 +141,17 @@ Los directorios principales incluyen:
 /usr: Aplicaciones de usuario
 /var: Datos variables como logs
 
-*El Sistema de Permisos: Tu Primera Línea de Seguridad*
+_El Sistema de Permisos: Tu Primera Línea de Seguridad_
 
 Los permisos en Unix/Linux siguen un modelo simple pero poderoso. Cada archivo y directorio tiene tres tipos de permisos para tres tipos de usuarios:
 
-*Tipos de permisos:*
+_Tipos de permisos:_
 
 r (read): Lectura
 w (write): Escritura
 x (execute): Ejecución
 
-*Tipos de usuarios:*
+_Tipos de usuarios:_
 
 Propietario (owner): quien creó el archivo
 Grupo (group): usuarios que pertenecen al mismo grupo
@@ -214,7 +217,7 @@ chmod 755 test_permisos.txt
 ls -l test_permisos.txt
 ```
 
-*Mejores Prácticas de Seguridad:*
+_Mejores Prácticas de Seguridad:_
 
 Nunca uses chmod 777 indiscriminadamente. Este comando da todos los permisos a todos los usuarios y es un riesgo de seguridad grave. Siempre aplica el principio de menor privilegio: da solo los permisos mínimos necesarios.
 
@@ -224,7 +227,7 @@ Nunca uses chmod 777 indiscriminadamente. Este comando da todos los permisos a t
 
 ## Lección 1.3: Manipulación de Archivos
 
-*Objetivos de aprendizaje:*
+_Objetivos de aprendizaje:_
 
 - Dominar la creación y edición básica de archivos
 - Entender las diferencias entre copiar, mover y enlazar archivos
@@ -278,7 +281,7 @@ Los modos principales son:
 - Modo Comando: Para ejecutar comandos como guardar o salir (presiona : para entrar)
 - Para salir de vim sin guardar cambios, usa :q!. Para guardar y salir, usa :wq. Estos comandos son fundamentales porque muchos principiantes se "quedan atrapados" en vim sin saber cómo salir.
 
-*Copia y Movimiento: Organizando tu Workspace*
+_Copia y Movimiento: Organizando tu Workspace_
 
 El comando cp (copy) es como usar una fotocopiadora. Crea una copia exacta del archivo original manteniendo el original intacto:
 
@@ -308,7 +311,7 @@ mv nombre_viejo.txt nombre_nuevo.txt
 mv archivo.txt /nueva/ubicacion/nuevo_nombre.txt
 ```
 
-*Enlaces: Creando Conexiones Inteligentes*
+_Enlaces: Creando Conexiones Inteligentes_
 
 Los enlaces son como crear accesos directos inteligentes. Hay dos tipos principales:
 
@@ -326,7 +329,7 @@ Los enlaces duros (hard links) son como tener múltiples nombres para el mismo a
 ln archivo_original.txt enlace_duro.txt
 ```
 
-*Visualización de Contenido: Diferentes Herramientas para Diferentes Necesidades*
+_Visualización de Contenido: Diferentes Herramientas para Diferentes Necesidades_
 
 La visualización de archivos es como tener diferentes tipos de ventanas para ver el mismo paisaje. Cada herramienta tiene su propósito específico.
 
@@ -368,7 +371,7 @@ tail archivo.txt
 tail -f archivo.log
 ```
 
-*Búsqueda de Archivos: Encontrando Agujas en el Pajar*
+_Búsqueda de Archivos: Encontrando Agujas en el Pajar_
 
 La búsqueda de archivos es como tener un detector de metales sofisticado. Diferentes herramientas son mejores para diferentes tipos de búsqueda.
 
@@ -390,13 +393,13 @@ find /ruta/busqueda -mtime -7
 
 El comando locate es como usar un índice de biblioteca. Es muy rápido porque usa una base de datos precompilada:
 
-```bash
+````bash
 # Buscar archivos que contengan "```bash" en el nombre
 locate ```bash
 
 # Actualizar la base de datos (como root)
 sudo updatedb
-```
+````
 
 Los comandos which y whereis son específicos para encontrar programas ejecutables:
 
@@ -409,7 +412,7 @@ which python
 whereis bash
 ```
 
-*Ejercicio Práctico Integral 1.3:*
+_Ejercicio Práctico Integral 1.3:_
 
 Vamos a poner en práctica todo lo aprendido creando un pequeño proyecto:
 
@@ -449,7 +452,7 @@ tail -n 3 notas.txt
 find . -name "*.txt" -type f
 ```
 
-*Mejores Prácticas de Manipulación de Archivos:*
+_Mejores Prácticas de Manipulación de Archivos:_
 
 Siempre haz copias de seguridad antes de hacer cambios importantes. Es como tener un seguro para tu trabajo. Usa nombres descriptivos para tus archivos y mantén una estructura de directorios lógica. Cuando uses mv, ten especial cuidado porque a diferencia de cp, no conserva el original.
 
@@ -461,15 +464,15 @@ Pregunta de Reflexión: ¿En qué situaciones crees que sería más útil usar l
 
 **Proyecto Práctico 1: Sistema de Gestión de Archivos para un Equipo de Desarrollo**
 
-*Contexto del Proyecto*
+_Contexto del Proyecto_
 
 Imagina que eres el administrador de sistemas de una pequeña empresa de desarrollo de software. Tu tarea es crear una estructura de archivos organizada para un nuevo proyecto, establecer los permisos correctos para diferentes tipos de usuarios y preparar los archivos iniciales del proyecto. Este es exactamente el tipo de situación que enfrentarás en el mundo real como especialista en bash.
 
-*Objetivos del Proyecto*
+_Objetivos del Proyecto_
 
 Al finalizar este proyecto, habrás creado un sistema completo de gestión de archivos que incluye estructura jerárquica, permisos de seguridad apropiados y documentación básica. Más importante aún, habrás aplicado cada concepto aprendido en situaciones prácticas que reflejan desafíos reales.
 
-*Fase 1: Planificación y Estructura Base*
+_Fase 1: Planificación y Estructura Base_
 
 Antes de comenzar a crear archivos y directorios, necesitamos planificar la estructura. Esta fase de planificación es crucial porque una estructura bien pensada desde el inicio te ahorrará mucho tiempo y problemas posteriormente.
 
@@ -500,11 +503,11 @@ find WebApp-Ecommerce -type d
 
 La razón por la que usamos la opción -p con mkdir es una mejor práctica fundamental. Esta opción crea automáticamente todos los directorios padre necesarios, evitando errores si algún directorio intermedio no existe. Es como construir una casa asegurándote de que primero existan los cimientos.
 
-*Fase 2: Creación de Archivos Iniciales*
+_Fase 2: Creación de Archivos Iniciales_
 
 Ahora vamos a poblar nuestra estructura con archivos iniciales que representan el contenido típico de un proyecto de desarrollo. Cada archivo tendrá un propósito específico y contenido relevante:
 
-```bash
+````bash
 # Navegar al directorio del proyecto
 cd WebApp-Ecommerce
 
@@ -616,11 +619,11 @@ done
 
 echo "=== Pruebas completadas ==="
 EOF
-```
+````
 
 La técnica que usamos aquí con cat > archivo << 'EOF' se llama "here document" y es una forma elegante de crear archivos con múltiples líneas de contenido. Es especialmente útil en scripts porque permite incluir texto formateado sin necesidad de usar múltiples comandos echo.
 
-*Fase 3: Configuración de Permisos de Seguridad*
+_Fase 3: Configuración de Permisos de Seguridad_
 
 Esta es la fase más crítica del proyecto porque los permisos incorrectos pueden crear vulnerabilidades de seguridad graves. Vamos a aplicar el principio de menor privilegio, dando a cada archivo solo los permisos mínimos necesarios para su función:
 
@@ -671,7 +674,7 @@ ls -la logs/app.log
 
 La lógica detrás de estos permisos es fundamental para la seguridad. Los archivos de configuración tienen permisos 644 (lectura para propietario, lectura para grupo, lectura para otros) porque necesitan ser leídos por la aplicación pero no modificados por usuarios no autorizados. Los scripts tienen permisos 755 para ser ejecutables. Los backups tienen permisos 700 porque contienen datos sensibles que solo el propietario debería acceder.
 
-*Fase 4: Creación de Enlaces y Accesos Rápidos*
+_Fase 4: Creación de Enlaces y Accesos Rápidos_
 
 Los enlaces nos permiten crear accesos eficientes a archivos y directorios frecuentemente usados, mejorando la productividad del equipo:
 
@@ -705,11 +708,11 @@ ls -la enlaces_rapidos/
 
 Los enlaces simbólicos son especialmente útiles en proyectos grandes porque permiten acceder rápidamente a archivos profundamente anidados sin tener que navegar por múltiples niveles de directorios. Piensa en ellos como atajos inteligentes que siempre apuntan al archivo correcto, incluso si lo mueves.
 
-*Fase 5: Implementación de Funcionalidades de Búsqueda*
+_Fase 5: Implementación de Funcionalidades de Búsqueda_
 
 Vamos a crear herramientas que faciliten encontrar archivos específicos en nuestro proyecto. Esto es especialmente valioso cuando el proyecto crece:
 
-```bash
+````bash
 # Crear un script de búsqueda personalizado
 cat > buscar_archivos.sh << 'EOF'
 #!/bin/```bash
@@ -759,15 +762,15 @@ chmod +x buscar_archivos.sh
 # Probar el script de búsqueda
 echo "Probando búsqueda de archivos .md:"
 find . -name "*.md" -type f
-```
+````
 
 Este script de búsqueda demuestra cómo combinar múltiples conceptos aprendidos: condicionales básicas, lectura de input del usuario, y comandos de búsqueda avanzados. Es un ejemplo perfecto de cómo las herramientas básicas se pueden combinar para crear soluciones más complejas.
 
-*Fase 6: Documentación y Validación Final*
+_Fase 6: Documentación y Validación Final_
 
 Finalmente, vamos a crear documentación sobre la estructura que hemos creado y validar que todo funcione correctamente:
 
-```bash
+````bash
 # Crear un archivo de documentación de la estructura
 cat > ESTRUCTURA_PROYECTO.md << 'EOF'
 # Documentación de la Estructura del Proyecto
@@ -890,9 +893,9 @@ chmod +x validar_proyecto.sh
 
 # Ejecutar la validación
 ./validar_proyecto.sh
-```
+````
 
-*Reflexión y Mejores Prácticas Aplicadas*
+_Reflexión y Mejores Prácticas Aplicadas_
 
 Este proyecto práctico integra todos los conceptos fundamentales del Módulo 1 de manera coherente. Hemos aplicado varias mejores prácticas importantes que debes recordar para proyectos futuros:
 
@@ -901,4 +904,3 @@ La planificación previa de la estructura de directorios es fundamental porque e
 El script de validación que creamos es un ejemplo excelente de automatización básica que te será muy útil en proyectos reales. Te permite verificar rápidamente que todo está configurado correctamente, lo cual es especialmente valioso cuando trabajas en equipos o cuando regresas a un proyecto después de tiempo.
 
 Pregunta de reflexión final: ¿Qué aspectos de este proyecto crees que serían más útiles si estuvieras configurando un entorno de desarrollo real para un equipo de trabajo? ¿Cómo modificarías la estructura de permisos si tuvieras que trabajar con usuarios que tienen diferentes niveles de acceso al sistema?
-

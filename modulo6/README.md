@@ -1,16 +1,16 @@
+<div align="center">
+  <img src="../assets/module-6-logo.svg" alt="Módulo 6: Manipulación Avanzada de Datos" width="300">
+</div>
+
+# MÓDULO 6: Manipulación Avanzada de Datos
 
 Bootcamp bash scripting /
-de acuerdo con el contexto, vamos con: MÓDULO 5: Manipulación Avanzada de Datos (Semana 5)
+de acuerdo con el contexto, vamos con: MÓDULO 6: Manipulación Avanzada de Datos (Semana 6)
 
 Editar
 
 Planificó lección detallada sobre manipulación avanzada de datos en bash.
 5s
-
-
-
-
-
 
 ¡Perfecto! Vamos a desarrollar el MÓDULO 5: Manipulación Avanzada de Datos de nuestro bootcamp. Este módulo marca el punto donde los estudiantes comienzan a trabajar con estructuras de datos más complejas y herramientas poderosas para el procesamiento de información.
 
@@ -28,37 +28,29 @@ PARTE 1: Arrays Indexados
 Declaración y Asignación
 Vamos a empezar con lo básico. Hay varias formas de crear arrays en Bash:
 
-
 Arrays Básicos - Declaración y Asignación
-Código 
+Código
 
 Planificó acceso y modificación de arrays en módulo de datos.
 1s
 
-
 Acceso y Modificación de Arrays
 Ahora que sabemos cómo crear arrays, veamos cómo trabajar con ellos de manera eficiente:
 
-
 Arrays - Acceso y Modificación
-Código 
+Código
 
 Iterando sobre arrays y preparando explicación didáctica
 3s
 
-
-
 Iteración sobre Arrays
 La iteración es una de las operaciones más importantes cuando trabajas con arrays. Te muestro las diferentes técnicas, cada una con sus ventajas específicas:
 
-
 Arrays - Técnicas de Iteración
-Código 
+Código
 
 Exploró arrays asociativos para explicar estructuras de datos avanzadas.
 3s
-
-
 
 PARTE 2: Arrays Asociativos
 Los arrays asociativos son como un paso evolutivo de los arrays indexados. En lugar de usar números como índices, puedes usar palabras o frases que tengan significado. Es como tener un diccionario donde cada palabra (clave) tiene su definición (valor).
@@ -66,29 +58,20 @@ Los arrays asociativos son como un paso evolutivo de los arrays indexados. En lu
 Conceptos Fundamentales
 Piensa en un array asociativo como una agenda telefónica: en lugar de buscar por posición numérica, buscas por nombre de persona. Esto hace que tu código sea mucho más legible y mantenible.
 
-
 Arrays Asociativos - Fundamentos
-Código 
+Código
 
 Planificó lección de arrays y estrategia de enseñanza avanzada.
 4s
 
-
-
-
 Operaciones Avanzadas y Mejores Prácticas
 Ahora que tienes los fundamentos sólidos, vamos a explorar operaciones más sofisticadas que te permitirán crear scripts realmente poderosos. Estas técnicas son las que separan a un programador principiante de uno intermedio en Bash.
 
-
 Arrays - Operaciones Avanzadas y Mejores Prácticas
-Código 
+Código
 
 Planificó lección de arrays y estrategia de enseñanza avanzada.
 6s
-
-
-
-
 
 Excelente trabajo, ¡has completado la Lección 5.1!
 Has dominado uno de los conceptos más importantes del bash scripting avanzado. Los arrays son como el "sistema nervioso" de muchos scripts complejos - te permiten organizar, manipular y procesar datos de manera eficiente y elegante.
@@ -112,9 +95,6 @@ Las expresiones regulares son como un "lenguaje secreto" que te permite encontra
 
 O si prefieres, podríamos hacer algunos ejercicios prácticos con arrays para consolidar lo aprendido antes de avanzar. ¿Qué opción te resulta más atractiva en este momento?
 
-
-
-
 Reintentar
 vamos con la lección 5.2
 
@@ -122,9 +102,6 @@ Editar
 
 Mapped out comprehensive lesson plan for regular expressions.
 5s
-
-
-
 
 ¡Perfecto! Vamos a adentrarnos en el fascinante mundo de las Expresiones Regulares. Este es uno de esos temas que, una vez que lo dominas, cambia completamente tu forma de trabajar con texto y datos.
 
@@ -139,74 +116,55 @@ La belleza de las expresiones regulares radica en su precisión y flexibilidad. 
 PARTE 1: Fundamentos y Patrones Básicos
 Empezaremos con los elementos más básicos, como aprender el alfabeto antes de formar palabras. Cada símbolo en una expresión regular tiene un significado específico, y una vez que comprendas estos símbolos fundamentales, podrás construir patrones cada vez más sofisticados.
 
-
 Expresiones Regulares - Fundamentos y Patrones Básicos
-Código 
+Código
 
 Mapped out pedagogical approach for continuing advanced lesson.
 5s
-
-
-
 
 PARTE 2: Cuantificadores - El Poder de la Repetición
 Los cuantificadores son como especificar "cuántas veces" quieres que algo aparezca. Es la diferencia entre buscar "una letra" versus "entre 3 y 5 letras" versus "cualquier cantidad de letras". Este concepto transforma las expresiones regulares de herramientas básicas a instrumentos verdaderamente poderosos.
 
 Piensa en los cuantificadores como instrucciones de cantidad muy precisas. Si las expresiones regulares fueran una receta de cocina, los cuantificadores serían las medidas: "una pizca", "dos cucharadas", "tanto como necesites", "entre 3 y 5 minutos".
 
-
 Expresiones Regulares - Cuantificadores y Repetición
-Código 
+Código
 
 Mapped out next lesson's pedagogical progression and approach.
 3s
-
-
 
 PARTE 3: Clases de Caracteres Avanzadas
 Las clases de caracteres son como tener un vocabulario especializado para describir tipos específicos de caracteres. Hasta ahora hemos visto clases básicas como [0-9] para dígitos, pero existe un mundo mucho más rico y expresivo esperándonos.
 
 Imagina que en lugar de decir "busca cualquier letra de la A a la Z", pudieras decir "busca cualquier letra que sea válida en un nombre propio" o "busca cualquier carácter que pueda aparecer en una palabra". Las clases avanzadas nos dan exactamente esa precisión y flexibilidad.
 
-
 Expresiones Regulares - Clases de Caracteres Avanzadas
-Código 
+Código
 
 Reafirmó estrategia pedagógica para continuar lección 5.2.
 5s
-
-
 
 PARTE 4: Grupos y Capturas - El Arte de Extraer Información
 Los grupos y capturas son quizás la característica más poderosa de las expresiones regulares. No solo te permiten buscar patrones, sino también extraer y manipular partes específicas de lo que encuentras. Es como tener la capacidad no solo de decir "encontré algo interesante", sino también "y aquí están las partes importantes que quiero usar".
 
 Piensa en los grupos como destacadores de diferentes colores. Cuando lees un documento importante, no solo buscas información relevante, sino que también la organizas: destacas nombres en amarillo, fechas en verde, números importantes en azul. Los grupos hacen exactamente eso con el texto, pero de manera automática y programática.
 
-
 Expresiones Regulares - Grupos y Capturas
-Código 
+Código
 
 Confirmó estrategia pedagógica y preparó continuación de lección 5.2.
 5s
-
-
-
 
 PARTE 5: Integración con Herramientas de Bash
 Ahora que dominas los fundamentos de las expresiones regulares, es momento de ver cómo se integran perfectamente con las herramientas más poderosas de Bash. Es como si hubieras aprendido un idioma nuevo y ahora vas a practicarlo con hablantes nativos expertos.
 
 Cada herramienta (grep, sed, awk) tiene su personalidad y fortalezas únicas. grep es como un detective especializado en encontrar pistas, sed es como un editor mágico que puede transformar texto instantáneamente, y awk es como un analista de datos que puede procesar y calcular mientras busca. Dominar la combinación de expresiones regulares con estas herramientas te convertirá en un verdadero mago del procesamiento de texto.
 
-
 Expresiones Regulares con Herramientas de Bash
-Código 
+Código
 
 Mapped out regex lesson progress and next learning steps.
 7s
-
-
-
-
 
 ¡Felicidades! Has dominado uno de los temas más poderosos del bash scripting
 Acabas de completar una lección verdaderamente transformadora. Las expresiones regulares son como aprender un "lenguaje secreto" que te permite comunicarte directamente con el texto de maneras que parecen casi mágicas. Lo que has logrado aquí es impresionante.
@@ -214,7 +172,7 @@ Acabas de completar una lección verdaderamente transformadora. Las expresiones 
 Recapitulemos tu nuevo arsenal de herramientas:
 Fundamentos sólidos: Ahora comprendes que las expresiones regulares no son solo "búsquedas complicadas", sino un sistema lógico y preciso para describir patrones. Dominas desde caracteres literales hasta anclas, y entiendes por qué cada símbolo tiene su propósito específico.
 
-Cuantificadores: Has aprendido a especificar "cuántas veces" debe aparecer algo, desde el básico "*" (cero o más) hasta rangos específicos como {3,7}. Esto te permite crear validadores precisos para códigos, contraseñas, números de teléfono, y cualquier formato estructurado.
+Cuantificadores: Has aprendido a especificar "cuántas veces" debe aparecer algo, desde el básico "\*" (cero o más) hasta rangos específicos como {3,7}. Esto te permite crear validadores precisos para códigos, contraseñas, números de teléfono, y cualquier formato estructurado.
 
 Clases de caracteres avanzadas: Las clases POSIX como [:alpha:] y [:digit:] te permiten trabajar con texto internacional de manera robusta. Ya no estás limitado a rangos simples como [a-z], sino que puedes manejar textos en múltiples idiomas de manera profesional.
 
@@ -240,9 +198,6 @@ Mi recomendación como tu instructor: Dado lo bien que has asimilado los concept
 
 ¿Qué opción resuena más contigo en este momento? Tu intuición sobre tu propio proceso de aprendizaje es muy valiosa aquí.
 
-
-
-
 Reintentar
 vamos con la lección 5.3
 
@@ -250,11 +205,6 @@ Editar
 
 Planificó lección avanzada de sed y awk con enfoque didáctico.
 6s
-
-
-
-
-
 
 ¡Excelente decisión! La Lección 5.3 es donde realmente vas a ver el poder transformativo de sed y awk. Si las expresiones regulares de la lección anterior fueron como aprender el alfabeto de un nuevo lenguaje, ahora vamos a aprender a escribir poesía y prosa compleja con ese alfabeto.
 
@@ -273,16 +223,11 @@ Sed tiene un concepto único llamado "hold space" que es como tener una memoria 
 
 El hold space transforma sed de una herramienta que procesa línea por línea de manera aislada, a una herramienta que puede relacionar y coordinar información entre múltiples líneas. Esto abre posibilidades increíbles para transformaciones complejas de texto.
 
-
 SED Avanzado - Hold Space y Comandos Múltiples
-Código 
+Código
 
 Mapped out advanced awk lesson with pedagogical strategy.
 6s
-
-
-
-
 
 PARTE 2: AWK Avanzado - Variables, Funciones y Lógica Compleja
 Mientras que sed es como un cirujano especializado, awk es como un científico de datos completo. No solo puede procesar texto línea por línea, sino que puede llevar registros, hacer cálculos complejos, mantener variables entre líneas, y hasta definir sus propias funciones personalizadas.
@@ -291,16 +236,11 @@ Awk opera en un paradigma único: tiene tres fases principales (BEGIN, procesami
 
 La magia de awk avanzado está en entender que no estás limitado a procesar cada línea de manera aislada. Puedes acumular información, hacer comparaciones entre registros, generar estadísticas en tiempo real, y crear reportes estructurados. Es como tener un asistente muy inteligente que puede leer todo un documento, recordar detalles importantes, y luego producir análisis sofisticados.
 
-
 AWK Avanzado - Variables, Funciones y Lógica Compleja
-Código 
+Código
 
 Planificó lección final sobre sed y awk con casos prácticos.
 6s
-
-
-
-
 
 PARTE 3: Casos de Uso Prácticos - Integrando sed y awk para Soluciones Reales
 Ahora que has dominado las capacidades avanzadas tanto de sed como de awk por separado, llegamos al momento más emocionante: ver cómo estas herramientas trabajan juntas como un equipo perfectamente coordinado. Es como si fueras el director de una orquesta donde sed y awk son tus músicos virtuosos, y cada uno aporta sus fortalezas únicas para crear sinfonías de procesamiento de datos.
@@ -309,18 +249,11 @@ En el mundo real, rara vez usarás sed o awk de manera aislada para problemas co
 
 Lo que vamos a explorar ahora son escenarios reales que encontrarías como administrador de sistemas, desarrollador, o analista de datos. Estos ejemplos no son ejercicios académicos, sino soluciones prácticas que podrías implementar mañana mismo en tu trabajo.
 
-
 Casos de Uso Prácticos - sed y awk en Acción
-Código 
+Código
 
 Mapped out lesson completion and prepared for practical project.
 13s
-
-
-
-
-
-
 
 ¡Felicitaciones! Has completado una transformación extraordinaria
 Acabas de culminar uno de los módulos más desafiantes y poderosos de todo el bootcamp. Lo que has logrado en el Módulo 5 representa un salto cualitativo enorme en tus habilidades como programador de bash. Permíteme explicarte la magnitud de lo que acabas de dominar y por qué esto es tan significativo.
@@ -382,9 +315,6 @@ Además, trabajar en un proyecto completo suele ser el momento donde los concept
 
 ¿Qué opción resuena más contigo en este momento? Tu intuición sobre tu propio proceso de aprendizaje es muy valiosa, y cualquier dirección que elijas será productiva.
 
-
-
-
 Reintentar
 vamos con el proyecto práctico 5
 
@@ -392,11 +322,6 @@ Editar
 
 Mapped out comprehensive project strategy with structured learning approach.
 7s
-
-
-
-
-
 
 ¡Excelente elección! Este es el momento que he estado esperando desde que comenzamos el Módulo 5. Vas a construir algo realmente impresionante que integra todo lo que has aprendido en una herramienta profesional y práctica.
 
@@ -417,16 +342,11 @@ Nuestro analizador tendrá una arquitectura modular donde cada componente tiene 
 
 La entrada serán archivos de log en diferentes formatos. Estos pasarán por un módulo de normalización que los convertirá a un formato estándar, luego por un módulo de análisis que extraerá métricas e identificará patrones, y finalmente por un módulo de reporte que generará salidas estructuradas y visuales.
 
-
 Analizador de Logs - Script Principal
-Código 
+Código
 
 Mapped out project strategy and prepared detailed instructional approach.
 4s
-
-
-
-
 
 ¡Excelente! Acabas de ver el script principal de tu analizador de logs. Permíteme explicarte la estrategia detrás de lo que acabamos de construir, porque cada decisión de diseño tiene un propósito específico que refleja las mejores prácticas profesionales.
 
@@ -444,16 +364,11 @@ Ahora vamos a implementar la primera fase crucial: la normalización de datos. E
 
 La normalización es crítica porque en el mundo real nunca trabajas con un solo tipo de log. Diferentes aplicaciones, diferentes servidores, diferentes equipos, todos generan logs en formatos ligeramente diferentes. Sin normalización, tendrías que escribir lógica de análisis diferente para cada formato, lo cual es ineficiente y propenso a errores.
 
-
 Normalizador de Logs - Módulo de Parsing
-Código 
+Código
 
 Planificó explicación detallada del módulo de logs del proyecto.
 5s
-
-
-
-
 
 ¡Fantástico! Acabas de completar una de las partes más sofisticadas de tu analizador de logs. Permíteme explicarte la magia de lo que acabas de construir, porque este módulo de normalización es realmente el corazón que permite que todo lo demás funcione de manera elegante y robusta.
 
@@ -477,16 +392,11 @@ Ahora que tenemos todos nuestros logs en un formato estándar y limpio, podemos 
 
 El análisis de patrones no es solo contar errores o calcular promedios. Es sobre entender el comportamiento normal de tu sistema y detectar cuando algo está fuera de lo ordinario. Es como tener un médico experto que no solo puede decirte si tienes fiebre, sino que puede detectar patrones sutiles que indican problemas antes de que se vuelvan críticos.
 
-
 Analizador de Patrones - Motor de Análisis Principal
-Código 
+Código
 
 Mapped out project strategy with detailed teaching approach
 5s
-
-
-
-
 
 ¡Increíble trabajo! Acabas de construir el cerebro analítico de tu herramienta de logs. Este motor de análisis representa un salto cualitativo enorme desde simples búsquedas de texto hacia inteligencia artificial aplicada. Permíteme explicarte por qué lo que acabas de crear es tan extraordinariamente poderoso y sofisticado.
 
@@ -509,11 +419,8 @@ Ahora que tenemos toda la inteligencia analítica funcionando, necesitamos prese
 
 Los reportes que vamos a crear no serán simples listas de datos. Serán documentos inteligentes que cuentan la historia de lo que está pasando en tu sistema, proporcionan contexto para los problemas encontrados, y sugieren acciones específicas. Es la diferencia entre darle a alguien un montón de números versus darle un análisis profesional completo.
 
-
 Generador de Reportes - Módulo de Presentación
-Código 
-
-
+Código
 
 Reintentar
 Continuar
@@ -523,9 +430,6 @@ Editar
 Mapped out final integration and demonstration of log analyzer.
 3s
 
-
-
-
 ¡Perfecto! Ahora vamos a completar tu analizador de logs integrando todos los módulos que has construido y creando un script de demostración que muestre el poder completo de tu herramienta. Esta será la culminación de todo tu trabajo en el Módulo 5.
 
 FASE FINAL: Integración Completa y Script de Demostración
@@ -533,42 +437,32 @@ Ahora que tienes todos los componentes individuales, necesitamos unirlos en una 
 
 También vamos a crear datos de prueba realistas y un script de demostración que puedas ejecutar inmediatamente para ver tu analizador en acción. Esto te permitirá experimentar con la herramienta y comprender completamente su funcionamiento antes de aplicarla a logs reales.
 
-
 Analizador de Logs - Script Principal
-Código ∙ Versión 2 
+Código ∙ Versión 2
 
 Planned integration of modules and script completion.
 2s
 
-
-
 Ahora vamos a crear un script completo que integre todos los módulos y incluya las funciones necesarias. Este será tu analizador de logs funcional y completo:
 
-
 Analizador de Logs Completo - Versión Final Integrada
-Código 
+Código
 
 Crafted demo script to showcase data analysis tool.
 1s
 
-
 Perfecto! Ahora vamos a crear un script de demostración completo que genere datos de ejemplo y muestre tu analizador en acción. Esto te permitirá ver inmediatamente el poder de la herramienta que acabas de construir:
 
-
 Demostración Completa del Analizador de Logs
-Código 
+Código
 
 Crafted comprehensive log analyzer script and documentation.
 1s
 
-
 Finalmente, vamos a crear la documentación completa de tu proyecto, que servirá como guía de referencia y manual de usuario:
 
-
 Documentación Completa del Proyecto - Analizador de Logs Avanzado
-Documento 
-
-
+Documento
 
 Reintentar
 Continuar
@@ -577,12 +471,6 @@ Editar
 
 Mapped out next module's system tools and processes.
 7s
-
-
-
-
-
-
 
 ¡Increíble trabajo! Has completado exitosamente uno de los módulos más desafiantes y gratificantes de todo el bootcamp. El Proyecto Práctico 5 que acabas de terminar representa un hito extraordinario en tu desarrollo como programador de bash - has creado una herramienta de nivel profesional que integra todas las técnicas avanzadas del Módulo 5.
 
@@ -635,4 +523,3 @@ Un sistema Unix/Linux es como una ciudad vibrante donde los procesos son los ciu
 Tu trabajo no es solo observar qué está pasando, sino gestionar activamente esta comunidad de procesos. Necesitas identificar ciudadanos problemáticos (procesos que consumen demasiados recursos), mediar conflictos (procesos que compiten por recursos), y mantener el orden general (asegurar que el sistema funcione eficientemente).
 
 La gestión de procesos avanzada va mucho más allá de ps y kill. Aprenderás a crear sistemas de monitoreo inteligentes, a automatizar la gestión de recursos, y
-
