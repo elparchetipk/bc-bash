@@ -100,3 +100,37 @@ pip-delete-this-directory.txt
 *.db
 *.sqlite
 *.sqlite3
+
+# Archivos específicos de open source
+PRIVATE.md
+SECRETS.md
+*.secret
+secrets/
+private/
+
+# Archivos de desarrollo local
+.local/
+local/
+dev/
+*.dev
+
+# Coverage reports y análisis
+coverage/
+.nyc_output/
+.coverage
+*.lcov
+
+# Archivos de release
+dist/
+build/
+release/
+
+# Archivos de dependencias específicas
+vendor/
+.vendor/
+
+# Archivos de configuración sensible
+config/secrets.json
+config/private.json
+.config/secrets
+.secrets/

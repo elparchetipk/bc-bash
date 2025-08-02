@@ -1,0 +1,23 @@
+# Configuración de funding para GitHub Sponsors
+# Este archivo permite que los usuarios vean opciones de sponsorship en el repositorio
+
+# GitHub Sponsors (cuando esté disponible)
+# github: [username]
+
+# Patreon (cuando esté disponible)
+# patreon: username
+
+# Open Collective (cuando esté disponible)
+# open_collective: bootcamp-bash
+
+# Ko-fi (cuando esté disponible)
+# ko_fi: username
+
+# Liberapay (cuando esté disponible)
+# liberapay: username
+
+# PayPal (cuando esté disponible)
+# custom: ['https://paypal.me/username']
+
+# Por ahora, el proyecto es completamente gratuito y open source
+# Los patrocinios se configurarán en el futuro si la comunidad lo demanda

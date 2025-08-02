@@ -223,4 +223,16 @@ git commit -m "feat(module2): add advanced loop examples"
 
 ## 📄 Licencia
 
-[Incluir información de licencia aquí]
+Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
+
+### 🤝 Contribuciones
+
+Las contribuciones son bienvenidas y apreciadas. Por favor lee nuestra [Guía de Contribución](CONTRIBUTING.md) para conocer cómo participar en este proyecto.
+
+### 📋 Código de Conducta
+
+Este proyecto adhiere al [Código de Conducta del Contributor Covenant](CODE_OF_CONDUCT.md). Al participar, se espera que mantengas este código.
+
+### 🔒 Seguridad
+
+Si encuentras una vulnerabilidad de seguridad, por favor sigue nuestra [Política de Seguridad](SECURITY.md) para reportarla de manera responsable.
