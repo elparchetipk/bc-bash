@@ -6,7 +6,7 @@ Se han actualizado todos los archivos de documentación e instrucciones para usa
 
 ### 📁 Archivos Actualizados
 
-#### 1. `/home/epti/Documentos/epti-dev/bc-bash/_docs/github-copilot-english-setup.md`
+#### 1. `/home/epti/Documentos/epti-dev/bc-bash/_docs/setup/github-copilot-english-setup.md`
 
 **Cambios principales:**
 
@@ -146,7 +146,7 @@ cd /home/epti/Documentos/epti-dev/bc-bash && ./_scripts/setup-copilot-english.sh
 
 Todos estos archivos ahora usan rutas absolutas consistentemente:
 
-1. **`_docs/github-copilot-english-setup.md`** - Guía principal
+1. **`_docs/setup/github-copilot-english-setup.md`** - Guía principal
 2. **`_scripts/setup-copilot-english.sh`** - Script de configuración
 3. **`_scripts/copilot-aliases.sh`** - Aliases y funciones
 

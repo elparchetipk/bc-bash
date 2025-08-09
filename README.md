@@ -27,8 +27,8 @@ Este proyecto incluye un **sistema de commits automáticos profesional** que pue
 
 ### 📋 Replicar en Otros Proyectos
 
-- 🚀 **[Guía de Instalación Rápida](_docs/QUICK_SETUP.md)** - 10 minutos
-- 📖 **[Guía Completa Paso a Paso](_docs/auto-commit-replication-guide.md)** - Implementación detallada
+- 🚀 **[Guía de Instalación Rápida](_docs/setup/QUICK_SETUP.md)** - 10 minutos
+- 📖 **[Guía Completa Paso a Paso](_docs/automation/auto-commit-replication-guide.md)** - Implementación detallada
 
 ## 📚 Contenido del Bootcamp
 
@@ -132,7 +132,7 @@ echo "Mi ejercicio" > modulo1/mi_script.sh
 ### Documentación Principal
 
 - **[README de Documentación](_docs/README.md)** - Descripción completa del proyecto
-- **[Estrategia de Commits](_docs/COMMIT_STRATEGY.md)** - Sistema de commits automáticos
+- **[Estrategia de Commits](_docs/automation/COMMIT_STRATEGY.md)** - Sistema de commits automáticos
 - **[Plantillas](_docs/templates/)** - Templates para ejercicios
 
 ### Por Módulo

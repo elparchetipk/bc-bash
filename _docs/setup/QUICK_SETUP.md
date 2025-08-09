@@ -6,7 +6,7 @@ Esta estrategia de commits automáticos puede ser replicada en **cualquier proye
 
 ## 📖 Guía Completa
 
-👉 **[Ver Guía Detallada Paso a Paso](_docs/auto-commit-replication-guide.md)**
+👉 **[Ver Guía Detallada Paso a Paso](../automation/auto-commit-replication-guide.md)**
 
 La guía incluye:
 
@@ -49,7 +49,7 @@ config: update database settings
 
 ## 📞 ¿Necesitas Ayuda?
 
-1. Lee la [guía completa](_docs/auto-commit-replication-guide.md)
+1. Lee la [guía completa](../automation/auto-commit-replication-guide.md)
 2. Revisa los scripts en `_scripts/` como referencia
 3. Adapta la configuración a tu proyecto
 

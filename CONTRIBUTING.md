@@ -295,7 +295,7 @@ Closes #456
 
 - [README Principal](README.md)
 - [Documentación Completa](_docs/README.md)
-- [Estrategia de Commits](_docs/COMMIT_STRATEGY.md)
+- [Estrategia de Commits](_docs/automation/COMMIT_STRATEGY.md)
 
 ### Herramientas
 

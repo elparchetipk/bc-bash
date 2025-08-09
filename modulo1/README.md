@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../assets/module-1-logo.svg" alt="Módulo 1: Fundamentos de Bash" width="300">
+  <img src="../assets/module-1-logo.svg" alt="Módulo 1: Fundamentos de Bash" width="400">
 </div>
 
 **¡Excelente! Vamos a desarrollar el MÓDULO 1: Fundamentos del Sistema de nuestro bootcamp de bash Scripting. Este módulo es crucial porque establece las bases sólidas sobre las cuales construiremos todo el conocimiento posterior.**
@@ -21,7 +21,7 @@ Antes de sumergirnos en el mundo del scripting, necesitamos entender claramente 
 
 La consola es el hardware físico o virtual donde interactúas con el sistema. Piénsalo como el teclado y pantalla que usas. El terminal es el programa que proporciona la interfaz gráfica para acceder a la shell, como una ventana donde puedes escribir comandos. La shell es el intérprete de comandos que realmente ejecuta las instrucciones que escribes.
 
-bash, que significa "Bourne Again SHell", es una evolución de la shell original de Unix creada por Stephen Bourne. ```bash se convirtió en el estándar porque combina la funcionalidad de la shell original con características avanzadas como autocompletado, historial de comandos y scripting robusto.
+bash, que significa "Bourne Again SHell", es una evolución de la shell original de Unix creada por Stephen Bourne. bash se convirtió en el estándar porque combina la funcionalidad de la shell original con características avanzadas como autocompletado, historial de comandos y scripting robusto.
 
 _Configuración del Entorno_
 

@@ -55,7 +55,7 @@ Se ha creado exitosamente la estructura completa para publicar el proyecto **Boo
 
 - **`.github/FUNDING.yml`** - Configuración de sponsorship (preparada)
 - **`.gitignore`** - Actualizado para proyectos open source
-- **`_docs/open-source-structure.md`** - Documentación de la estructura
+- **`_docs/development/open-source-structure.md`** - Documentación de la estructura
 
 ## 📊 Estadísticas de Implementación
 

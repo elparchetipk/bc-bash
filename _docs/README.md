@@ -76,11 +76,43 @@ bc_bash/
 
 ## Documentación Disponible
 
-### En `_docs/`
+### Organización Temática en `_docs/`
 
-- [`commit-strategy.md`](_docs/commit-strategy.md) - Estrategia de commits automáticos
-- [`templates/`](_docs/templates/) - Plantillas para ejercicios y proyectos
-- [`assets/`](_docs/assets/) - Recursos visuales y diagramas
+#### 🚀 **Setup & Configuración** (`setup/`)
+
+- [`QUICK_SETUP.md`](setup/QUICK_SETUP.md) - Guía rápida de configuración
+- [`github-copilot-english-setup.md`](setup/github-copilot-english-setup.md) - Configuración de GitHub Copilot
+
+#### 🤖 **Automatización** (`automation/`)
+
+- [`COMMIT_STRATEGY.md`](automation/COMMIT_STRATEGY.md) - Estrategia de commits automáticos
+- [`auto-commit-replication-guide.md`](automation/auto-commit-replication-guide.md) - Guía de replicación
+- [`competition-auto-commit-summary.md`](automation/competition-auto-commit-summary.md) - Resumen de competición
+
+#### 📋 **Cheatsheets** (`cheatsheets/`)
+
+- [`markdown-cheatsheet.md`](cheatsheets/markdown-cheatsheet.md) - Referencia rápida de Markdown
+- [`unix-permissions-cheatsheet.md`](cheatsheets/unix-permissions-cheatsheet.md) - Permisos Unix
+- [`comandos_xa_recordar.md`](cheatsheets/comandos_xa_recordar.md) - Comandos para recordar
+
+#### 🛠️ **Desarrollo** (`development/`)
+
+- [`open-source-structure.md`](development/open-source-structure.md) - Estructura open source
+
+#### 📊 **Resúmenes** (`summaries/`)
+
+- [`8-modules-update-summary.md`](summaries/8-modules-update-summary.md) - Actualización a 8 módulos
+- [`absolute-paths-update.md`](summaries/absolute-paths-update.md) - Actualización de rutas absolutas
+- [`open-source-implementation-summary.md`](summaries/open-source-implementation-summary.md) - Implementación open source
+- [`svg-logos-implementation-summary.md`](summaries/svg-logos-implementation-summary.md) - Implementación de logos SVG
+
+#### 🔧 **Solución de Problemas** (`troubleshooting/`)
+
+- [`fedora-cron-solution.md`](troubleshooting/fedora-cron-solution.md) - Solución cron para Fedora
+
+#### 📄 **Plantillas** (`templates/`)
+
+- [`ejercicio-template.md`](templates/ejercicio-template.md) - Plantilla para ejercicios
 
 ### Por Módulo
 
