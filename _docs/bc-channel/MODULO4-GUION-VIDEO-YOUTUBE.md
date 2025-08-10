@@ -83,27 +83,27 @@ readonly NC='\033[0m'
 sumar_numeros() {
     local suma=0
     local contador=0
-    
+
     # Validar que tenemos al menos un argumento
     if [[ $# -eq 0 ]]; then
         echo -e "${RED}❌ Error: Se requiere al menos un número${NC}" >&2
         return 1
     fi
-    
+
     echo -e "${BLUE}🧮 Calculando suma de $# números...${NC}"
-    
+
     for numero in "$@"; do
         # Validar que es un número
         if ! [[ "$numero" =~ ^-?[0-9]+$ ]]; then
             echo -e "${RED}❌ Error: '$numero' no es un número válido${NC}" >&2
             return 1
         fi
-        
+
         suma=$((suma + numero))
         ((contador++))
         echo -e "${CYAN}  Paso $contador: $suma (agregando $numero)${NC}"
     done
-    
+
     echo -e "${GREEN}✅ Resultado final: $suma${NC}"
     return 0
 }
@@ -115,26 +115,26 @@ sumar_numeros() {
 # Función que retorna múltiples valores via variables globales
 analizar_archivo() {
     local archivo="$1"
-    
+
     # Variables globales para retornar resultados
     archivo_tamaño=""
     archivo_tipo=""
     archivo_permisos=""
     archivo_modificacion=""
     archivo_existe=false
-    
+
     if [[ ! -f "$archivo" ]]; then
         echo -e "${RED}❌ Archivo '$archivo' no existe${NC}" >&2
         return 1
     fi
-    
+
     # Recopilar información
     archivo_existe=true
     archivo_tamaño=$(stat -f%z "$archivo" 2>/dev/null || stat -c%s "$archivo")
     archivo_tipo=$(file -b "$archivo")
     archivo_permisos=$(stat -f%A "$archivo" 2>/dev/null || stat -c%a "$archivo")
     archivo_modificacion=$(stat -f%m "$archivo" 2>/dev/null || stat -c%Y "$archivo")
-    
+
     echo -e "${GREEN}✅ Análisis completado para: $archivo${NC}"
     return 0
 }
@@ -142,7 +142,7 @@ analizar_archivo() {
 # Función para mostrar análisis formateado
 mostrar_analisis() {
     local archivo="$1"
-    
+
     if analizar_archivo "$archivo"; then
         echo -e "${PURPLE}📊 ANÁLISIS DETALLADO${NC}"
         echo "================================"
@@ -164,12 +164,12 @@ formatear_tamaño() {
     local bytes="$1"
     local unidades=("bytes" "KB" "MB" "GB" "TB")
     local unidad=0
-    
+
     while ((bytes >= 1024 && unidad < 4)); do
         bytes=$((bytes / 1024))
         ((unidad++))
     done
-    
+
     echo "$bytes ${unidades[unidad]}"
 }
 
@@ -179,16 +179,16 @@ mostrar_progreso() {
     local total="$2"
     local ancho="${3:-50}"
     local caracter="${4:-█}"
-    
+
     local porcentaje=$((actual * 100 / total))
     local completado=$((porcentaje * ancho / 100))
     local restante=$((ancho - completado))
-    
+
     printf "\r${BLUE}["
     printf "%${completado}s" | tr ' ' "$caracter"
     printf "%${restante}s" | tr ' ' '░'
     printf "] %3d%% (%d/%d)${NC}" "$porcentaje" "$actual" "$total"
-    
+
     [[ $actual -eq $total ]] && echo
 }
 
@@ -198,7 +198,7 @@ log_mensaje() {
     shift
     local mensaje="$*"
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-    
+
     case $nivel in
         "INFO")  echo -e "${BLUE}[$timestamp] INFO: $mensaje${NC}" ;;
         "WARN")  echo -e "${YELLOW}[$timestamp] WARN: $mensaje${NC}" >&2 ;;
@@ -216,7 +216,7 @@ log_mensaje() {
 validar_email() {
     local email="$1"
     local regex="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
-    
+
     if [[ $email =~ $regex ]]; then
         echo -e "${GREEN}✅ Email válido: $email${NC}"
         return 0
@@ -230,7 +230,7 @@ validar_email() {
 validar_url() {
     local url="$1"
     local regex="^https?://[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(/.*)?$"
-    
+
     if [[ $url =~ $regex ]]; then
         echo -e "${GREEN}✅ URL válida: $url${NC}"
         return 0
@@ -245,17 +245,17 @@ validar_numero_rango() {
     local numero="$1"
     local min="$2"
     local max="$3"
-    
+
     if ! [[ "$numero" =~ ^-?[0-9]+$ ]]; then
         echo -e "${RED}❌ '$numero' no es un número${NC}"
         return 1
     fi
-    
+
     if ((numero < min || numero > max)); then
         echo -e "${RED}❌ '$numero' debe estar entre $min y $max${NC}"
         return 1
     fi
-    
+
     echo -e "${GREEN}✅ Número válido: $numero${NC}"
     return 0
 }
@@ -268,19 +268,19 @@ demo_funciones_avanzadas() {
     echo -e "${PURPLE}🚀 DEMOSTRACIÓN DE FUNCIONES AVANZADAS${NC}"
     echo "=============================================="
     echo
-    
+
     # Demo 1: Suma variable de números
     echo -e "${BLUE}📊 Demo 1: Suma de números variables${NC}"
     sumar_numeros 10 20 30 40 50
     echo
-    
+
     # Demo 2: Análisis de archivos
     echo -e "${BLUE}📊 Demo 2: Análisis de archivos${NC}"
     # Crear archivo de ejemplo
     echo "Contenido de ejemplo para análisis" > archivo_demo.txt
     mostrar_analisis "archivo_demo.txt"
     echo
-    
+
     # Demo 3: Barras de progreso
     echo -e "${BLUE}📊 Demo 3: Simulación de progreso${NC}"
     for i in {1..20}; do
@@ -288,7 +288,7 @@ demo_funciones_avanzadas() {
         sleep 0.1
     done
     echo
-    
+
     # Demo 4: Validaciones
     echo -e "${BLUE}📊 Demo 4: Validaciones avanzadas${NC}"
     validar_email "usuario@ejemplo.com"
@@ -298,10 +298,10 @@ demo_funciones_avanzadas() {
     validar_numero_rango 50 1 100
     validar_numero_rango 150 1 100
     echo
-    
+
     # Limpiar
     rm -f archivo_demo.txt
-    
+
     echo -e "${GREEN}✅ Demostración completada${NC}"
 }
 
@@ -364,7 +364,7 @@ lib_log() {
     local message="$*"
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     local caller="${BASH_SOURCE[2]##*/}:${BASH_LINENO[1]}"
-    
+
     case $level in
         "INFO")  echo -e "${LIB_BLUE}[$timestamp] [$caller] INFO: $message${LIB_NC}" ;;
         "WARN")  echo -e "${LIB_YELLOW}[$timestamp] [$caller] WARN: $message${LIB_NC}" >&2 ;;
@@ -381,7 +381,7 @@ lib_log() {
 lib_validar_archivo() {
     local archivo="$1"
     local tipo="${2:-file}"
-    
+
     case $tipo in
         "file")
             [[ -f "$archivo" ]] || { lib_log ERROR "Archivo no existe: $archivo"; return 1; }
@@ -394,25 +394,25 @@ lib_validar_archivo() {
             [[ -x "$archivo" ]] || { lib_log ERROR "Archivo no ejecutable: $archivo"; return 1; }
             ;;
     esac
-    
+
     return 0
 }
 
 lib_validar_dependencias() {
     local deps=("$@")
     local faltantes=()
-    
+
     for dep in "${deps[@]}"; do
         if ! command -v "$dep" &> /dev/null; then
             faltantes+=("$dep")
         fi
     done
-    
+
     if [[ ${#faltantes[@]} -gt 0 ]]; then
         lib_log ERROR "Dependencias faltantes: ${faltantes[*]}"
         return 1
     fi
-    
+
     lib_log SUCCESS "Todas las dependencias están disponibles"
     return 0
 }
@@ -424,7 +424,7 @@ lib_validar_dependencias() {
 lib_formatear_bytes() {
     local bytes="$1"
     local precision="${2:-1}"
-    
+
     if ((bytes < 1024)); then
         echo "${bytes} B"
     elif ((bytes < 1048576)); then
@@ -441,7 +441,7 @@ lib_formatear_tiempo() {
     local horas=$((segundos / 3600))
     local minutos=$(((segundos % 3600) / 60))
     local segs=$((segundos % 60))
-    
+
     if ((horas > 0)); then
         printf "%02d:%02d:%02d\n" $horas $minutos $segs
     elif ((minutos > 0)); then
@@ -459,7 +459,7 @@ lib_mostrar_banner() {
     local titulo="$1"
     local subtitulo="${2:-}"
     local ancho=60
-    
+
     echo -e "${LIB_PURPLE}"
     printf "═%.0s" $(seq 1 $ancho)
     echo
@@ -472,7 +472,7 @@ lib_mostrar_banner() {
 lib_confirmar() {
     local mensaje="$1"
     local respuesta
-    
+
     while true; do
         read -p "$mensaje [y/N]: " respuesta
         case $respuesta in
@@ -488,16 +488,16 @@ lib_progreso() {
     local total="$2"
     local etiqueta="${3:-Progreso}"
     local ancho=40
-    
+
     local porcentaje=$((actual * 100 / total))
     local completado=$((actual * ancho / total))
     local restante=$((ancho - completado))
-    
+
     printf "\r${LIB_CYAN}%s: [" "$etiqueta"
     printf "%${completado}s" | tr ' ' '▓'
     printf "%${restante}s" | tr ' ' '░'
     printf "] %3d%% (%d/%d)${LIB_NC}" "$porcentaje" "$actual" "$total"
-    
+
     [[ $actual -eq $total ]] && echo
 }
 
@@ -508,13 +508,13 @@ lib_progreso() {
 lib_backup_archivo() {
     local archivo="$1"
     local backup_dir="${2:-./backups}"
-    
+
     lib_validar_archivo "$archivo" "file" || return 1
-    
+
     mkdir -p "$backup_dir"
     local timestamp=$(date '+%Y%m%d_%H%M%S')
     local backup_name="${backup_dir}/$(basename "$archivo").backup_${timestamp}"
-    
+
     if cp "$archivo" "$backup_name"; then
         lib_log SUCCESS "Backup creado: $backup_name"
         echo "$backup_name"
@@ -529,10 +529,10 @@ lib_limpiar_temporales() {
     local directorio="${1:-/tmp}"
     local patron="${2:-tmp.*}"
     local dias="${3:-7}"
-    
+
     lib_log INFO "Limpiando archivos temporales en $directorio"
     local encontrados=$(find "$directorio" -name "$patron" -type f -mtime +$dias 2>/dev/null | wc -l)
-    
+
     if ((encontrados > 0)); then
         find "$directorio" -name "$patron" -type f -mtime +$dias -delete 2>/dev/null
         lib_log SUCCESS "Eliminados $encontrados archivos temporales"
@@ -579,47 +579,47 @@ source ./lib_utils.sh
 main() {
     lib_mostrar_banner "DEMO DE BIBLIOTECA" "Demostrando funcionalidades modulares"
     echo
-    
+
     # Demo logging
     lib_log INFO "Iniciando demostración"
     lib_log WARN "Esta es una advertencia"
     lib_log SUCCESS "Operación exitosa"
-    
+
     echo
-    
+
     # Demo validación
     lib_log INFO "Validando dependencias del sistema..."
     lib_validar_dependencias "bash" "echo" "printf" "date"
-    
+
     echo
-    
+
     # Demo formateo
     lib_log INFO "Demostrando formateo de datos"
     echo "Tamaño formateado: $(lib_formatear_bytes 1048576)"
     echo "Tiempo formateado: $(lib_formatear_tiempo 3665)"
-    
+
     echo
-    
+
     # Demo progreso
     lib_log INFO "Simulando proceso con barra de progreso"
     for i in {1..25}; do
         lib_progreso $i 25 "Procesando"
         sleep 0.05
     done
-    
+
     echo
     echo
-    
+
     # Demo archivo
     echo "Contenido de ejemplo" > demo_temp.txt
     backup_path=$(lib_backup_archivo "demo_temp.txt")
     lib_log SUCCESS "Archivo respaldado en: $backup_path"
-    
+
     # Limpiar
     rm -f demo_temp.txt
     rm -f "$backup_path"
     rmdir backups 2>/dev/null || true
-    
+
     lib_log SUCCESS "Demostración completada exitosamente"
 }
 
@@ -642,6 +642,7 @@ echo "🎯 EJECUTANDO DEMO DE BIBLIOTECA:"
 **[PANTALLA: Lista de principios SOLID aplicados a Bash]**
 
 > "Principios profesionales para funciones bash:
+>
 > 1. **Una responsabilidad por función**: Cada función hace una cosa y la hace bien
 > 2. **Parámetros claros**: Nombres descriptivos y validación inmediata
 > 3. **Valores de retorno consistentes**: 0 para éxito, código específico para errores
@@ -946,7 +947,7 @@ construir_conexion() {
     local usuario="${db_config[usuario]}"
     local bd="${db_config[base_datos]}"
     local puerto="${db_config[puerto]}"
-    
+
     echo "postgresql://${usuario}@${host}:${puerto}/${bd}"
 }
 
@@ -970,7 +971,7 @@ eventos=("login" "logout" "error" "login" "success" "error" "login" "success" "s
 for evento in "${eventos[@]}"; do
     # Incrementar contador
     ((contadores[$evento]++))
-    
+
     # Simular tiempo de respuesta
     tiempo=$((RANDOM % 1000 + 100))
     tiempos_respuesta[$evento]="${tiempos_respuesta[$evento]:-0},$tiempo"
@@ -989,7 +990,7 @@ calcular_promedio() {
     local tiempos="${tiempos_respuesta[$evento]}"
     local suma=0
     local cuenta=0
-    
+
     IFS=',' read -ra TIEMPOS <<< "$tiempos"
     for tiempo in "${TIEMPOS[@]}"; do
         [[ "$tiempo" != "0" ]] && {
@@ -997,7 +998,7 @@ calcular_promedio() {
             ((cuenta++))
         }
     done
-    
+
     if ((cuenta > 0)); then
         echo $((suma / cuenta))
     else
@@ -1021,11 +1022,11 @@ echo
 serializar_array() {
     local -n arr_ref=$1
     local resultado=""
-    
+
     for clave in "${!arr_ref[@]}"; do
         resultado+="$clave=${arr_ref[$clave]};"
     done
-    
+
     echo "${resultado%;}"  # Remover último punto y coma
 }
 
@@ -1033,7 +1034,7 @@ serializar_array() {
 deserializar_array() {
     local datos="$1"
     local -n arr_ref=$2
-    
+
     IFS=';' read -ra PARES <<< "$datos"
     for par in "${PARES[@]}"; do
         IFS='=' read -r clave valor <<< "$par"
@@ -1099,9 +1100,9 @@ ordenamiento_burbuja() {
     local -n arr=$1
     local n=${#arr[@]}
     local temp
-    
+
     echo -e "${BLUE}🔄 Ordenamiento burbuja en progreso...${NC}"
-    
+
     for ((i = 0; i < n-1; i++)); do
         for ((j = 0; j < n-i-1; j++)); do
             if ((arr[j] > arr[j+1])); then
@@ -1113,7 +1114,7 @@ ordenamiento_burbuja() {
         done
         echo "  Pasada $((i+1)): ${arr[*]}"
     done
-    
+
     echo -e "${GREEN}✅ Ordenamiento completado${NC}"
 }
 
@@ -1127,13 +1128,13 @@ busqueda_binaria() {
     local izquierda=0
     local derecha=$((${#arr[@]} - 1))
     local medio
-    
+
     echo -e "${BLUE}🔍 Búsqueda binaria de: $objetivo${NC}"
-    
+
     while ((izquierda <= derecha)); do
         medio=$(((izquierda + derecha) / 2))
         echo "  Buscando en rango [$izquierda, $derecha], medio=$medio, valor=${arr[medio]}"
-        
+
         if ((arr[medio] == objetivo)); then
             echo -e "${GREEN}✅ Encontrado en posición: $medio${NC}"
             return $medio
@@ -1143,7 +1144,7 @@ busqueda_binaria() {
             derecha=$((medio - 1))
         fi
     done
-    
+
     echo -e "${RED}❌ No encontrado${NC}"
     return -1
 }
@@ -1156,9 +1157,9 @@ filtrar_array() {
     local -n origen=$1
     local -n destino=$2
     local condicion=$3
-    
+
     destino=()
-    
+
     case $condicion in
         "pares")
             for num in "${origen[@]}"; do
@@ -1186,7 +1187,7 @@ reducir_array() {
     local -n arr=$1
     local operacion=$2
     local acumulador=${3:-0}
-    
+
     for elemento in "${arr[@]}"; do
         case $operacion in
             "suma")
@@ -1203,7 +1204,7 @@ reducir_array() {
                 ;;
         esac
     done
-    
+
     echo $acumulador
 }
 
@@ -1213,51 +1214,51 @@ reducir_array() {
 
 demo_algoritmos() {
     echo -e "${YELLOW}📊 Datos iniciales:${NC}"
-    
+
     # Array para demos
     numeros=(64 34 25 12 22 11 90 5 77 30)
     echo "Números originales: ${numeros[*]}"
     echo
-    
+
     # Demo 1: Ordenamiento
     echo -e "${YELLOW}1️⃣ ORDENAMIENTO BURBUJA:${NC}"
     numeros_copia=("${numeros[@]}")
     ordenamiento_burbuja numeros_copia
     echo "Resultado final: ${numeros_copia[*]}"
     echo
-    
+
     # Demo 2: Búsqueda binaria
     echo -e "${YELLOW}2️⃣ BÚSQUEDA BINARIA:${NC}"
     busqueda_binaria numeros_copia 25
     busqueda_binaria numeros_copia 100
     echo
-    
+
     # Demo 3: Filtrado
     echo -e "${YELLOW}3️⃣ FILTRADO DE DATOS:${NC}"
     declare -a pares impares mayores
-    
+
     filtrar_array numeros pares "pares"
     filtrar_array numeros impares "impares"
     filtrar_array numeros mayores "mayores_10"
-    
+
     echo "Números pares: ${pares[*]}"
     echo "Números impares: ${impares[*]}"
     echo "Mayores a 10: ${mayores[*]}"
     echo
-    
+
     # Demo 4: Reducción
     echo -e "${YELLOW}4️⃣ OPERACIONES DE REDUCCIÓN:${NC}"
     suma=$(reducir_array numeros "suma")
     producto=$(reducir_array numeros "producto" 1)
     maximo=$(reducir_array numeros "maximo" ${numeros[0]})
     minimo=$(reducir_array numeros "minimo" ${numeros[0]})
-    
+
     echo "Suma total: $suma"
     echo "Producto: $producto"
     echo "Máximo: $maximo"
     echo "Mínimo: $minimo"
     echo
-    
+
     # Estadísticas
     promedio=$((suma / ${#numeros[@]}))
     echo "Promedio: $promedio"
@@ -1281,6 +1282,7 @@ echo "🎯 EJECUTANDO ALGORITMOS CON ARRAYS:"
 **[PANTALLA: Guía de optimización de arrays]**
 
 > "Optimización y mejores prácticas para arrays:
+>
 > 1. **Usa arrays asociativos** para datos clave-valor complejos
 > 2. **Comillas dobles**: Siempre usa "${array[@]}" para preservar espacios
 > 3. **Validación de índices**: Verifica que los índices existan antes de acceder
@@ -1289,6 +1291,7 @@ echo "🎯 EJECUTANDO ALGORITMOS CON ARRAYS:"
 > 6. **Funciones específicas**: Pasa arrays por referencia con nameref"
 
 ---
+
 ## 🏗️ PARTE 3: PATRONES DE DISEÑO EN BASH (13 minutos)
 
 ### 🎤 Transición
@@ -1329,7 +1332,7 @@ echo
 crear_logger() {
     local tipo="$1"
     local archivo="${2:-}"
-    
+
     case $tipo in
         "consola")
             cat << 'LOGGER_CONSOLA'
@@ -1383,7 +1386,7 @@ LOGGER_JSON
 
 crear_validador() {
     local tipo="$1"
-    
+
     case $tipo in
         "email")
             cat << 'VALIDADOR_EMAIL'
@@ -1433,20 +1436,20 @@ VALIDADOR_URL
 
 crear_formateador() {
     local tipo="$1"
-    
+
     case $tipo in
         "tabla")
             cat << 'FORMATEADOR_TABLA'
 formatear() {
     local -n datos=$1
     local separador="${2:-|}"
-    
+
     # Encontrar anchos máximos
     local max_width=0
     for elemento in "${datos[@]}"; do
         [[ ${#elemento} -gt $max_width ]] && max_width=${#elemento}
     done
-    
+
     # Imprimir tabla
     for elemento in "${datos[@]}"; do
         printf "%-${max_width}s %s\n" "$elemento" "$separador"
@@ -1476,7 +1479,7 @@ formatear() {
     local -n datos=$1
     local separador="${2:-,}"
     local primera_linea=true
-    
+
     for elemento in "${datos[@]}"; do
         [[ $primera_linea == false ]] && echo -n "$separador"
         echo -n "$elemento"
@@ -1499,19 +1502,19 @@ FORMATEADOR_CSV
 
 demo_factory() {
     echo -e "${BLUE}📝 Creando loggers dinámicamente:${NC}"
-    
+
     # Crear y usar logger de consola
     eval "$(crear_logger consola)"
     log_mensaje "INFO" "Logger de consola creado"
-    
+
     # Crear y usar logger JSON
     eval "$(crear_logger json)"
     log_mensaje "DEBUG" "Logger JSON activo"
-    
+
     echo
-    
+
     echo -e "${BLUE}✅ Creando validadores dinámicamente:${NC}"
-    
+
     # Probar validador de email
     eval "$(crear_validador email)"
     if validar "usuario@ejemplo.com"; then
@@ -1519,7 +1522,7 @@ demo_factory() {
     else
         echo "❌ Email inválido"
     fi
-    
+
     # Probar validador de número
     eval "$(crear_validador numero)"
     if validar "123"; then
@@ -1527,21 +1530,21 @@ demo_factory() {
     else
         echo "❌ Número inválido"
     fi
-    
+
     echo
-    
+
     echo -e "${BLUE}🎨 Creando formateadores dinámicamente:${NC}"
-    
+
     # Datos de ejemplo
     datos=("Nombre" "Email" "Edad" "Ciudad")
-    
+
     # Formatear como tabla
     eval "$(crear_formateador tabla)"
     echo "Formato tabla:"
     formatear datos
-    
+
     echo
-    
+
     # Formatear como JSON
     eval "$(crear_formateador json)"
     echo "Formato JSON:"
@@ -1593,7 +1596,7 @@ declare -A observadores
 suscribir() {
     local evento="$1"
     local callback="$2"
-    
+
     # Agregar callback a la lista de observadores del evento
     observadores["$evento"]+="$callback;"
     echo -e "${GREEN}✅ Observador registrado para evento: $evento${NC}"
@@ -1603,7 +1606,7 @@ suscribir() {
 desuscribir() {
     local evento="$1"
     local callback="$2"
-    
+
     # Remover callback de la lista
     observadores["$evento"]="${observadores["$evento"]/$callback;/}"
     echo -e "${YELLOW}⚠️ Observador removido del evento: $evento${NC}"
@@ -1614,9 +1617,9 @@ emitir() {
     local evento="$1"
     shift
     local datos="$*"
-    
+
     echo -e "${BLUE}📡 Emitiendo evento: $evento${NC}"
-    
+
     # Verificar si hay observadores para este evento
     if [[ -n "${observadores[$evento]:-}" ]]; then
         # Separar callbacks y ejecutar cada uno
@@ -1653,7 +1656,7 @@ email_observer() {
 stats_observer() {
     local evento="$1"
     local datos="$2"
-    
+
     # Incrementar contador en archivo
     echo "$evento:$(date '+%Y-%m-%d %H:%M:%S'):$datos" >> estadisticas.csv
     echo -e "${PURPLE}📊 Estadística actualizada para: $evento${NC}"
@@ -1663,7 +1666,7 @@ stats_observer() {
 alert_observer() {
     local evento="$1"
     local datos="$2"
-    
+
     case $evento in
         "error_critico"|"sistema_caido"|"intrusion")
             echo -e "${RED}🚨 ALERTA CRÍTICA: $evento - $datos${NC}"
@@ -1682,7 +1685,7 @@ alert_observer() {
 # Función que simula monitoreo del sistema
 monitorear_sistema() {
     echo -e "${BLUE}🔍 Iniciando monitoreo del sistema...${NC}"
-    
+
     # Simular diferentes eventos del sistema
     local eventos=(
         "usuario_login:Juan ha iniciado sesión"
@@ -1692,10 +1695,10 @@ monitorear_sistema() {
         "backup_completado:Backup diario finalizado"
         "sistema_caido:Servidor principal no responde"
     )
-    
+
     for evento_completo in "${eventos[@]}"; do
         IFS=':' read -r tipo descripcion <<< "$evento_completo"
-        
+
         echo
         echo -e "${BLUE}🎯 Detectado: $tipo${NC}"
         emitir "$tipo" "$descripcion"
@@ -1709,28 +1712,28 @@ monitorear_sistema() {
 
 configurar_observadores() {
     echo -e "${BLUE}⚙️ Configurando sistema de observadores...${NC}"
-    
+
     # Suscribir observadores a eventos específicos
     suscribir "usuario_login" "log_observer"
     suscribir "usuario_login" "stats_observer"
-    
+
     suscribir "usuario_logout" "log_observer"
     suscribir "usuario_logout" "stats_observer"
-    
+
     suscribir "archivo_modificado" "log_observer"
     suscribir "archivo_modificado" "email_observer"
-    
+
     suscribir "error_critico" "log_observer"
     suscribir "error_critico" "email_observer"
     suscribir "error_critico" "alert_observer"
-    
+
     suscribir "sistema_caido" "log_observer"
     suscribir "sistema_caido" "email_observer"
     suscribir "sistema_caido" "alert_observer"
-    
+
     suscribir "backup_completado" "log_observer"
     suscribir "backup_completado" "stats_observer"
-    
+
     echo -e "${GREEN}✅ Observadores configurados${NC}"
 }
 
@@ -1741,34 +1744,34 @@ configurar_observadores() {
 demo_observer() {
     # Limpiar archivos anteriores
     rm -f eventos.log estadisticas.csv
-    
+
     # Configurar sistema
     configurar_observadores
-    
+
     echo
     echo -e "${PURPLE}🚀 Iniciando demostración del patrón Observer${NC}"
     echo
-    
+
     # Ejecutar monitoreo
     monitorear_sistema
-    
+
     echo
     echo -e "${BLUE}📋 Resultados de la demostración:${NC}"
-    
+
     # Mostrar logs generados
     if [[ -f eventos.log ]]; then
         echo
         echo "📝 Eventos registrados en log:"
         cat eventos.log
     fi
-    
+
     # Mostrar estadísticas
     if [[ -f estadisticas.csv ]]; then
         echo
         echo "📊 Estadísticas recopiladas:"
         cat estadisticas.csv
     fi
-    
+
     # Limpiar archivos temporales
     rm -f eventos.log estadisticas.csv
 }
@@ -1818,9 +1821,9 @@ estrategia_burbuja() {
     local -n arr=$1
     local n=${#arr[@]}
     local temp
-    
+
     echo -e "${CYAN}🔄 Usando estrategia: Ordenamiento Burbuja${NC}"
-    
+
     for ((i = 0; i < n-1; i++)); do
         for ((j = 0; j < n-i-1; j++)); do
             if ((arr[j] > arr[j+1])); then
@@ -1837,9 +1840,9 @@ estrategia_seleccion() {
     local -n arr=$1
     local n=${#arr[@]}
     local temp min_idx
-    
+
     echo -e "${CYAN}🎯 Usando estrategia: Ordenamiento por Selección${NC}"
-    
+
     for ((i = 0; i < n-1; i++)); do
         min_idx=$i
         for ((j = i+1; j < n; j++)); do
@@ -1847,7 +1850,7 @@ estrategia_seleccion() {
                 min_idx=$j
             fi
         done
-        
+
         # Intercambiar
         temp=${arr[min_idx]}
         arr[min_idx]=${arr[i]}
@@ -1860,18 +1863,18 @@ estrategia_insercion() {
     local -n arr=$1
     local n=${#arr[@]}
     local key j
-    
+
     echo -e "${CYAN}📥 Usando estrategia: Ordenamiento por Inserción${NC}"
-    
+
     for ((i = 1; i < n; i++)); do
         key=${arr[i]}
         j=$((i-1))
-        
+
         while ((j >= 0 && arr[j] > key)); do
             arr[$((j+1))]=${arr[j]}
             ((j--))
         done
-        
+
         arr[$((j+1))]=$key
     done
 }
@@ -1884,9 +1887,9 @@ estrategia_insercion() {
 estrategia_gzip() {
     local archivo="$1"
     local destino="${2:-${archivo}.gz}"
-    
+
     echo -e "${CYAN}📦 Usando estrategia: Compresión GZIP${NC}"
-    
+
     if command -v gzip &> /dev/null; then
         gzip -c "$archivo" > "$destino"
         echo "✅ Archivo comprimido con GZIP: $destino"
@@ -1901,9 +1904,9 @@ estrategia_gzip() {
 estrategia_zip() {
     local archivo="$1"
     local destino="${2:-${archivo}.zip}"
-    
+
     echo -e "${CYAN}🗜️ Usando estrategia: Compresión ZIP${NC}"
-    
+
     if command -v zip &> /dev/null; then
         zip -q "$destino" "$archivo"
         echo "✅ Archivo comprimido con ZIP: $destino"
@@ -1918,9 +1921,9 @@ estrategia_zip() {
 estrategia_tar_bz2() {
     local archivo="$1"
     local destino="${2:-${archivo}.tar.bz2}"
-    
+
     echo -e "${CYAN}📁 Usando estrategia: Compresión TAR.BZ2${NC}"
-    
+
     if command -v tar &> /dev/null && command -v bzip2 &> /dev/null; then
         tar -cjf "$destino" "$archivo"
         echo "✅ Archivo comprimido con TAR.BZ2: $destino"
@@ -1939,7 +1942,7 @@ estrategia_tar_bz2() {
 ejecutar_ordenamiento() {
     local estrategia="$1"
     local -n datos=$2
-    
+
     case $estrategia in
         "burbuja")
             estrategia_burbuja datos
@@ -1962,7 +1965,7 @@ ejecutar_compresion() {
     local estrategia="$1"
     local archivo="$2"
     local destino="$3"
-    
+
     case $estrategia in
         "gzip")
             estrategia_gzip "$archivo" "$destino"
@@ -1988,13 +1991,13 @@ ejecutar_compresion() {
 estrategia_backup_incremental() {
     local origen="$1"
     local destino="$2"
-    
+
     echo -e "${CYAN}📈 Usando estrategia: Backup Incremental${NC}"
-    
+
     # Buscar archivos modificados en las últimas 24 horas
     local archivos_modificados
     readarray -t archivos_modificados < <(find "$origen" -type f -mtime -1 2>/dev/null)
-    
+
     if [[ ${#archivos_modificados[@]} -gt 0 ]]; then
         mkdir -p "$destino"
         for archivo in "${archivos_modificados[@]}"; do
@@ -2011,9 +2014,9 @@ estrategia_backup_incremental() {
 estrategia_backup_completo() {
     local origen="$1"
     local destino="$2"
-    
+
     echo -e "${CYAN}📋 Usando estrategia: Backup Completo${NC}"
-    
+
     if cp -r "$origen" "$destino" 2>/dev/null; then
         echo "✅ Backup completo realizado de: $origen"
     else
@@ -2026,9 +2029,9 @@ estrategia_backup_completo() {
 estrategia_backup_sync() {
     local origen="$1"
     local destino="$2"
-    
+
     echo -e "${CYAN}🔄 Usando estrategia: Backup Sincronizado${NC}"
-    
+
     if command -v rsync &> /dev/null; then
         rsync -av --delete "$origen/" "$destino/" 2>/dev/null
         echo "✅ Sincronización completada con rsync"
@@ -2044,49 +2047,49 @@ estrategia_backup_sync() {
 
 demo_strategy() {
     echo -e "${BLUE}📊 Demostración de estrategias de ordenamiento:${NC}"
-    
+
     # Datos de prueba
     datos_originales=(64 34 25 12 22 11 90)
-    
+
     # Probar cada estrategia de ordenamiento
     for estrategia in "burbuja" "seleccion" "insercion"; do
         echo
         echo -e "${YELLOW}Probando estrategia: $estrategia${NC}"
         datos=("${datos_originales[@]}")
         echo "Datos originales: ${datos[*]}"
-        
+
         ejecutar_ordenamiento "$estrategia" datos
         echo "Datos ordenados: ${datos[*]}"
     done
-    
+
     echo
     echo -e "${BLUE}📦 Demostración de estrategias de compresión:${NC}"
-    
+
     # Crear archivo de prueba
     echo "Contenido de ejemplo para compresión" > archivo_prueba.txt
     echo "Segunda línea del archivo" >> archivo_prueba.txt
     echo "Tercera línea con más contenido" >> archivo_prueba.txt
-    
+
     # Probar estrategias de compresión disponibles
     for estrategia in "gzip" "zip" "tar_bz2"; do
         echo
         echo -e "${YELLOW}Probando compresión: $estrategia${NC}"
         ejecutar_compresion "$estrategia" "archivo_prueba.txt" "prueba.$estrategia"
     done
-    
+
     echo
     echo -e "${BLUE}💾 Demostración de estrategias de backup:${NC}"
-    
+
     # Crear directorio de prueba
     mkdir -p prueba_origen
     echo "Archivo 1" > prueba_origen/archivo1.txt
     echo "Archivo 2" > prueba_origen/archivo2.txt
-    
+
     # Probar estrategias de backup
     for estrategia in "incremental" "completo" "sync"; do
         echo
         echo -e "${YELLOW}Probando backup: $estrategia${NC}"
-        
+
         case $estrategia in
             "incremental")
                 estrategia_backup_incremental "prueba_origen" "backup_incremental"
@@ -2099,7 +2102,7 @@ demo_strategy() {
                 ;;
         esac
     done
-    
+
     # Limpiar archivos de prueba
     rm -f archivo_prueba.txt prueba.* 2>/dev/null
     rm -rf prueba_origen backup_* 2>/dev/null
@@ -2121,7 +2124,7 @@ echo "🎯 EJECUTANDO PATRÓN STRATEGY:"
 **[PANTALLA: Aplicación de principios SOLID]**
 
 > "Los principios SOLID aplicados a bash scripting:
-> 
+>
 > **S - Single Responsibility**: Cada función tiene una sola razón para cambiar
 > **O - Open/Closed**: Abierto para extensión, cerrado para modificación
 > **L - Liskov Substitution**: Las implementaciones son intercambiables
@@ -2171,56 +2174,56 @@ echo
 analizar_directorio() {
     local directorio="$1"
     local profundidad="${2:-1}"
-    
+
     echo -e "${BLUE}📊 Analizando directorio: $directorio${NC}"
-    
+
     if [[ ! -d "$directorio" ]]; then
         echo -e "${RED}❌ Error: '$directorio' no es un directorio válido${NC}"
         return 1
     fi
-    
+
     # Contadores
     local total_archivos=0
     local total_directorios=0
     local tamaño_total=0
     local archivos_vacios=0
     local archivos_grandes=0
-    
+
     # Arrays para estadísticas
     declare -A tipos_archivo
     declare -A tamaños_por_tipo
-    
+
     echo "🔍 Escaneando contenido..."
-    
+
     # Recorrer archivos con find
     while IFS= read -r -d '' elemento; do
         if [[ -f "$elemento" ]]; then
             ((total_archivos++))
-            
+
             # Obtener información del archivo
             local tamaño
             tamaño=$(stat -f%z "$elemento" 2>/dev/null || stat -c%s "$elemento")
             tamaño_total=$((tamaño_total + tamaño))
-            
+
             # Clasificar por tamaño
             if ((tamaño == 0)); then
                 ((archivos_vacios++))
             elif ((tamaño > 1048576)); then  # > 1MB
                 ((archivos_grandes++))
             fi
-            
+
             # Clasificar por extensión
             local extension="${elemento##*.}"
             [[ "$extension" == "$elemento" ]] && extension="sin_extension"
-            
+
             ((tipos_archivo[$extension]++))
             tamaños_por_tipo[$extension]=$((${tamaños_por_tipo[$extension]:-0} + tamaño))
-            
+
         elif [[ -d "$elemento" ]]; then
             ((total_directorios++))
         fi
     done < <(find "$directorio" -maxdepth "$profundidad" -print0 2>/dev/null)
-    
+
     # Mostrar resultados
     echo
     echo -e "${CYAN}📋 RESUMEN DEL ANÁLISIS:${NC}"
@@ -2229,7 +2232,7 @@ analizar_directorio() {
     echo "  💾 Tamaño total: $(formatear_bytes $tamaño_total)"
     echo "  📭 Archivos vacíos: $archivos_vacios"
     echo "  📈 Archivos grandes (>1MB): $archivos_grandes"
-    
+
     if [[ ${#tipos_archivo[@]} -gt 0 ]]; then
         echo
         echo -e "${CYAN}📊 DISTRIBUCIÓN POR TIPO:${NC}"
@@ -2244,7 +2247,7 @@ analizar_directorio() {
 
 formatear_bytes() {
     local bytes="$1"
-    
+
     if ((bytes < 1024)); then
         echo "${bytes} B"
     elif ((bytes < 1048576)); then
@@ -2263,33 +2266,33 @@ formatear_bytes() {
 organizar_por_extension() {
     local directorio_origen="$1"
     local directorio_destino="${2:-${directorio_origen}_organizado}"
-    
+
     echo -e "${BLUE}🗂️ Organizando archivos por extensión${NC}"
     echo "Origen: $directorio_origen"
     echo "Destino: $directorio_destino"
-    
+
     if [[ ! -d "$directorio_origen" ]]; then
         echo -e "${RED}❌ Directorio origen no existe${NC}"
         return 1
     fi
-    
+
     mkdir -p "$directorio_destino"
-    
+
     # Procesar archivos
     local archivos_movidos=0
-    
+
     find "$directorio_origen" -type f -print0 | while IFS= read -r -d '' archivo; do
         local nombre_archivo
         nombre_archivo=$(basename "$archivo")
         local extension="${nombre_archivo##*.}"
-        
+
         # Si no tiene extensión, usar "otros"
         [[ "$extension" == "$nombre_archivo" ]] && extension="otros"
-        
+
         # Crear directorio para la extensión
         local dir_extension="$directorio_destino/$extension"
         mkdir -p "$dir_extension"
-        
+
         # Mover archivo
         if cp "$archivo" "$dir_extension/"; then
             echo "  📄 $nombre_archivo → $extension/"
@@ -2298,38 +2301,38 @@ organizar_por_extension() {
             echo -e "${RED}  ❌ Error moviendo: $nombre_archivo${NC}"
         fi
     done
-    
+
     echo -e "${GREEN}✅ Organización completada: $archivos_movidos archivos procesados${NC}"
 }
 
 organizar_por_fecha() {
     local directorio_origen="$1"
     local directorio_destino="${2:-${directorio_origen}_por_fecha}"
-    
+
     echo -e "${BLUE}📅 Organizando archivos por fecha de modificación${NC}"
-    
+
     mkdir -p "$directorio_destino"
-    
+
     find "$directorio_origen" -type f -print0 | while IFS= read -r -d '' archivo; do
         local nombre_archivo
         nombre_archivo=$(basename "$archivo")
-        
+
         # Obtener fecha de modificación
         local fecha_mod
         fecha_mod=$(stat -f%m "$archivo" 2>/dev/null || stat -c%Y "$archivo")
         local año_mes
         año_mes=$(date -r "$fecha_mod" '+%Y-%m' 2>/dev/null || date -d "@$fecha_mod" '+%Y-%m')
-        
+
         # Crear directorio para el año-mes
         local dir_fecha="$directorio_destino/$año_mes"
         mkdir -p "$dir_fecha"
-        
+
         # Copiar archivo
         if cp "$archivo" "$dir_fecha/"; then
             echo "  📄 $nombre_archivo → $año_mes/"
         fi
     done
-    
+
     echo -e "${GREEN}✅ Organización por fecha completada${NC}"
 }
 
@@ -2340,23 +2343,23 @@ organizar_por_fecha() {
 limpiar_duplicados() {
     local directorio="$1"
     local accion="${2:-listar}"  # listar, eliminar
-    
+
     echo -e "${BLUE}🔍 Buscando archivos duplicados en: $directorio${NC}"
-    
+
     # Array asociativo para almacenar checksums
     declare -A checksums
     declare -a duplicados
-    
+
     # Calcular checksums de todos los archivos
     find "$directorio" -type f -print0 | while IFS= read -r -d '' archivo; do
         local checksum
         checksum=$(md5sum "$archivo" 2>/dev/null | cut -d' ' -f1)
-        
+
         if [[ -n "${checksums[$checksum]:-}" ]]; then
             echo -e "${YELLOW}🔄 Duplicado encontrado:${NC}"
             echo "  Original: ${checksums[$checksum]}"
             echo "  Duplicado: $archivo"
-            
+
             if [[ "$accion" == "eliminar" ]]; then
                 echo "  🗑️ Eliminando duplicado..."
                 rm "$archivo"
@@ -2370,9 +2373,9 @@ limpiar_duplicados() {
 limpiar_archivos_temporales() {
     local directorio="$1"
     local dias="${2:-7}"
-    
+
     echo -e "${BLUE}🧹 Limpiando archivos temporales mayores a $dias días${NC}"
-    
+
     # Patrones de archivos temporales
     local patrones=(
         "*.tmp"
@@ -2383,9 +2386,9 @@ limpiar_archivos_temporales() {
         "*.log"
         "*.cache"
     )
-    
+
     local archivos_eliminados=0
-    
+
     for patron in "${patrones[@]}"; do
         while IFS= read -r -d '' archivo; do
             echo "  🗑️ Eliminando: $(basename "$archivo")"
@@ -2393,7 +2396,7 @@ limpiar_archivos_temporales() {
             ((archivos_eliminados++))
         done < <(find "$directorio" -name "$patron" -type f -mtime +$dias -print0 2>/dev/null)
     done
-    
+
     echo -e "${GREEN}✅ Limpieza completada: $archivos_eliminados archivos eliminados${NC}"
 }
 
@@ -2408,40 +2411,40 @@ declare -A function_calls
 # Función para medir rendimiento
 profile_function() {
     [[ $PROFILE_MODE == true ]] || return 0
-    
+
     local function_name="${FUNCNAME[1]}"
     local start_time=$(date +%s%N)
-    
+
     # Ejecutar función original
     "$@"
     local exit_code=$?
-    
+
     local end_time=$(date +%s%N)
     local duration=$(((end_time - start_time) / 1000000))  # ms
-    
+
     # Actualizar estadísticas
     function_times[$function_name]=$((${function_times[$function_name]:-0} + duration))
     function_calls[$function_name]=$((${function_calls[$function_name]:-0} + 1))
-    
+
     log_debug "PROFILE: $function_name ejecutada en ${duration}ms"
-    
+
     return $exit_code
 }
 
 # Mostrar reporte de profiling
 show_profile_report() {
     [[ $PROFILE_MODE == true ]] || return 0
-    
+
     echo -e "${PURPLE}📊 REPORTE DE PROFILING${NC}"
     echo "============================================"
     printf "%-20s %10s %12s %10s\n" "FUNCIÓN" "LLAMADAS" "TIEMPO_TOTAL" "PROMEDIO"
     echo "--------------------------------------------"
-    
+
     for func in "${!function_calls[@]}"; do
         local calls=${function_calls[$func]}
         local total_time=${function_times[$func]}
         local avg_time=$((total_time / calls))
-        
+
         printf "%-20s %10d %12dms %10dms\n" "$func" "$calls" "$total_time" "$avg_time"
     done
 }
@@ -2455,9 +2458,9 @@ error_handler() {
     local exit_code=$?
     local line_number=$1
     local command="$2"
-    
+
     log_error "Error en línea $line_number: comando '$command' falló con código $exit_code"
-    
+
     # Stack trace
     log_error "Stack trace:"
     local frame=0
@@ -2466,14 +2469,14 @@ error_handler() {
     done | while read line func file; do
         log_error "  $file:$line en función $func"
     done
-    
+
     # Información del entorno
     log_error "Información del entorno:"
     log_error "  PWD: $(pwd)"
     log_error "  USER: $(whoami)"
     log_error "  DATE: $(date)"
     log_error "  ARGS: $*"
-    
+
     exit $exit_code
 }
 
@@ -2481,7 +2484,7 @@ error_handler() {
 set_error_handling() {
     # Capturar errores con información detallada
     trap 'error_handler $LINENO "$BASH_COMMAND"' ERR
-    
+
     # Capturar señales
     trap 'log_warn "Recibida señal INT (Ctrl+C)"; exit 130' INT
     trap 'log_warn "Recibida señal TERM"; exit 143' TERM
@@ -2495,34 +2498,34 @@ set_error_handling() {
 demo_logging() {
     echo -e "${PURPLE}🔧 DEMOSTRACIÓN DEL SISTEMA DE LOGGING${NC}"
     echo "============================================"
-    
+
     # Inicializar sistemas
     init_logging
     set_error_handling
-    
+
     # Configurar modos
     TRACE_MODE=true
     PROFILE_MODE=true
-    
+
     log_info "Iniciando demostración del sistema de logging"
-    
+
     # Crear estructura de prueba
     mkdir -p demo_logs/{archivos,vacios}
     echo "Contenido 1" > demo_logs/archivos/archivo1.txt
     echo "Contenido 2" > demo_logs/archivos/archivo2.txt
     touch demo_logs/vacios/archivo_vacio.txt
-    
+
     # Demo de diferentes niveles de log
     log_debug "Mensaje de debug - información detallada"
     log_info "Proceso iniciado correctamente"
     log_warn "Advertencia: directorio temporal lleno al 80%"
-    
+
     # Demo de validación con logging
     echo
     echo -e "${BLUE}🔍 Validación de archivos con logging:${NC}"
     validar_archivo "demo_logs/archivos/archivo1.txt" "file"
     validar_archivo "demo_logs/inexistente.txt" "file" || true
-    
+
     # Demo de procesamiento con profiling
     echo
     echo -e "${BLUE}⚡ Procesamiento con profiling:${NC}"
@@ -2531,20 +2534,20 @@ demo_logging() {
     else
         procesar_archivos "demo_logs/archivos" "*.txt"
     fi
-    
+
     # Simular error controlado
     echo
     echo -e "${BLUE}❌ Simulando manejo de errores:${NC}"
     log_error "Error simulado para demostración"
-    
+
     # Mostrar contenido del log
     echo
     echo -e "${BLUE}📄 Últimas líneas del log:${NC}"
     tail -10 "$LOG_FILE"
-    
+
     # Limpiar
     rm -rf demo_logs
-    
+
     log_info "Demostración completada exitosamente"
 }
 
@@ -2592,7 +2595,7 @@ debug_print() {
     local level="$1"
     shift
     local message="$*"
-    
+
     if ((level <= DEBUG_LEVEL)); then
         local caller="${BASH_SOURCE[2]##*/}:${BASH_LINENO[1]}"
         echo -e "${CYAN}[DEBUG $level] [$caller] $message${NC}" >&2
@@ -2610,7 +2613,7 @@ debug3() { debug_print 3 "$@"; }
 
 dump_vars() {
     echo -e "${BLUE}📋 Volcado de variables:${NC}"
-    
+
     # Variables especiales
     echo "Variables especiales:"
     echo "  \$0 = $0"
@@ -2620,14 +2623,14 @@ dump_vars() {
     echo "  \$? = $?"
     echo "  \$\$ = $$"
     echo "  \$! = ${!:-N/A}"
-    
+
     # Variables de entorno importantes
     echo "Variables de entorno:"
     echo "  HOME = $HOME"
     echo "  PATH = ${PATH:0:100}..."
     echo "  PWD = $PWD"
     echo "  USER = $USER"
-    
+
     # Variables personalizadas (si existen)
     if [[ -n "${MI_VAR:-}" ]]; then
         echo "Variables personalizadas:"
@@ -2642,15 +2645,15 @@ dump_vars() {
 breakpoint() {
     local punto="$1"
     local mensaje="${2:-Breakpoint alcanzado}"
-    
+
     echo -e "${RED}🛑 BREAKPOINT: $punto${NC}"
     echo -e "${YELLOW}$mensaje${NC}"
     echo
-    
+
     # Mostrar contexto
     dump_vars
     echo
-    
+
     # Menú interactivo
     while true; do
         echo -e "${BLUE}Opciones de debugging:${NC}"
@@ -2659,14 +2662,14 @@ breakpoint() {
         echo "  s) Stack trace"
         echo "  e) Evaluar expresión"
         echo "  q) Salir"
-        
+
         read -p "Debug> " opcion
-        
+
         case $opcion in
             c|C) break ;;
             v|V) dump_vars ;;
             s|S) stack_trace ;;
-            e|E) 
+            e|E)
                 read -p "Expresión a evaluar: " expr
                 eval "$expr" || echo "Error en la expresión"
                 ;;
@@ -2698,20 +2701,20 @@ stack_trace() {
 time_function() {
     local func_name="$1"
     shift
-    
+
     echo -e "${BLUE}⏱️ Midiendo rendimiento de: $func_name${NC}"
-    
+
     local start_time=$(date +%s%N)
-    
+
     # Ejecutar función
     "$@"
     local exit_code=$?
-    
+
     local end_time=$(date +%s%N)
     local duration=$(((end_time - start_time) / 1000000))  # ms
-    
+
     echo -e "${GREEN}⚡ $func_name completada en ${duration}ms${NC}"
-    
+
     return $exit_code
 }
 
@@ -2721,30 +2724,30 @@ time_function() {
 
 funcion_con_errores() {
     debug1 "Iniciando función con errores potenciales"
-    
+
     local numero="$1"
-    
+
     debug2 "Número recibido: $numero"
-    
+
     # Validación con debugging
     if [[ ! "$numero" =~ ^[0-9]+$ ]]; then
         debug1 "Error: no es un número válido"
         return 1
     fi
-    
+
     debug2 "Número validado correctamente"
-    
+
     # Breakpoint condicional
     if ((numero > 50)); then
         breakpoint "numero_alto" "Número mayor a 50 detectado: $numero"
     fi
-    
+
     # Operación que puede fallar
     if ((numero % 7 == 0)); then
         debug1 "Simulando error con múltiplo de 7"
         return 2
     fi
-    
+
     debug1 "Función completada exitosamente"
     echo "Resultado: $((numero * 2))"
     return 0
@@ -2752,19 +2755,19 @@ funcion_con_errores() {
 
 funcion_recursiva() {
     debug3 "Llamada recursiva con: $1"
-    
+
     local n="$1"
-    
+
     if ((n <= 1)); then
         debug3 "Caso base alcanzado"
         echo 1
         return 0
     fi
-    
+
     local resultado
     resultado=$(funcion_recursiva $((n - 1)))
     resultado=$((n * resultado))
-    
+
     debug3 "Resultado para $n: $resultado"
     echo $resultado
 }
@@ -2775,41 +2778,41 @@ funcion_recursiva() {
 
 demo_debugging() {
     echo -e "${BLUE}🔍 Demostrando técnicas de debugging${NC}"
-    
+
     # Configurar nivel de debug alto para ver todo
     DEBUG_LEVEL=3
-    
+
     echo
     echo -e "${YELLOW}1️⃣ Debugging con diferentes niveles:${NC}"
     debug1 "Mensaje de debug nivel 1 (siempre visible)"
     debug2 "Mensaje de debug nivel 2 (detalle medio)"
     debug3 "Mensaje de debug nivel 3 (máximo detalle)"
-    
+
     echo
     echo -e "${YELLOW}2️⃣ Función con manejo de errores:${NC}"
-    
+
     # Casos de prueba
     echo "Probando con número válido (10):"
     time_function "funcion_con_errores" funcion_con_errores 10
-    
+
     echo
     echo "Probando con número inválido (abc):"
     time_function "funcion_con_errores" funcion_con_errores "abc" || echo "Error capturado correctamente"
-    
+
     echo
     echo "Probando con múltiplo de 7 (14):"
     time_function "funcion_con_errores" funcion_con_errores 14 || echo "Error simulado capturado"
-    
+
     echo
     echo -e "${YELLOW}3️⃣ Función recursiva con tracing:${NC}"
     echo "Calculando factorial de 5:"
     resultado=$(time_function "factorial" funcion_recursiva 5)
     echo "Factorial de 5 = $resultado"
-    
+
     echo
     echo -e "${YELLOW}4️⃣ Stack trace de ejemplo:${NC}"
     stack_trace
-    
+
     echo
     echo -e "${GREEN}✅ Demo de debugging completada${NC}"
 }
@@ -2829,6 +2832,7 @@ echo "🎯 EJECUTANDO DEBUGGING AVANZADO:"
 **[PANTALLA: Checklist de debugging profesional]**
 
 > "Estrategias profesionales de debugging:
+>
 > 1. **Logging estructurado**: Niveles, timestamps, contexto
 > 2. **Debugging condicional**: Solo cuando es necesario
 > 3. **Breakpoints estratégicos**: En puntos críticos del código
@@ -2851,6 +2855,7 @@ echo "🎯 EJECUTANDO DEBUGGING AVANZADO:"
 **[PANTALLA: Diagrama de componentes]**
 
 > "Nuestro sistema tendrá arquitectura modular:
+>
 > - 🔧 **Motor de backup**: Estrategias intercambiables (completo, incremental, diferencial)
 > - 📊 **Sistema de monitoreo**: Métricas, alertas, reportes
 > - 🔐 **Seguridad**: Encriptación, verificación de integridad
@@ -2918,12 +2923,12 @@ declare -A ACTIVE_JOBS
 init_logging() {
     mkdir -p "$LOG_DIR"
     local log_file="${LOG_DIR}/backup_$(date +%Y%m%d).log"
-    
+
     # Rotar logs si es necesario
     if [[ -f "$log_file" && $(stat -f%z "$log_file" 2>/dev/null || stat -c%s "$log_file") -gt 10485760 ]]; then
         mv "$log_file" "${log_file}.$(date +%H%M%S)"
     fi
-    
+
     exec 3>>"$log_file"
 }
 
@@ -2933,13 +2938,13 @@ log() {
     local message="$*"
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     local caller="${BASH_SOURCE[2]##*/}:${BASH_LINENO[1]}"
-    
+
     # Formatear mensaje
     local log_entry="[$timestamp] [$level] [$caller] $message"
-    
+
     # Escribir a archivo
     echo "$log_entry" >&3
-    
+
     # Mostrar en consola según nivel
     case $level in
         "DEBUG") [[ "${CONFIG[log_level]}" == "DEBUG" ]] && echo -e "${CYAN}[DEBUG] $message${NC}" ;;
@@ -2957,7 +2962,7 @@ log() {
 load_config() {
     if [[ -f "$CONFIG_FILE" ]]; then
         log "DEBUG" "Cargando configuración desde $CONFIG_FILE"
-        
+
         while IFS='=' read -r key value; do
             [[ -n "$key" && ! "$key" =~ ^# ]] && CONFIG["$key"]="$value"
         done < "$CONFIG_FILE"
@@ -2970,7 +2975,7 @@ load_config() {
 save_config() {
     mkdir -p "$CONFIG_DIR"
     log "DEBUG" "Guardando configuración en $CONFIG_FILE"
-    
+
     {
         echo "# Configuración del Sistema de Backup v$SCRIPT_VERSION"
         echo "# Generado: $(date)"
@@ -2984,7 +2989,7 @@ save_config() {
 show_config() {
     echo -e "${PURPLE}⚙️ CONFIGURACIÓN ACTUAL${NC}"
     echo "=================================="
-    
+
     for key in "${!CONFIG[@]}"; do
         printf "%-20s: %s\n" "$key" "${CONFIG[$key]}"
     done
@@ -2999,33 +3004,33 @@ backup_full() {
     local source="$1"
     local target="$2"
     local job_id="$3"
-    
+
     log "INFO" "Iniciando backup completo: $source -> $target"
-    
+
     local start_time=$(date +%s)
     local files_processed=0
     local total_size=0
-    
+
     # Crear directorio de destino
     mkdir -p "$target"
-    
+
     # Copiar archivos con verificación
     while IFS= read -r -d '' file; do
         local relative_path="${file#$source/}"
         local target_file="$target/$relative_path"
         local target_dir="$(dirname "$target_file")"
-        
+
         mkdir -p "$target_dir"
-        
+
         if cp "$file" "$target_file"; then
             ((files_processed++))
             local file_size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file")
             total_size=$((total_size + file_size))
-            
+
             # Actualizar estadísticas
             BACKUP_STATS["${job_id}_files"]=$files_processed
             BACKUP_STATS["${job_id}_size"]=$total_size
-            
+
             # Progress cada 100 archivos
             if ((files_processed % 100 == 0)); then
                 log "DEBUG" "Backup $job_id: $files_processed archivos procesados"
@@ -3034,12 +3039,12 @@ backup_full() {
             log "ERROR" "Error copiando: $file"
         fi
     done < <(find "$source" -type f -print0 2>/dev/null)
-    
+
     local end_time=$(date +%s)
     local duration=$((end_time - start_time))
-    
+
     log "INFO" "Backup completo finalizado: $files_processed archivos, $(format_size $total_size), ${duration}s"
-    
+
     # Registrar en índice
     echo "$(date +%s)|FULL|$source|$target|$files_processed|$total_size|$duration" >> "$BACKUP_INDEX"
 }
@@ -3050,38 +3055,38 @@ backup_incremental() {
     local target="$2"
     local job_id="$3"
     local since_days="${4:-1}"
-    
+
     log "INFO" "Iniciando backup incremental: $source (últimos $since_days días)"
-    
+
     local start_time=$(date +%s)
     local files_processed=0
     local total_size=0
-    
+
     mkdir -p "$target"
-    
+
     # Buscar archivos modificados
     while IFS= read -r -d '' file; do
         local relative_path="${file#$source/}"
         local target_file="$target/$relative_path"
         local target_dir="$(dirname "$target_file")"
-        
+
         mkdir -p "$target_dir"
-        
+
         if cp "$file" "$target_file"; then
             ((files_processed++))
             local file_size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file")
             total_size=$((total_size + file_size))
-            
+
             BACKUP_STATS["${job_id}_files"]=$files_processed
             BACKUP_STATS["${job_id}_size"]=$total_size
         fi
     done < <(find "$source" -type f -mtime -$since_days -print0 2>/dev/null)
-    
+
     local end_time=$(date +%s)
     local duration=$((end_time - start_time))
-    
+
     log "INFO" "Backup incremental finalizado: $files_processed archivos, $(format_size $total_size), ${duration}s"
-    
+
     echo "$(date +%s)|INCREMENTAL|$source|$target|$files_processed|$total_size|$duration" >> "$BACKUP_INDEX"
 }
 
@@ -3090,15 +3095,15 @@ backup_differential() {
     local source="$1"
     local target="$2"
     local job_id="$3"
-    
+
     log "INFO" "Iniciando backup diferencial: $source"
-    
+
     # Buscar último backup completo
     local last_full_backup=""
     if [[ -f "$BACKUP_INDEX" ]]; then
         last_full_backup=$(grep "|FULL|$source|" "$BACKUP_INDEX" | tail -1 | cut -d'|' -f1)
     fi
-    
+
     if [[ -n "$last_full_backup" ]]; then
         local days_since=$(( ($(date +%s) - last_full_backup) / 86400 ))
         log "INFO" "Último backup completo hace $days_since días"
@@ -3116,9 +3121,9 @@ backup_differential() {
 compress_backup() {
     local backup_path="$1"
     local compression="${CONFIG[compression]}"
-    
+
     log "INFO" "Comprimiendo backup con $compression"
-    
+
     case $compression in
         "gzip")
             if command -v tar &> /dev/null; then
@@ -3142,10 +3147,10 @@ compress_backup() {
 
 encrypt_backup() {
     local backup_file="$1"
-    
+
     if [[ "${CONFIG[encryption]}" == "true" ]]; then
         log "INFO" "Encriptando backup"
-        
+
         if command -v gpg &> /dev/null; then
             gpg --symmetric --cipher-algo AES256 --compress-algo 2 --s2k-mode 3 \
                 --s2k-digest-algo SHA512 --s2k-count 65536 --quiet \
@@ -3167,10 +3172,10 @@ encrypt_backup() {
 
 verify_backup() {
     local backup_file="$1"
-    
+
     if [[ "${CONFIG[verify_integrity]}" == "true" ]]; then
         log "INFO" "Verificando integridad del backup"
-        
+
         # Calcular checksum
         local checksum
         if command -v sha256sum &> /dev/null; then
@@ -3181,11 +3186,11 @@ verify_backup() {
             log "WARN" "No se puede verificar integridad: sha256sum no disponible"
             return 0
         fi
-        
+
         # Guardar checksum
         echo "$checksum  $backup_file" > "${backup_file}.sha256"
         log "INFO" "Checksum guardado: ${backup_file}.sha256"
-        
+
         return 0
     fi
 }
@@ -3198,17 +3203,17 @@ start_backup_job() {
     local source="$1"
     local strategy="$2"
     local job_id="backup_$(date +%s)_$$"
-    
+
     log "INFO" "Iniciando trabajo de backup: $job_id"
-    
+
     # Crear directorio de destino
     local timestamp=$(date +%Y%m%d_%H%M%S)
     local target="${CONFIG[backup_dir]}/${timestamp}_${strategy}"
-    
+
     # Ejecutar backup en background
     (
         ACTIVE_JOBS["$job_id"]="RUNNING"
-        
+
         case $strategy in
             "full")
                 backup_full "$source" "$target" "$job_id"
@@ -3220,21 +3225,21 @@ start_backup_job() {
                 backup_differential "$source" "$target" "$job_id"
                 ;;
         esac
-        
+
         # Post-procesamiento
         local final_backup="$target"
         final_backup=$(compress_backup "$final_backup")
         final_backup=$(encrypt_backup "$final_backup")
         verify_backup "$final_backup"
-        
+
         ACTIVE_JOBS["$job_id"]="COMPLETED"
         log "INFO" "Trabajo $job_id completado: $final_backup"
-        
+
     ) &
-    
+
     local pid=$!
     ACTIVE_JOBS["$job_id"]="$pid"
-    
+
     echo "$job_id"
 }
 
@@ -3244,7 +3249,7 @@ start_backup_job() {
 
 format_size() {
     local bytes="$1"
-    
+
     if ((bytes < 1024)); then
         echo "${bytes} B"
     elif ((bytes < 1048576)); then
@@ -3305,25 +3310,25 @@ HELP
 cmd_backup() {
     local source="$1"
     local strategy="${2:-full}"
-    
+
     if [[ ! -d "$source" ]]; then
         log "ERROR" "Directorio fuente no existe: $source"
         return 1
     fi
-    
+
     log "INFO" "Solicitando backup $strategy de: $source"
-    
+
     # Verificar límite de trabajos paralelos
     local active_count=0
     for job in "${ACTIVE_JOBS[@]}"; do
         [[ "$job" =~ ^[0-9]+$ ]] && kill -0 "$job" 2>/dev/null && ((active_count++))
     done
-    
+
     if ((active_count >= CONFIG[max_parallel])); then
         log "WARN" "Límite de trabajos paralelos alcanzado ($active_count/${CONFIG[max_parallel]})"
         return 1
     fi
-    
+
     local job_id
     job_id=$(start_backup_job "$source" "$strategy")
     echo "Trabajo iniciado: $job_id"
@@ -3332,15 +3337,15 @@ cmd_backup() {
 cmd_list() {
     echo -e "${BLUE}📋 HISTORIAL DE BACKUPS${NC}"
     echo "=================================="
-    
+
     if [[ ! -f "$BACKUP_INDEX" ]]; then
         echo "No hay backups registrados"
         return 0
     fi
-    
+
     printf "%-12s %-12s %-25s %-8s %-10s %-8s\n" "FECHA" "TIPO" "ORIGEN" "ARCHIVOS" "TAMAÑO" "TIEMPO"
     echo "------------------------------------------------------------------------"
-    
+
     while IFS='|' read -r timestamp tipo origen destino archivos tamaño tiempo; do
         local fecha=$(date -r "$timestamp" '+%Y-%m-%d %H:%M' 2>/dev/null || echo "N/A")
         printf "%-12s %-12s %-25s %-8s %-10s %-8ss\n" \
@@ -3351,16 +3356,16 @@ cmd_list() {
 cmd_status() {
     echo -e "${BLUE}📊 ESTADO DE TRABAJOS ACTIVOS${NC}"
     echo "=================================="
-    
+
     if [[ ${#ACTIVE_JOBS[@]} -eq 0 ]]; then
         echo "No hay trabajos activos"
         return 0
     fi
-    
+
     for job_id in "${!ACTIVE_JOBS[@]}"; do
         local status="${ACTIVE_JOBS[$job_id]}"
         echo "  $job_id: $status"
-        
+
         # Mostrar estadísticas si están disponibles
         if [[ -n "${BACKUP_STATS[${job_id}_files]:-}" ]]; then
             echo "    Archivos: ${BACKUP_STATS[${job_id}_files]}"
@@ -3372,15 +3377,15 @@ cmd_status() {
 cmd_cleanup() {
     local retention_days="${CONFIG[retention_days]}"
     log "INFO" "Limpiando backups antiguos (>$retention_days días)"
-    
+
     local cleanup_count=0
-    
+
     find "${CONFIG[backup_dir]}" -type f -mtime +$retention_days -name "*.tar.*" -o -name "*.gpg" | while read -r file; do
         log "INFO" "Eliminando backup antiguo: $(basename "$file")"
         rm "$file"
         ((cleanup_count++))
     done
-    
+
     echo "Backups eliminados: $cleanup_count"
 }
 
@@ -3393,7 +3398,7 @@ main() {
     init_logging
     load_config
     mkdir -p "${CONFIG[backup_dir]}"
-    
+
     # Verificar argumentos
     if [[ $# -eq 0 ]]; then
         show_banner
@@ -3401,10 +3406,10 @@ main() {
         show_help
         exit 0
     fi
-    
+
     local command="$1"
     shift
-    
+
     case $command in
         "backup")
             [[ $# -lt 1 ]] && { echo "Error: Se requiere directorio fuente"; exit 1; }
@@ -3490,20 +3495,23 @@ echo -e "${GREEN}✅ PROYECTO FINAL COMPLETADO EXITOSAMENTE${NC}"
 **[PANTALLA: Checklist de funcionalidades]**
 
 > "Nuestro sistema de backup incluye:
-> 
+>
 > **🏗️ Arquitectura Empresarial:**
+>
 > - Configuración centralizada y persistente
 > - Logging estructurado con rotación automática
 > - Gestión de trabajos paralelos
 > - Índice de backups para auditoría
-> 
+>
 > **🔧 Funcionalidades Avanzadas:**
+>
 > - Tres estrategias de backup (completo, incremental, diferencial)
 > - Compresión múltiple (gzip, bzip2)
 > - Encriptación con GPG
 > - Verificación de integridad con checksums
-> 
+>
 > **🎛️ Interfaz Profesional:**
+>
 > - CLI con múltiples comandos
 > - Reportes detallados
 > - Limpieza automática por retención
@@ -3514,7 +3522,7 @@ echo -e "${GREEN}✅ PROYECTO FINAL COMPLETADO EXITOSAMENTE${NC}"
 **[PANTALLA: Principios aplicados]**
 
 > "Este proyecto demuestra principios profesionales:
-> 
+>
 > ✅ **Modularidad**: Cada funcionalidad en su módulo específico
 > ✅ **Configurabilidad**: Comportamiento adaptable sin modificar código
 > ✅ **Escalabilidad**: Diseño que soporta crecimiento y nuevas funcionalidades
@@ -3531,7 +3539,7 @@ echo -e "${GREEN}✅ PROYECTO FINAL COMPLETADO EXITOSAMENTE${NC}"
 **[PANTALLA: Mapa mental de todo lo aprendido]**
 
 > "¡Increíble recorrido! Has dominado el arte de crear software modular en bash:
-> 
+>
 > ✅ **Funciones avanzadas**: De simples bloques a componentes reutilizables
 > ✅ **Arrays y estructuras**: Manejo de datos complejos como un profesional
 > ✅ **Patrones de diseño**: Factory, Observer, Strategy aplicados a bash
@@ -3544,10 +3552,10 @@ echo -e "${GREEN}✅ PROYECTO FINAL COMPLETADO EXITOSAMENTE${NC}"
 
 > "**ANTES del Módulo 4:** Escribías scripts lineales
 > **DESPUÉS del Módulo 4:** Diseñas arquitecturas de software
-> 
+>
 > **ANTES:** Un problema, un script desde cero
 > **DESPUÉS:** Bibliotecas reutilizables y patrones probados
-> 
+>
 > **ANTES:** Scripts que funcionan 'a veces'
 > **DESPUÉS:** Sistemas robustos con logging y recovery"
 
@@ -3556,6 +3564,7 @@ echo -e "${GREEN}✅ PROYECTO FINAL COMPLETADO EXITOSAMENTE${NC}"
 **[PANTALLA: Preview del Módulo 5]**
 
 > "El Módulo 5 te llevará al nivel de arquitecto de automatización:
+>
 > - 🌐 **Integración con APIs** y servicios web
 > - 🔄 **Pipelines de CI/CD** automatizados
 > - 📊 **Análisis de datos** con herramientas bash
@@ -3567,24 +3576,26 @@ echo -e "${GREEN}✅ PROYECTO FINAL COMPLETADO EXITOSAMENTE${NC}"
 **[PANTALLA: Reto personalizado]**
 
 > "🏆 **DESAFÍO MAESTRO DEL MÓDULO 4:**
-> 
+>
 > Extiende el sistema de backup con:
+>
 > 1. **Sincronización con la nube** (AWS S3, Google Drive)
 > 2. **Notificaciones inteligentes** (Slack, Discord, Email)
 > 3. **Dashboard web** para monitoreo visual
 > 4. **Restauración selectiva** de archivos específicos
 > 5. **Políticas de backup automáticas** basadas en patrones
-> 
+>
 > ¡Comparte tu implementación y conviértete en referente de la comunidad!"
 
 ### 🤝 Comunidad y Próximos Pasos
 
 > "💬 **TU VIAJE CONTINÚA:**
+>
 > - 📝 **Documenta tus bibliotecas** para futuros proyectos
 > - 🔄 **Contribuye a proyectos** open source en bash
 > - 🎓 **Mentoriza a otros** compartiendo tu conocimiento
 > - 🚀 **Construye tu portafolio** con herramientas bash profesionales
-> 
+>
 > **¡Nos vemos en el Módulo 5! Sigue construyendo el futuro, una función a la vez.**"
 
 **[PANTALLA FINAL: Logo con animación de código modular conectándose]**
