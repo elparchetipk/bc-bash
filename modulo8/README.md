@@ -1,3 +1,102 @@
+# MÓDULO 8: PROYECTOS AVANZADOS Y AUTOMATIZACIÓN
+
+![Módulo 8 Logo](../assets/module-8-logo.svg)
+
+## 🎯 VISIÓN GENERAL DEL MÓDULO
+
+El **Módulo 8** representa la culminación del Bootcamp Bash Scripting. Aquí integrarás todo lo aprendido en los módulos anteriores para crear **sistemas de automatización complejos** y **proyectos de nivel empresarial**. Este módulo transforma a los participantes en **arquitectos de automatización** capaces de diseñar e implementar soluciones robustas para entornos de producción.
+
+### 🏆 Lo que Lograrás
+
+Al completar este módulo serás capaz de:
+
+- Diseñar arquitecturas de automatización escalables y mantenibles
+- Implementar sistemas de orquestación de procesos complejos
+- Crear herramientas de DevOps y CI/CD usando Bash
+- Desarrollar sistemas de monitoreo y alertas automatizadas
+- Integrar Bash con APIs, bases de datos y servicios externos
+- Construir frameworks reutilizables para automatización empresarial
+
+---
+
+## 📚 ESTRUCTURA DEL MÓDULO
+
+### 📖 Lecciones Principales
+
+#### **Lección 8.1: Arquitectura de Sistemas de Automatización**
+
+- Diseño de arquitecturas escalables y modulares
+- Patrones de diseño para automatización
+- Gestión de configuración centralizada
+- Manejo de dependencias y versionado
+
+#### **Lección 8.2: Orquestación de Procesos y Workflows**
+
+- Diseño de workflows complejos y pipeline automation
+- Manejo de estados y transiciones
+- Sistemas de colas y procesamiento asíncrono
+- Gestión de errores y recovery automático
+
+#### **Lección 8.3: Integración con Ecosistemas Externos**
+
+- Integración con APIs REST y GraphQL
+- Conectores de bases de datos y sistemas externos
+- Automatización de servicios cloud (AWS, GCP, Azure)
+- Herramientas de contenedores y orquestación
+
+#### **Lección 8.4: Frameworks y Herramientas Empresariales**
+
+- Desarrollo de frameworks reutilizables
+- Sistemas de configuración y templating
+- Herramientas de DevOps y CI/CD
+- Automatización de infraestructura como código
+
+---
+
+## 🎯 OBJETIVOS DE APRENDIZAJE
+
+### Competencias Técnicas
+
+- **Arquitectura de Software**: Diseñar sistemas modulares y escalables
+- **Orquestación**: Coordinar procesos complejos y workflows
+- **Integración**: Conectar sistemas heterogéneos de manera robusta
+- **DevOps**: Implementar pipelines de CI/CD y automatización de infraestructura
+- **Monitoreo**: Crear sistemas de observabilidad y alertas inteligentes
+
+### Competencias Profesionales
+
+- **Pensamiento Sistémico**: Analizar problemas complejos de automatización
+- **Documentación Técnica**: Crear documentación de nivel empresarial
+- **Gestión de Proyectos**: Planificar y ejecutar proyectos de automatización
+- **Colaboración**: Trabajar en equipos de DevOps y desarrollo
+- **Resolución de Problemas**: Debuggear sistemas complejos de producción
+
+---
+
+## 🛠️ HERRAMIENTAS Y TECNOLOGÍAS
+
+### Tecnologías Core
+
+- **Bash Advanced**: Arrays asociativos, coprocessos, networking
+- **JSON/YAML**: Parsing y generación de configuraciones
+- **Git Hooks**: Automatización de workflows de desarrollo
+- **Cron/Systemd**: Scheduling y servicios del sistema
+
+### Integraciones
+
+- **APIs**: curl, jq, webhook handling
+- **Databases**: Conectores MySQL/PostgreSQL/MongoDB
+- **Cloud Services**: AWS CLI, gcloud, az
+- **Containers**: Docker, Kubernetes integration
+- **Monitoring**: Prometheus, Grafana, custom metrics
+
+### Herramientas de Desarrollo
+
+- **Testing**: Framework de testing avanzado
+- **Documentation**: Generación automática de docs
+- **Deployment**: Sistemas de deployment automatizado
+- **Security**: Escáneo y validación de seguridad
+
 ---
 
 ## 🔧 LECCIÓN 8.1: ARQUITECTURA DE SISTEMAS DE AUTOMATIZACIÓN
@@ -33,10 +132,10 @@ main() {
     config_load "$@"
     logger_init
     view_init
-    
+
     # Ejecutar workflow
     controller_execute_workflow
-    
+
     # Cleanup
     cleanup_all
 }
@@ -61,7 +160,7 @@ config_define() {
     local type="${3:-string}"
     local description="$4"
     local required="${5:-false}"
-    
+
     CONFIG["$key"]="$default_value"
     CONFIG_METADATA["${key}_type"]="$type"
     CONFIG_METADATA["${key}_desc"]="$description"
@@ -70,15 +169,15 @@ config_define() {
 
 config_load_from_file() {
     local config_file="$1"
-    
+
     [[ ! -f "$config_file" ]] && return 1
-    
+
     # Cargar configuración de forma segura
     while IFS='=' read -r key value; do
         # Ignorar comentarios y líneas vacías
         [[ "$key" =~ ^[[:space:]]*# ]] && continue
         [[ -z "$key" ]] && continue
-        
+
         # Validar que la configuración existe
         if [[ -n "${CONFIG_METADATA[${key}_type]}" ]]; then
             config_set "$key" "$value"
@@ -92,7 +191,7 @@ config_set() {
     local key="$1"
     local value="$2"
     local type="${CONFIG_METADATA[${key}_type]:-string}"
-    
+
     # Validar tipo
     case "$type" in
         "int")
@@ -120,7 +219,7 @@ config_set() {
             }
             ;;
     esac
-    
+
     CONFIG["$key"]="$value"
     logger_debug "Configuración actualizada: $key=$value"
 }
@@ -128,7 +227,7 @@ config_set() {
 config_get() {
     local key="$1"
     local default="$2"
-    
+
     echo "${CONFIG[$key]:-$default}"
 }
 
@@ -138,24 +237,24 @@ config_init() {
     config_define "app.name" "AutomationSystem" "string" "Nombre de la aplicación"
     config_define "app.version" "1.0.0" "string" "Versión de la aplicación"
     config_define "app.debug" "false" "bool" "Modo debug activado"
-    
+
     # Configuraciones de logging
     config_define "log.level" "INFO" "string" "Nivel de logging"
     config_define "log.file" "/tmp/automation.log" "string" "Archivo de log"
     config_define "log.max_size" "100" "int" "Tamaño máximo del log en MB"
-    
+
     # Configuraciones de ejecución
     config_define "exec.timeout" "3600" "int" "Timeout en segundos"
     config_define "exec.max_parallel" "5" "int" "Procesos paralelos máximos"
     config_define "exec.retry_count" "3" "int" "Intentos de reintento"
-    
+
     # Cargar configuraciones de archivos
     local config_files=(
         "/etc/automation/config"
         "$HOME/.automation/config"
         "./config/automation.conf"
     )
-    
+
     for config_file in "${config_files[@]}"; do
         [[ -f "$config_file" ]] && config_load_from_file "$config_file"
     done
@@ -179,24 +278,24 @@ module_define() {
     local module_path="$2"
     local version="${3:-1.0.0}"
     local dependencies="$4"  # "mod1,mod2,mod3"
-    
+
     MODULE_DEPENDENCIES["$module_name"]="$dependencies"
     MODULE_VERSIONS["$module_name"]="$version"
-    
+
     logger_debug "Módulo definido: $module_name v$version"
 }
 
 module_load() {
     local module_name="$1"
     local force_reload="${2:-false}"
-    
+
     # Verificar si ya está cargado
     if [[ "${LOADED_MODULES[$module_name]}" == "true" && "$force_reload" != "true" ]]; then
         return 0
     fi
-    
+
     logger_info "Cargando módulo: $module_name"
-    
+
     # Cargar dependencias primero
     local dependencies="${MODULE_DEPENDENCIES[$module_name]}"
     if [[ -n "$dependencies" ]]; then
@@ -208,7 +307,7 @@ module_load() {
             }
         done
     fi
-    
+
     # Cargar el módulo
     local module_path="modules/${module_name}.sh"
     if [[ -f "$module_path" ]]; then
@@ -216,7 +315,7 @@ module_load() {
             logger_error "Error cargando módulo: $module_name"
             return 1
         }
-        
+
         # Ejecutar función de inicialización si existe
         if declare -f "${module_name}_init" &>/dev/null; then
             "${module_name}_init" || {
@@ -224,7 +323,7 @@ module_load() {
                 return 1
             }
         fi
-        
+
         LOADED_MODULES["$module_name"]="true"
         logger_info "Módulo cargado exitosamente: $module_name"
         return 0
@@ -236,12 +335,12 @@ module_load() {
 
 module_unload() {
     local module_name="$1"
-    
+
     # Ejecutar función de cleanup si existe
     if declare -f "${module_name}_cleanup" &>/dev/null; then
         "${module_name}_cleanup"
     fi
-    
+
     unset LOADED_MODULES["$module_name"]
     logger_info "Módulo descargado: $module_name"
 }
@@ -282,7 +381,7 @@ version_get_current() {
 version_parse() {
     local version="$1"
     local parts
-    
+
     IFS='.' read -ra parts <<< "$version"
     echo "${parts[0]:-0}" "${parts[1]:-0}" "${parts[2]:-0}"
 }
@@ -291,9 +390,9 @@ version_increment() {
     local type="$1"  # major, minor, patch
     local current_version
     current_version=$(version_get_current)
-    
+
     read -r major minor patch <<< "$(version_parse "$current_version")"
-    
+
     case "$type" in
         "major")
             ((major++))
@@ -312,10 +411,10 @@ version_increment() {
             return 1
             ;;
     esac
-    
+
     local new_version="$major.$minor.$patch"
     echo "$new_version" > "$VERSION_FILE"
-    
+
     logger_info "Versión actualizada: $current_version → $new_version"
     echo "$new_version"
 }
@@ -323,13 +422,13 @@ version_increment() {
 version_tag_release() {
     local version="$1"
     local message="${2:-Release version $version}"
-    
+
     # Crear tag de git
     git tag -a "v$version" -m "$message"
-    
+
     # Generar release notes
     version_generate_release_notes "$version"
-    
+
     logger_info "Release tagged: v$version"
 }
 
@@ -337,10 +436,10 @@ version_generate_release_notes() {
     local version="$1"
     local since_tag
     since_tag=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
-    
+
     local output_file="releases/v${version}.md"
     mkdir -p "releases"
-    
+
     {
         echo "# Release v$version"
         echo ""
@@ -348,24 +447,24 @@ version_generate_release_notes() {
         echo ""
         echo "## Changes"
         echo ""
-        
+
         if [[ -n "$since_tag" ]]; then
             git log --pretty=format:"- %s" "$since_tag..HEAD"
         else
             git log --pretty=format:"- %s"
         fi
-        
+
         echo ""
         echo ""
         echo "## Files Changed"
         echo ""
-        
+
         if [[ -n "$since_tag" ]]; then
             git diff --name-only "$since_tag..HEAD" | sed 's/^/- /'
         fi
-        
+
     } > "$output_file"
-    
+
     logger_info "Release notes generadas: $output_file"
 }
 ```

@@ -88,7 +88,7 @@ check-copilot-config() {
 
 # Función para setup rápido en cualquier proyecto
 setup-copilot-english-project() {
-    local script_path="/home/epti/Documentos/epti-dev/bc-bash/_scripts/setup-copilot-english.sh"
+    local script_path="/home/epti/Documentos/epti-dev/bc-channel/bc-bash/_scripts/setup-copilot-english.sh"
     local current_dir
     current_dir="$(pwd)"
     
