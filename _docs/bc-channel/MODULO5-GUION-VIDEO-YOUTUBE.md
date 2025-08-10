@@ -859,10 +859,10 @@ sort | uniq -c | sort -nr
 echo -e "\n=== SED PARA TRANSFORMACIÓN ==="
 
 echo "Extraer solo IP, hora y código de estado:"
-sed -E 's/^([0-9.]+).*\\[([^]]+)\\].*" ([0-9]{3}).*/\\1 \\2 \\3/' "$ARCHIVO"
+sed -E 's/^([0-9.]+) .*\\[([^]]+)\\].*" ([0-9]{3}).*/\\1 \\2 \\3/' "$ARCHIVO"
 
 echo -e "\nConvertir a formato CSV:"
-sed -E 's/^([0-9.]+).*\\[([^]]+)\\].*"([^"]+)".*([0-9]{3}) ([0-9]+)/\\1,\\2,\\3,\\4,\\5/' "$ARCHIVO"
+sed -E 's/^([0-9.]+) .*\\[([^]]+)\\].*"([^"]+)".*([0-9]{3}) ([0-9]+)/\\1,\\2,\\3,\\4,\\5/' "$ARCHIVO"
 
 echo -e "\n=== AWK PARA ANÁLISIS ==="
 
@@ -898,7 +898,7 @@ echo -e "\n=== PIPELINE COMPLEJO ==="
 
 echo "Top 3 IPs por tráfico (bytes transferidos):"
 grep -E "GET.*200" "$ARCHIVO" | \
-sed -E 's/^([0-9.]+).*" 200 ([0-9]+)/\\1 \\2/' | \
+sed -E 's/^([0-9.]+) .*" 200 ([0-9]+)/\\1 \\2/' | \
 awk '{bytes[$1] += $2} END {
     for (ip in bytes) {
         print bytes[ip], ip
@@ -1411,7 +1411,7 @@ BEGIN {
 }
 
 /LOGIN_FAILED/ {
-    match($0, /ip=([0-9.]+)/, ip_match)
+    match($0, /ip=([0-9]+)/, ip_match)
     match($0, /user=([^ ]+)/, user_match)
 
     if (ip_match[1] && user_match[1]) {
@@ -1646,7 +1646,7 @@ END {
         mem_val = ultimas_metricas[servidor "_MEMORY"]
         disk_val = ultimas_metricas[servidor "_DISK"]
 
-        if (cpu_val > 90 || mem_val > 10 || disk_val > 80) {
+        if (cpu_val > 90 || mem_val > 10 || disk_val >  80) {
             print "   🚨 ESTADO: CRÍTICO"
         } else if (cpu_val > 70 || mem_val > 8 || disk_val > 60) {
             print "   ⚠️  ESTADO: ADVERTENCIA"
@@ -1753,3 +1753,654 @@ En la Parte 4 final, construiremos el **Analizador de Logs más sofisticado** qu
 ---
 
 _[Fin de la Parte 3 del guión]_
+
+## 🎯 PARTE 4A: PROYECTO PRÁCTICO - DISEÑO Y ARQUITECTURA
+
+### Tiempo: 75:00 - 90:00
+
+#### [75:00 - 77:00] BIENVENIDA AL PROYECTO FINAL
+
+**[PANTALLA: Transición épica con título "Parte 4: Proyecto Práctico - Analizador de Logs"]**
+
+¡Bienvenidos al momento más emocionante de todo el Módulo 5! Durante las últimas tres partes has construido una base técnica extraordinaria. Ahora llega el momento de la síntesis: crear una herramienta profesional que integre todo tu conocimiento en una solución real.
+
+**[PANTALLA: Visión del proyecto completado - screenshots del analizador funcionando]**
+
+El analizador de logs que vamos a construir no es un ejercicio académico. Es una herramienta de nivel empresarial que podrías:
+
+- **Implementar mañana mismo** en tu trabajo actual
+- **Mostrar en una entrevista** como ejemplo de tus habilidades
+- **Usar como base** para proyectos más complejos
+- **Presentar a tu equipo** para impresionar a colegas y jefes
+
+**[PANTALLA: Estadísticas de impacto del proyecto]**
+
+Al completar este proyecto, habrás demostrado maestría en:
+
+- Arquitectura modular de software
+- Procesamiento de datos en tiempo real
+- Análisis estadístico automatizado
+- Detección de anomalías de seguridad
+- Generación de reportes ejecutivos
+- Optimización de rendimiento
+
+#### [77:00 - 80:00] VISIÓN Y ALCANCE DEL PROYECTO
+
+**[PANTALLA: Escenario empresarial realista]**
+
+**EL ESCENARIO:**
+Trabajas como DevOps Engineer en una empresa que maneja múltiples servicios: servidores web, bases de datos, aplicaciones, APIs. Cada día se generan millones de líneas de logs que contienen información crítica sobre rendimiento, seguridad, y salud del sistema.
+
+**EL PROBLEMA:**
+Actualmente, cuando surge un incidente:
+
+- Los equipos revisan logs manualmente (lento y propenso a errores)
+- Los patrones importantes pasan desapercibidos
+- La detección de problemas es reactiva, no proactiva
+- No hay visibilidad ejecutiva del estado del sistema
+
+**[PANTALLA: Arquitectura de la solución que construiremos]**
+
+**LA SOLUCIÓN:**
+Tu analizador de logs será capaz de:
+
+1. **Procesamiento Multi-formato**: Apache, Nginx, aplicaciones personalizadas, syslog
+2. **Análisis Inteligente**: Detección de anomalías, patrones de seguridad, métricas de rendimiento
+3. **Alertas Automáticas**: Notificaciones proactivas de problemas críticos
+4. **Reportes Ejecutivos**: Dashboards HTML con gráficos y métricas clave
+5. **Escalabilidad**: Manejo eficiente de archivos de GB de tamaño
+
+**[PANTALLA: Demostración del flujo de trabajo completo]**
+
+**FLUJO DE TRABAJO:**
+
+```
+Logs Raw → Normalización → Análisis → Detección → Reportes → Alertas
+   ↓            ↓           ↓          ↓          ↓        ↓
+Multiple    Standard    Pattern    Anomaly    HTML     Email/
+Formats     Format      Mining     Detection  Reports  Slack
+```
+
+#### [80:00 - 85:00] ARQUITECTURA MODULAR PROFESIONAL
+
+**[PANTALLA: Diagrama de componentes del sistema]**
+
+Vamos a diseñar nuestro analizador con una arquitectura modular profesional. Cada componente tiene una responsabilidad específica y puede evolucionar independientemente.
+
+**[PANTALLA: Creando la estructura del proyecto]**
+
+```bash
+# Creamos la estructura del proyecto
+mkdir -p log_analyzer/{modules,config,data,reports,tests}
+cd log_analyzer
+
+echo "📁 ESTRUCTURA DEL PROYECTO:"
+echo "=========================="
+tree .
+```
+
+**[PANTALLA: Escribiendo el script principal]**
+
+```bash
+nano log_analyzer.sh
+```
+
+```bash
+#!/bin/bash
+# log_analyzer.sh - Analizador de Logs Profesional
+# Módulo 5 - Bootcamp Bash Scripting
+# Arquitectura modular para análisis empresarial de logs
+
+set -euo pipefail
+
+# =============================================================================
+# CONFIGURACIÓN GLOBAL Y CONSTANTES
+# =============================================================================
+
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly MODULES_DIR="${SCRIPT_DIR}/modules"
+readonly CONFIG_DIR="${SCRIPT_DIR}/config"
+readonly DATA_DIR="${SCRIPT_DIR}/data"
+readonly REPORTS_DIR="${SCRIPT_DIR}/reports"
+
+# Colores para output
+readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
+readonly YELLOW='\033[1;33m'
+readonly BLUE='\033[0;34m'
+readonly PURPLE='\033[0;35m'
+readonly CYAN='\033[0;36m'
+readonly NC='\033[0m' # No Color
+
+# Configuración por defecto
+declare -A CONFIG=(
+    ["alert_threshold_error_rate"]="10"
+    ["alert_threshold_response_time"]="2.0"
+    ["alert_threshold_failed_logins"]="5"
+    ["report_format"]="html"
+    ["max_file_size_mb"]="500"
+    ["retention_days"]="30"
+)
+
+# Arrays para estadísticas globales
+declare -A GLOBAL_STATS
+declare -A ALERT_SUMMARY
+declare -A PERFORMANCE_METRICS
+
+# =============================================================================
+# FUNCIONES UTILITARIAS
+# =============================================================================
+
+log_message() {
+    local level="$1"
+    local message="$2"
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+
+    case "$level" in
+        "INFO")  echo -e "${CYAN}[INFO]${NC}  ${timestamp} - $message" ;;
+        "WARN")  echo -e "${YELLOW}[WARN]${NC}  ${timestamp} - $message" ;;
+        "ERROR") echo -e "${RED}[ERROR]${NC} ${timestamp} - $message" ;;
+        "SUCCESS") echo -e "${GREEN}[OK]${NC}    ${timestamp} - $message" ;;
+    esac
+}
+
+validate_file() {
+    local file="$1"
+
+    if [[ ! -f "$file" ]]; then
+        log_message "ERROR" "Archivo no encontrado: $file"
+        return 1
+    fi
+
+    local size_mb=$(( $(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo 0) / 1024 / 1024 ))
+
+    if [[ $size_mb -gt ${CONFIG[max_file_size_mb]} ]]; then
+        log_message "WARN" "Archivo muy grande: ${size_mb}MB (máximo: ${CONFIG[max_file_size_mb]}MB)"
+        read -p "¿Continuar de todos modos? (y/N): " -n 1 -r
+        echo
+        [[ $REPLY =~ ^[Yy]$ ]] || return 1
+    fi
+
+    return 0
+}
+
+create_output_directory() {
+    local dir="$1"
+
+    if [[ ! -d "$dir" ]]; then
+        mkdir -p "$dir" || {
+            log_message "ERROR" "No se pudo crear directorio: $dir"
+            return 1
+        }
+        log_message "INFO" "Directorio creado: $dir"
+    fi
+}
+
+# =============================================================================
+# CARGA DE MÓDULOS
+# =============================================================================
+
+load_module() {
+    local module_name="$1"
+    local module_path="${MODULES_DIR}/${module_name}.sh"
+
+    if [[ -f "$module_path" ]]; then
+        source "$module_path"
+        log_message "INFO" "Módulo cargado: $module_name"
+    else
+        log_message "ERROR" "Módulo no encontrado: $module_path"
+        return 1
+    fi
+}
+
+# =============================================================================
+# FUNCIÓN PRINCIPAL DE ANÁLISIS
+# =============================================================================
+
+analyze_log_file() {
+    local input_file="$1"
+    local output_prefix="$2"
+
+    log_message "INFO" "Iniciando análisis de: $(basename "$input_file")"
+
+    # Validar archivo de entrada
+    validate_file "$input_file" || return 1
+
+    # Crear directorio de salida
+    create_output_directory "$REPORTS_DIR" || return 1
+
+    # Detectar formato de log
+    local log_format
+    log_format=$(detect_log_format "$input_file")
+    log_message "INFO" "Formato detectado: $log_format"
+
+    # Normalizar datos
+    local normalized_file="${DATA_DIR}/normalized_${output_prefix}.log"
+    normalize_log_file "$input_file" "$normalized_file" "$log_format"
+
+    # Análisis de patrones
+    local analysis_file="${DATA_DIR}/analysis_${output_prefix}.json"
+    analyze_patterns "$normalized_file" "$analysis_file"
+
+    # Detección de anomalías
+    local alerts_file="${DATA_DIR}/alerts_${output_prefix}.json"
+    detect_anomalies "$normalized_file" "$alerts_file"
+
+    # Generación de reportes
+    local report_file="${REPORTS_DIR}/report_${output_prefix}.html"
+    generate_report "$analysis_file" "$alerts_file" "$report_file"
+
+    log_message "SUCCESS" "Análisis completado. Reporte: $report_file"
+}
+
+# =============================================================================
+# GESTIÓN DE CONFIGURACIÓN
+# =============================================================================
+
+load_config() {
+    local config_file="${CONFIG_DIR}/analyzer.conf"
+
+    if [[ -f "$config_file" ]]; then
+        log_message "INFO" "Cargando configuración desde: $config_file"
+
+        while IFS='=' read -r key value; do
+            # Ignorar comentarios y líneas vacías
+            [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue
+
+            # Limpiar espacios
+            key=$(echo "$key" | tr -d ' ')
+            value=$(echo "$value" | tr -d ' ')
+
+            CONFIG["$key"]="$value"
+        done < "$config_file"
+    else
+        log_message "WARN" "Archivo de configuración no encontrado, usando valores por defecto"
+    fi
+}
+
+show_config() {
+    log_message "INFO" "Configuración actual:"
+    for key in "${!CONFIG[@]}"; do
+        printf "  %-30s: %s\n" "$key" "${CONFIG[$key]}"
+    done
+}
+
+# =============================================================================
+# MANEJO DE ARGUMENTOS Y MENU PRINCIPAL
+# =============================================================================
+
+show_usage() {
+    cat << EOF
+${BLUE}
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    ANALIZADOR DE LOGS PROFESIONAL v2.0                      ║
+║                         Bootcamp Bash Scripting                             ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+${NC}
+
+USAGE: $0 [OPTIONS] [LOG_FILE]
+
+OPTIONS:
+    -f, --file FILE         Archivo de log a analizar
+    -o, --output PREFIX     Prefijo para archivos de salida
+    -c, --config FILE       Archivo de configuración personalizado
+    -t, --threshold NUM     Umbral personalizado para alertas
+    -r, --report FORMAT     Formato de reporte (html|json|text)
+    -v, --verbose           Modo verbose
+    -h, --help              Mostrar esta ayuda
+    --demo                  Ejecutar demostración con datos de ejemplo
+    --config-show           Mostrar configuración actual
+
+EXAMPLES:
+    $0 --file /var/log/apache2/access.log
+    $0 --file app.log --output myapp --report html
+    $0 --demo
+    $0 --config-show
+
+FORMATOS SOPORTADOS:
+    • Apache Combined Log Format
+    • Nginx Access Logs
+    • Application Logs (JSON/Plain)
+    • Syslog Format
+    • Custom formats (configurables)
+
+EOF
+}
+
+main() {
+    # Banner de bienvenida
+    cat << EOF
+${PURPLE}
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  🚀 ANALIZADOR DE LOGS PROFESIONAL - INICIANDO                              ║
+║  📊 Módulo 5: Manipulación Avanzada de Datos                               ║
+║  🎯 Bootcamp Bash Scripting                                                ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+${NC}
+
+EOF
+
+    # Cargar configuración
+    load_config
+
+    # Variables locales
+    local input_file=""
+    local output_prefix="analysis_$(date +%Y%m%d_%H%M%S)"
+    local verbose=false
+    local demo_mode=false
+
+    # Procesar argumentos
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -f|--file)
+                input_file="$2"
+                shift 2
+                ;;
+            -o|--output)
+                output_prefix="$2"
+                shift 2
+                ;;
+            -c|--config)
+                CONFIG_FILE="$2"
+                load_config
+                shift 2
+                ;;
+            -r|--report)
+                CONFIG["report_format"]="$2"
+                shift 2
+                ;;
+            -v|--verbose)
+                verbose=true
+                shift
+                ;;
+            --demo)
+                demo_mode=true
+                shift
+                ;;
+            --config-show)
+                show_config
+                exit 0
+                ;;
+            -h|--help)
+                show_usage
+                exit 0
+                ;;
+            *)
+                log_message "ERROR" "Opción desconocida: $1"
+                show_usage
+                exit 1
+                ;;
+        esac
+    done
+
+    # Cargar módulos necesarios
+    load_module "log_normalizer"
+    load_module "pattern_analyzer"
+    load_module "anomaly_detector"
+    load_module "report_generator"
+
+    # Ejecutar según modo
+    if [[ "$demo_mode" == true ]]; then
+        log_message "INFO" "Ejecutando modo demostración..."
+        run_demo
+    elif [[ -n "$input_file" ]]; then
+        analyze_log_file "$input_file" "$output_prefix"
+    else
+        log_message "ERROR" "Debe especificar un archivo de log o usar --demo"
+        show_usage
+        exit 1
+    fi
+}
+
+# Ejecutar función principal si el script se ejecuta directamente
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi
+```
+
+**[PANTALLA: Explicando la arquitectura mientras se escribe]**
+
+Lo que acabas de ver es una arquitectura de software profesional aplicada a bash:
+
+1. **Separación de responsabilidades**: Cada módulo tiene un propósito específico
+2. **Configuración centralizada**: Parámetros ajustables sin modificar código
+3. **Logging estructurado**: Mensajes claros con niveles y timestamps
+4. **Validación robusta**: Verificación de archivos y parámetros
+5. **Manejo de errores**: Fallos controlados con mensajes informativos
+6. **Interfaz profesional**: CLI con opciones completas y ayuda
+
+#### [85:00 - 90:00] CREACIÓN DE MÓDULOS FUNDAMENTALES
+
+**[PANTALLA: Creando el primer módulo - Normalizador de Logs]**
+
+Ahora vamos a crear los módulos especializados. Empezamos con el normalizador, que es el corazón del sistema.
+
+```bash
+nano modules/log_normalizer.sh
+```
+
+```bash
+#!/bin/bash
+# modules/log_normalizer.sh - Normalizador de logs multi-formato
+# Convierte diferentes formatos de log a un formato estándar para análisis
+
+# =============================================================================
+# DETECTORES DE FORMATO
+# =============================================================================
+
+detect_log_format() {
+    local file="$1"
+    local sample_lines=10
+
+    # Obtener muestra del archivo
+    local sample
+    sample=$(head -n "$sample_lines" "$file")
+
+    # Patrones de detección
+    if grep -qE '^\[.*\] - - \[.*\] ".*" [0-9]{3} [0-9]+' <<< "$sample"; then
+        echo "apache_combined"
+    elif grep -qE '^[0-9.]+ - - \[.*\] ".*" [0-9]{3}' <<< "$sample"; then
+        echo "apache_common"
+    elif grep -qE '^[0-9.]+ - .* \[.*\] ".*" [0-9]{3} [0-9]+ ".*" ".*"' <<< "$sample"; then
+        echo "nginx_combined"
+    elif grep -qE '^[A-Z][a-z]{2} [0-9 :]+ [a-zA-Z0-9.-]+ ' <<< "$sample"; then
+        echo "syslog"
+    elif grep -qE '^\{.*\}$' <<< "$sample"; then
+        echo "json"
+    elif grep -qE '^[0-9]{4}-[0-9]{2}-[0-9]{2}.*\[(INFO|WARN|ERROR|DEBUG)\]' <<< "$sample"; then
+        echo "application"
+    else
+        echo "unknown"
+    fi
+}
+
+# =============================================================================
+# NORMALIZADORES POR FORMATO
+# =============================================================================
+
+normalize_apache_combined() {
+    local input="$1"
+    local output="$2"
+
+    log_message "INFO" "Normalizando formato Apache Combined..."
+
+    sed -E '
+        # Extraer campos del formato Apache Combined
+        # 127.0.0.1 - - [10/Oct/2000:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326
+        s/^([0-9.]+) - - \[([^\]]+)\] "([A-Z]+) ([^ ]+) ([^"]+)" ([0-9]{3}) ([0-9]+).*$/\2|\1|INFO|Apache|\3 \4|\6|\7|/
+
+        # Convertir timestamp Apache a formato estándar
+        s/([0-9]{2})\/([A-Z][a-z]{2})\/([0-9]{4}):([0-9:]+) [+-][0-9]{4}/\3-\2-\1 \4/
+
+        # Convertir nombres de mes
+        s/-Jan-/-01-/g; s/-Feb-/-02-/g; s/-Mar-/-03-/g; s/-Apr-/-04-/g
+        s/-May-/-05-/g; s/-Jun-/-06-/g; s/-Jul-/-07-/g; s/-Aug-/-08-/g
+        s/-Sep-/-09-/g; s/-Oct-/-10-/g; s/-Nov-/-11-/g; s/-Dec-/-12-/g
+
+        # Categorizar por código de estado
+        s/\|20[0-9]\|/|INFO|/g
+        s/\|30[0-9]\|/|WARN|/g
+        s/\|40[0-9]\|/|ERROR|/g
+        s/\|50[0-9]\|/|ERROR|/g
+    ' "$input" > "$output"
+}
+
+normalize_nginx_combined() {
+    local input="$1"
+    local output="$2"
+
+    log_message "INFO" "Normalizando formato Nginx Combined..."
+
+    awk '{
+        # Extraer IP
+        ip = $1
+
+        # Extraer timestamp (entre corchetes)
+        match($0, /\[([^\]]+)\]/, timestamp_match)
+        timestamp = timestamp_match[1]
+
+        # Extraer método y URL (entre comillas)
+        match($0, /"([A-Z]+) ([^ ]+) ([^"]+)"/, request_match)
+        method = request_match[1]
+        url = request_match[2]
+
+        # Extraer código de estado y tamaño
+        match($0, /" ([0-9]{3}) ([0-9]+) /, response_match)
+        status_code = response_match[1]
+        size = response_match[2]
+
+        # Determinar nivel de log basado en código de estado
+        if (status_code ~ /^20[0-9]$/) level = "INFO"
+        else if (status_code ~ /^30[0-9]$/) level = "WARN"
+        else if (status_code ~ /^[45][0-9][0-9]$/) level = "ERROR"
+        else level = "INFO"
+
+        # Formato de salida estándar: timestamp|ip|level|source|message|status|size|extra
+        printf "%s|%s|%s|Nginx|%s %s|%s|%s|\n",
+               timestamp, ip, level, method, url, status_code, size
+    }' "$input" > "$output"
+}
+
+normalize_application_log() {
+    local input="$1"
+    local output="$2"
+
+    log_message "INFO" "Normalizando formato Application Log..."
+
+    sed -E '
+        # Formato: 2024-03-15 09:15:30 [INFO] User login successful: user123
+        s/^([0-9]{4}-[0-9]{2}-[0-9]{2} [0-9:]+) \[([A-Z]+)\] (.*)$/\1|unknown|\2|Application|\3|||/
+
+        # Extraer IPs si están presentes
+        s/([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})/\1/g
+
+        # Detectar fuente específica basada en mensaje
+        s/\|Application\|(.*(database|db|sql).*)$/|Application-DB|\1/i
+        s/\|Application\|(.*(auth|login|password).*)$/|Application-Auth|\1/i
+        s/\|Application\|(.*(api|rest|endpoint).*)$/|Application-API|\1/i
+    ' "$input" > "$output"
+}
+
+normalize_syslog() {
+    local input="$1"
+    local output="$2"
+
+    log_message "INFO" "Normalizando formato Syslog..."
+
+    awk '{
+        # Formato syslog: Mar 15 09:15:30 hostname service[pid]: message
+        month = $1
+        day = $2
+        time = $3
+        hostname = $4
+
+        # Convertir mes a número
+        months["Jan"]=1; months["Feb"]=2; months["Mar"]=3; months["Apr"]=4
+        months["May"]=5; months["Jun"]=6; months["Jul"]=7; months["Aug"]=8
+        months["Sep"]=9; months["Oct"]=10; months["Nov"]=11; months["Dec"]=12
+
+        # Construir timestamp (asumir año actual)
+        timestamp = strftime("%Y") "-" sprintf("%02d", months[month]) "-" sprintf("%02d", day) " " time
+
+        # Extraer servicio y mensaje
+        rest = ""
+        for (i=5; i<=NF; i++) rest = rest $i " "
+
+        # Determinar nivel basado en palabras clave
+        level = "INFO"
+        if (match(rest, /(error|fail|critical|fatal)/i)) level = "ERROR"
+        else if (match(rest, /(warn|warning)/i)) level = "WARN"
+
+        # Formato de salida estándar: timestamp|ip|level|source|message|status|size|extra
+        printf "%s|%s|%s|Syslog|%s|||\n", timestamp, hostname, level, rest
+    }' "$input" > "$output"
+}
+
+# =============================================================================
+# FUNCIÓN PRINCIPAL DE NORMALIZACIÓN
+# =============================================================================
+
+normalize_log_file() {
+    local input_file="$1"
+    local output_file="$2"
+    local format="$3"
+
+    # Crear directorio de salida si no existe
+    mkdir -p "$(dirname "$output_file")"
+
+    case "$format" in
+        "apache_combined"|"apache_common")
+            normalize_apache_combined "$input_file" "$output_file"
+            ;;
+        "nginx_combined")
+            normalize_nginx_combined "$input_file" "$output_file"
+            ;;
+        "application")
+            normalize_application_log "$input_file" "$output_file"
+            ;;
+        "syslog")
+            normalize_syslog "$input_file" "$output_file"
+            ;;
+        "json")
+            log_message "WARN" "Normalización JSON no implementada aún"
+            cp "$input_file" "$output_file"
+            ;;
+        *)
+            log_message "WARN" "Formato desconocido, copiando archivo sin cambios"
+            cp "$input_file" "$output_file"
+            ;;
+    esac
+
+    local lines_processed=$(wc -l < "$output_file")
+    log_message "SUCCESS" "Normalización completa: $lines_processed líneas procesadas"
+}
+```
+
+**[PANTALLA: Ejecutando ejemplo de normalización]**
+
+¡Increíble! Has creado el primer módulo de tu analizador profesional. Este normalizador puede manejar los formatos de log más comunes en la industria y convertirlos a un formato estándar para análisis posterior.
+
+---
+
+**[PANTALLA: Resumen de la Parte 4A]**
+
+🎯 **LOGROS DE LA PARTE 4A:**
+
+✅ **Arquitectura profesional**: Script principal con diseño modular
+✅ **Configuración centralizada**: Sistema de configuración flexible
+✅ **Normalizador multi-formato**: Soporte para Apache, Nginx, Syslog, aplicaciones
+✅ **Interfaz CLI completa**: Opciones profesionales con ayuda integrada
+✅ **Logging estructurado**: Sistema de mensajes con niveles y colores
+
+**[PANTALLA: Preview de la Parte 4B]**
+
+En la **Parte 4B** continuaremos construyendo:
+
+- **Analizador de patrones**: Extracción de métricas e insights
+- **Detector de anomalías**: Sistema de alertas inteligente
+- **Generador de reportes**: Dashboards HTML profesionales
+- **Sistema de demostración**: Testing completo de la herramienta
+
+¡El proyecto está tomando forma de manera impresionante!
+
+---
