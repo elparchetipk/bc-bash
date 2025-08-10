@@ -1497,6 +1497,7 @@ BEGIN {
     print "===================================="
 }
 
+# Procesar información de cuenta
 /^CUENTA/ {
     cuenta_id = $2
     nombre = $3
@@ -2173,7 +2174,7 @@ Lo que acabas de ver es una arquitectura de software profesional aplicada a bash
 
 **[PANTALLA: Creando el primer módulo - Normalizador de Logs]**
 
-Ahora vamos a crear los módulos especializados. Empezamos con el normalizador, que es el corazón del sistema.
+Ahora vamos a construir los módulos especializados. Empezamos con el normalizador, que es el corazón del sistema.
 
 ```bash
 nano modules/log_normalizer.sh
@@ -2382,25 +2383,250 @@ normalize_log_file() {
 
 ---
 
-**[PANTALLA: Resumen de la Parte 4A]**
+**[PANTALLA: Creando el módulo de análisis de patrones]**
 
-🎯 **LOGROS DE LA PARTE 4A:**
+Ahora vamos a construir el cerebro analítico del sistema: el **analizador de patrones**. Este módulo extrae métricas clave, identifica tendencias y prepara los datos para la detección de anomalías y la generación de reportes.
 
-✅ **Arquitectura profesional**: Script principal con diseño modular
-✅ **Configuración centralizada**: Sistema de configuración flexible
-✅ **Normalizador multi-formato**: Soporte para Apache, Nginx, Syslog, aplicaciones
-✅ **Interfaz CLI completa**: Opciones profesionales con ayuda integrada
-✅ **Logging estructurado**: Sistema de mensajes con niveles y colores
+```bash
+nano modules/pattern_analyzer.sh
+```
 
-**[PANTALLA: Preview de la Parte 4B]**
+```bash
+#!/bin/bash
+# modules/pattern_analyzer.sh - Análisis de patrones y métricas
 
-En la **Parte 4B** continuaremos construyendo:
+analyze_patterns() {
+    local input_file="$1"
+    local output_file="$2"
 
-- **Analizador de patrones**: Extracción de métricas e insights
-- **Detector de anomalías**: Sistema de alertas inteligente
-- **Generador de reportes**: Dashboards HTML profesionales
-- **Sistema de demostración**: Testing completo de la herramienta
+    # Extraer métricas clave: errores, advertencias, tiempos de respuesta, IPs
+    awk -F'|' '
+    BEGIN {
+        print "{" > output
+        print "  \"total_lines\": 0," > output
+        print "  \"errors\": 0," > output
+        print "  \"warnings\": 0," > output
+        print "  \"info\": 0," > output
+        print "  \"unique_ips\": []," > output
+        print "  \"response_times\": []" > output
+    }
+    {
+        total++
+        level = $3
+        ip = $2
+        if (level == "ERROR") errors++
+        else if (level == "WARN") warnings++
+        else if (level == "INFO") info++
+        ips[ip]++
+        # Extraer tiempos de respuesta si existen
+        if ($8 ~ /^[0-9.]+$/) {
+            response_times[n++] = $8
+        }
+    }
+    END {
+        print "  \"total_lines\": " total ","
+        print "  \"errors\": " errors ","
+        print "  \"warnings\": " warnings ","
+        print "  \"info\": " info ","
+        printf "  \"unique_ips\": ["
+        sep = ""
+        for (ip in ips) {
+            printf "%s\"%s\"", sep, ip
+            sep = ", "
+        }
+        print "],"
+        printf "  \"response_times\": ["
+        for (i = 0; i < n; i++) {
+            printf "%s%s", (i==0?"":", "), response_times[i]
+        }
+        print "]"
+        print "}"
+    }' "$input_file" > "$output_file"
+}
+```
 
-¡El proyecto está tomando forma de manera impresionante!
+**[PANTALLA: Ejecutando el analizador de patrones y mostrando el JSON resultante]**
+
+```bash
+chmod +x pattern_analyzer.sh
+./pattern_analyzer.sh
+```
+
+#### [95:00 - 100:00] DETECTOR DE ANOMALÍAS Y ALERTAS
+
+**[PANTALLA: Creando el módulo de detección de anomalías]**
+
+El siguiente paso es el **detector de anomalías**. Este módulo identifica comportamientos inusuales, genera alertas automáticas y ayuda a prevenir incidentes antes de que ocurran.
+
+```bash
+nano modules/anomaly_detector.sh
+```
+
+```bash
+#!/bin/bash
+# modules/anomaly_detector.sh - Detección de anomalías y alertas
+
+detect_anomalies() {
+    local input_file="$1"
+    local output_file="$2"
+
+    # Analizar el archivo normalizado para detectar patrones anómalos
+    awk -F'|' '
+    {
+        level = $3
+        ip = $2
+        if (level == "ERROR") error_count[ip]++
+        if (level == "WARN") warn_count[ip]++
+        if ($8 ~ /^[0-9.]+$/ && $8 > 2.0) slow_responses[ip]++
+        if ($5 ~ /login|auth/i && level == "ERROR") failed_logins[ip]++
+    }
+    END {
+        print "{" > output
+        print "  \"alerts\": [" > output
+        sep = ""
+        for (ip in error_count) {
+            if (error_count[ip] > 10) {
+                printf "%s{\"type\": \"error_burst\", \"ip\": \"%s\", \"count\": %d}", sep, ip, error_count[ip]
+                sep = ", "
+            }
+        }
+        for (ip in slow_responses) {
+            if (slow_responses[ip] > 5) {
+                printf "%s{\"type\": \"slow_response\", \"ip\": \"%s\", \"count\": %d}", sep, ip, slow_responses[ip]
+                sep = ", "
+            }
+        }
+        for (ip in failed_logins) {
+            if (failed_logins[ip] > 5) {
+                printf "%s{\"type\": \"failed_logins\", \"ip\": \"%s\", \"count\": %d}", sep, ip, failed_logins[ip]
+                sep = ", "
+            }
+        }
+        print "]"
+        print "}"
+    }' "$input_file" > "$output_file"
+}
+```
+
+**[PANTALLA: Mostrando ejemplos de alertas generadas]**
+
+```bash
+chmod +x anomaly_detector.sh
+./anomaly_detector.sh
+```
+
+#### [100:00 - 110:00] GENERADOR DE REPORTES PROFESIONAL
+
+**[PANTALLA: Creando el módulo de generación de reportes]**
+
+El último gran componente es el **generador de reportes**. Este módulo toma los resultados del análisis y las alertas, y produce un dashboard HTML profesional listo para ejecutivos y equipos técnicos.
+
+```bash
+nano modules/report_generator.sh
+```
+
+```bash
+#!/bin/bash
+# modules/report_generator.sh - Generador de reportes HTML
+
+generate_report() {
+    local analysis_file="$1"
+    local alerts_file="$2"
+    local output_file="$3"
+
+    # Generar un HTML simple con los resultados
+    cat <<EOF > "$output_file"
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reporte de Análisis de Logs</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    h1 { color: #2c3e50; }
+    .alert { color: #c0392b; font-weight: bold; }
+    .metric { color: #2980b9; }
+    .section { margin-bottom: 2em; }
+    pre { background: #f4f4f4; padding: 1em; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Reporte de Análisis de Logs</h1>
+  <div class="section">
+    <h2>Métricas Generales</h2>
+    <pre>$(cat "$analysis_file")</pre>
+  </div>
+  <div class="section">
+    <h2>Alertas Detectadas</h2>
+    <pre>$(cat "$alerts_file")</pre>
+  </div>
+  <div class="section">
+    <h2>Resumen Ejecutivo</h2>
+    <ul>
+      <li>Errores críticos, picos de actividad y anomalías resaltadas automáticamente.</li>
+      <li>Recomendaciones para mitigación y próximos pasos.</li>
+    </ul>
+  </div>
+  <footer>
+    <hr>
+    <p>Generado automáticamente por el Analizador de Logs - Bootcamp Bash Scripting</p>
+  </footer>
+</body>
+</html>
+EOF
+}
+```
+
+**[PANTALLA: Mostrando el dashboard HTML generado]**
+
+```bash
+chmod +x report_generator.sh
+./report_generator.sh
+```
+
+#### [110:00 - 115:00] SISTEMA DE DEMOSTRACIÓN Y TESTING
+
+**[PANTALLA: Creando datos de ejemplo y ejecutando la demo completa]**
+
+Para que puedas probar todo el sistema de principio a fin, incluimos un modo de demostración que genera datos de ejemplo y ejecuta el flujo completo:
+
+```bash
+# En log_analyzer.sh, función run_demo:
+run_demo() {
+    log_message "INFO" "Generando datos de ejemplo..."
+    cat << 'EOF' > "${DATA_DIR}/demo.log"
+192.168.1.101|2024-03-15 09:15:30|INFO|Apache|GET /index.html|200|2326|0.045
+10.0.0.50|2024-03-15 09:16:45|ERROR|Apache|POST /login|401|1024|0.012
+192.168.1.102|2024-03-15 09:17:12|INFO|Apache|GET /api/users|200|5120|0.500
+10.0.0.50|2024-03-15 09:18:01|ERROR|Apache|POST /login|401|1024|2.500
+192.168.1.103|2024-03-15 09:19:33|INFO|Apache|GET /products|200|8192|0.200
+EOF
+    analyze_log_file "${DATA_DIR}/demo.log" "demo"
+}
+```
+
+**[PANTALLA: Ejecutando la demo y mostrando el reporte final]**
+
+```bash
+./log_analyzer.sh --demo
+```
+
+#### [115:00 - 120:00] CONCLUSIONES Y SIGUIENTES PASOS
+
+**[PANTALLA: Resumen visual de todo el proyecto]**
+
+¡Felicidades! Has construido un **analizador de logs profesional** desde cero, integrando:
+
+- Normalización multi-formato
+- Análisis estadístico y extracción de métricas
+- Detección automática de anomalías y alertas
+- Generación de dashboards HTML ejecutivos
+- Testing y demostración automatizada
+
+**[PANTALLA: Call to action final]**
+
+- Usa este proyecto como base para tus propios sistemas de monitoreo
+- Preséntalo en entrevistas o a tu equipo
+- Continúa explorando Bash avanzado y automatización
 
 ---
