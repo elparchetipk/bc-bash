@@ -2398,136 +2398,1252 @@ limpiar_archivos_temporales() {
 }
 
 # ================================
-# FUNCIONES DE BACKUP INTELIGENTE
+# PROFILING Y MÉTRICAS
 # ================================
 
-backup_inteligente() {
-    local origen="$1"
-    local destino="$2"
-    local tipo="${3:-incremental}"  # completo, incremental, diferencial
+# Array para almacenar tiempos de ejecución
+declare -A function_times
+declare -A function_calls
+
+# Función para medir rendimiento
+profile_function() {
+    [[ $PROFILE_MODE == true ]] || return 0
     
-    echo -e "${BLUE}💾 Iniciando backup $tipo${NC}"
-    echo "Origen: $origen"
-    echo "Destino: $destino"
+    local function_name="${FUNCNAME[1]}"
+    local start_time=$(date +%s%N)
     
-    mkdir -p "$destino"
+    # Ejecutar función original
+    "$@"
+    local exit_code=$?
     
-    case $tipo in
-        "completo")
-            echo "📋 Realizando backup completo..."
-            if command -v rsync &> /dev/null; then
-                rsync -av --progress "$origen/" "$destino/completo_$(date +%Y%m%d_%H%M%S)/"
-            else
-                cp -r "$origen" "$destino/completo_$(date +%Y%m%d_%H%M%S)"
-            fi
-            ;;
-        "incremental")
-            echo "📈 Realizando backup incremental..."
-            # Buscar archivos modificados en las últimas 24 horas
-            local backup_dir="$destino/incremental_$(date +%Y%m%d_%H%M%S)"
-            mkdir -p "$backup_dir"
-            
-            find "$origen" -type f -mtime -1 -print0 | while IFS= read -r -d '' archivo; do
-                local ruta_relativa="${archivo#$origen/}"
-                local dir_destino="$backup_dir/$(dirname "$ruta_relativa")"
-                mkdir -p "$dir_destino"
-                cp "$archivo" "$dir_destino/"
-                echo "  📄 $(basename "$archivo")"
-            done
-            ;;
-        "diferencial")
-            echo "📊 Realizando backup diferencial..."
-            # Implementación simplificada: archivos modificados en la última semana
-            local backup_dir="$destino/diferencial_$(date +%Y%m%d_%H%M%S)"
-            mkdir -p "$backup_dir"
-            
-            find "$origen" -type f -mtime -7 -print0 | while IFS= read -r -d '' archivo; do
-                local ruta_relativa="${archivo#$origen/}"
-                local dir_destino="$backup_dir/$(dirname "$ruta_relativa")"
-                mkdir -p "$dir_destino"
-                cp "$archivo" "$dir_destino/"
-            done
-            ;;
-    esac
+    local end_time=$(date +%s%N)
+    local duration=$(((end_time - start_time) / 1000000))  # ms
     
-    echo -e "${GREEN}✅ Backup $tipo completado${NC}"
+    # Actualizar estadísticas
+    function_times[$function_name]=$((${function_times[$function_name]:-0} + duration))
+    function_calls[$function_name]=$((${function_calls[$function_name]:-0} + 1))
+    
+    log_debug "PROFILE: $function_name ejecutada en ${duration}ms"
+    
+    return $exit_code
+}
+
+# Mostrar reporte de profiling
+show_profile_report() {
+    [[ $PROFILE_MODE == true ]] || return 0
+    
+    echo -e "${PURPLE}📊 REPORTE DE PROFILING${NC}"
+    echo "============================================"
+    printf "%-20s %10s %12s %10s\n" "FUNCIÓN" "LLAMADAS" "TIEMPO_TOTAL" "PROMEDIO"
+    echo "--------------------------------------------"
+    
+    for func in "${!function_calls[@]}"; do
+        local calls=${function_calls[$func]}
+        local total_time=${function_times[$func]}
+        local avg_time=$((total_time / calls))
+        
+        printf "%-20s %10d %12dms %10dms\n" "$func" "$calls" "$total_time" "$avg_time"
+    done
+}
+
+# ================================
+# MANEJO DE ERRORES AVANZADO
+# ================================
+
+# Función para capturar errores
+error_handler() {
+    local exit_code=$?
+    local line_number=$1
+    local command="$2"
+    
+    log_error "Error en línea $line_number: comando '$command' falló con código $exit_code"
+    
+    # Stack trace
+    log_error "Stack trace:"
+    local frame=0
+    while caller $frame; do
+        ((frame++))
+    done | while read line func file; do
+        log_error "  $file:$line en función $func"
+    done
+    
+    # Información del entorno
+    log_error "Información del entorno:"
+    log_error "  PWD: $(pwd)"
+    log_error "  USER: $(whoami)"
+    log_error "  DATE: $(date)"
+    log_error "  ARGS: $*"
+    
+    exit $exit_code
+}
+
+# Configurar trap para errores
+set_error_handling() {
+    # Capturar errores con información detallada
+    trap 'error_handler $LINENO "$BASH_COMMAND"' ERR
+    
+    # Capturar señales
+    trap 'log_warn "Recibida señal INT (Ctrl+C)"; exit 130' INT
+    trap 'log_warn "Recibida señal TERM"; exit 143' TERM
+    trap 'log_info "Script finalizado"; show_profile_report' EXIT
 }
 
 # ================================
 # DEMOSTRACIÓN COMPLETA
 # ================================
 
-demo_manejo_archivos() {
-    echo -e "${PURPLE}🚀 DEMOSTRACIÓN DE MANEJO AVANZADO DE ARCHIVOS${NC}"
+demo_logging() {
+    echo -e "${PURPLE}🔧 DEMOSTRACIÓN DEL SISTEMA DE LOGGING${NC}"
     echo "============================================"
     
+    # Inicializar sistemas
+    init_logging
+    set_error_handling
+    
+    # Configurar modos
+    TRACE_MODE=true
+    PROFILE_MODE=true
+    
+    log_info "Iniciando demostración del sistema de logging"
+    
     # Crear estructura de prueba
-    echo -e "${BLUE}📁 Creando estructura de prueba...${NC}"
-    mkdir -p demo_files/{documentos,imagenes,codigo,otros}
+    mkdir -p demo_logs/{archivos,vacios}
+    echo "Contenido 1" > demo_logs/archivos/archivo1.txt
+    echo "Contenido 2" > demo_logs/archivos/archivo2.txt
+    touch demo_logs/vacios/archivo_vacio.txt
     
-    # Crear archivos de ejemplo
-    echo "Contenido de texto" > demo_files/documentos/documento1.txt
-    echo "Otro documento" > demo_files/documentos/documento2.doc
-    echo "Código de ejemplo" > demo_files/codigo/script.sh
-    echo "Código Python" > demo_files/codigo/programa.py
-    echo "Imagen vacía" > demo_files/imagenes/foto.jpg
-    echo "Otra imagen" > demo_files/imagenes/imagen.png
-    echo "Archivo sin extensión" > demo_files/otros/readme
+    # Demo de diferentes niveles de log
+    log_debug "Mensaje de debug - información detallada"
+    log_info "Proceso iniciado correctamente"
+    log_warn "Advertencia: directorio temporal lleno al 80%"
     
-    # Crear algunos duplicados
-    cp demo_files/documentos/documento1.txt demo_files/otros/copia.txt
-    
+    # Demo de validación con logging
     echo
+    echo -e "${BLUE}🔍 Validación de archivos con logging:${NC}"
+    validar_archivo "demo_logs/archivos/archivo1.txt" "file"
+    validar_archivo "demo_logs/inexistente.txt" "file" || true
     
-    # Demo 1: Análisis de directorio
-    echo -e "${YELLOW}1️⃣ ANÁLISIS DE DIRECTORIO:${NC}"
-    analizar_directorio "demo_files" 2
-    
+    # Demo de procesamiento con profiling
     echo
+    echo -e "${BLUE}⚡ Procesamiento con profiling:${NC}"
+    if [[ $PROFILE_MODE == true ]]; then
+        profile_function procesar_archivos "demo_logs/archivos" "*.txt"
+    else
+        procesar_archivos "demo_logs/archivos" "*.txt"
+    fi
     
-    # Demo 2: Organización por extensión
-    echo -e "${YELLOW}2️⃣ ORGANIZACIÓN POR EXTENSIÓN:${NC}"
-    organizar_por_extension "demo_files" "demo_organizados"
-    
+    # Simular error controlado
     echo
+    echo -e "${BLUE}❌ Simulando manejo de errores:${NC}"
+    log_error "Error simulado para demostración"
     
-    # Demo 3: Búsqueda de duplicados
-    echo -e "${YELLOW}3️⃣ BÚSQUEDA DE DUPLICADOS:${NC}"
-    limpiar_duplicados "demo_files" "listar"
-    
+    # Mostrar contenido del log
     echo
+    echo -e "${BLUE}📄 Últimas líneas del log:${NC}"
+    tail -10 "$LOG_FILE"
     
-    # Demo 4: Backup inteligente
-    echo -e "${YELLOW}4️⃣ BACKUP INTELIGENTE:${NC}"
-    backup_inteligente "demo_files" "backups_demo" "incremental"
+    # Limpiar
+    rm -rf demo_logs
     
-    # Limpiar archivos de demo
-    echo
-    echo -e "${BLUE}🧹 Limpiando archivos de demostración...${NC}"
-    rm -rf demo_files demo_organizados backups_demo 2>/dev/null
-    
-    echo -e "${GREEN}✅ Demostración completada${NC}"
+    log_info "Demostración completada exitosamente"
 }
 
-# Ejecutar demostración
-demo_manejo_archivos
+# Ejecutar demo
+demo_logging
 EOF
 
-chmod +x manejo_archivos_avanzado.sh
-echo "🎯 EJECUTANDO MANEJO AVANZADO DE ARCHIVOS:"
-./manejo_archivos_avanzado.sh
+chmod +x sistema_logging.sh
+echo "🎯 EJECUTANDO SISTEMA DE LOGGING:"
+./sistema_logging.sh
 ```
 
-### 💡 Mejores Prácticas para Archivos
+### 🔍 Técnicas de Debugging Avanzadas
 
-**[PANTALLA: Checklist de operaciones seguras]**
+**[DEMOSTRACIÓN DE DEBUGGING]**
 
-> "Principios para manipulación segura de archivos:
-> 1. **Siempre crear backups** antes de operaciones destructivas
-> 2. **Validar permisos** antes de intentar operaciones
-> 3. **Usar rutas absolutas** para evitar confusión
-> 4. **Implementar dry-run** para operaciones masivas
-> 5. **Logging detallado** de todas las operaciones
-> 6. **Manejo de errores** robusto con rollback cuando sea posible"
+```bash
+cat > debugging_avanzado.sh << 'EOF'
+#!/bin/bash
+
+# ================================
+# TÉCNICAS AVANZADAS DE DEBUGGING
+# ================================
+
+# Configuración de debugging
+DEBUG_LEVEL="${DEBUG_LEVEL:-1}"
+VERBOSE="${VERBOSE:-false}"
+
+# Colores
+readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
+readonly YELLOW='\033[1;33m'
+readonly BLUE='\033[0;34m'
+readonly PURPLE='\033[0;35m'
+readonly NC='\033[0m'
+
+echo -e "${PURPLE}🐛 TÉCNICAS AVANZADAS DE DEBUGGING${NC}"
+echo "============================================"
+
+# ================================
+# DEBUGGING CONDICIONAL
+# ================================
+
+debug_print() {
+    local level="$1"
+    shift
+    local message="$*"
+    
+    if ((level <= DEBUG_LEVEL)); then
+        local caller="${BASH_SOURCE[2]##*/}:${BASH_LINENO[1]}"
+        echo -e "${CYAN}[DEBUG $level] [$caller] $message${NC}" >&2
+    fi
+}
+
+# Diferentes niveles de debug
+debug1() { debug_print 1 "$@"; }
+debug2() { debug_print 2 "$@"; }
+debug3() { debug_print 3 "$@"; }
+
+# ================================
+# INSPECCIÓN DE VARIABLES
+# ================================
+
+dump_vars() {
+    echo -e "${BLUE}📋 Volcado de variables:${NC}"
+    
+    # Variables especiales
+    echo "Variables especiales:"
+    echo "  \$0 = $0"
+    echo "  \$# = $#"
+    echo "  \$* = $*"
+    echo "  \$@ = $@"
+    echo "  \$? = $?"
+    echo "  \$\$ = $$"
+    echo "  \$! = ${!:-N/A}"
+    
+    # Variables de entorno importantes
+    echo "Variables de entorno:"
+    echo "  HOME = $HOME"
+    echo "  PATH = ${PATH:0:100}..."
+    echo "  PWD = $PWD"
+    echo "  USER = $USER"
+    
+    # Variables personalizadas (si existen)
+    if [[ -n "${MI_VAR:-}" ]]; then
+        echo "Variables personalizadas:"
+        echo "  MI_VAR = $MI_VAR"
+    fi
+}
+
+# ================================
+# BREAKPOINTS SIMULADOS
+# ================================
+
+breakpoint() {
+    local punto="$1"
+    local mensaje="${2:-Breakpoint alcanzado}"
+    
+    echo -e "${RED}🛑 BREAKPOINT: $punto${NC}"
+    echo -e "${YELLOW}$mensaje${NC}"
+    echo
+    
+    # Mostrar contexto
+    dump_vars
+    echo
+    
+    # Menú interactivo
+    while true; do
+        echo -e "${BLUE}Opciones de debugging:${NC}"
+        echo "  c) Continuar"
+        echo "  v) Ver variables"
+        echo "  s) Stack trace"
+        echo "  e) Evaluar expresión"
+        echo "  q) Salir"
+        
+        read -p "Debug> " opcion
+        
+        case $opcion in
+            c|C) break ;;
+            v|V) dump_vars ;;
+            s|S) stack_trace ;;
+            e|E) 
+                read -p "Expresión a evaluar: " expr
+                eval "$expr" || echo "Error en la expresión"
+                ;;
+            q|Q) exit 0 ;;
+            *) echo "Opción no válida" ;;
+        esac
+        echo
+    done
+}
+
+# ================================
+# STACK TRACE
+# ================================
+
+stack_trace() {
+    echo -e "${BLUE}📚 Stack trace:${NC}"
+    local frame=1
+    while caller $frame 2>/dev/null; do
+        ((frame++))
+    done | while read line func file; do
+        echo "  en $func() - $file:$line"
+    done
+}
+
+# ================================
+# PROFILING DE RENDIMIENTO
+# ================================
+
+time_function() {
+    local func_name="$1"
+    shift
+    
+    echo -e "${BLUE}⏱️ Midiendo rendimiento de: $func_name${NC}"
+    
+    local start_time=$(date +%s%N)
+    
+    # Ejecutar función
+    "$@"
+    local exit_code=$?
+    
+    local end_time=$(date +%s%N)
+    local duration=$(((end_time - start_time) / 1000000))  # ms
+    
+    echo -e "${GREEN}⚡ $func_name completada en ${duration}ms${NC}"
+    
+    return $exit_code
+}
+
+# ================================
+# FUNCIONES DE EJEMPLO PARA DEBUGGING
+# ================================
+
+funcion_con_errores() {
+    debug1 "Iniciando función con errores potenciales"
+    
+    local numero="$1"
+    
+    debug2 "Número recibido: $numero"
+    
+    # Validación con debugging
+    if [[ ! "$numero" =~ ^[0-9]+$ ]]; then
+        debug1 "Error: no es un número válido"
+        return 1
+    fi
+    
+    debug2 "Número validado correctamente"
+    
+    # Breakpoint condicional
+    if ((numero > 50)); then
+        breakpoint "numero_alto" "Número mayor a 50 detectado: $numero"
+    fi
+    
+    # Operación que puede fallar
+    if ((numero % 7 == 0)); then
+        debug1 "Simulando error con múltiplo de 7"
+        return 2
+    fi
+    
+    debug1 "Función completada exitosamente"
+    echo "Resultado: $((numero * 2))"
+    return 0
+}
+
+funcion_recursiva() {
+    debug3 "Llamada recursiva con: $1"
+    
+    local n="$1"
+    
+    if ((n <= 1)); then
+        debug3 "Caso base alcanzado"
+        echo 1
+        return 0
+    fi
+    
+    local resultado
+    resultado=$(funcion_recursiva $((n - 1)))
+    resultado=$((n * resultado))
+    
+    debug3 "Resultado para $n: $resultado"
+    echo $resultado
+}
+
+# ================================
+# DEMO DE DEBUGGING
+# ================================
+
+demo_debugging() {
+    echo -e "${BLUE}🔍 Demostrando técnicas de debugging${NC}"
+    
+    # Configurar nivel de debug alto para ver todo
+    DEBUG_LEVEL=3
+    
+    echo
+    echo -e "${YELLOW}1️⃣ Debugging con diferentes niveles:${NC}"
+    debug1 "Mensaje de debug nivel 1 (siempre visible)"
+    debug2 "Mensaje de debug nivel 2 (detalle medio)"
+    debug3 "Mensaje de debug nivel 3 (máximo detalle)"
+    
+    echo
+    echo -e "${YELLOW}2️⃣ Función con manejo de errores:${NC}"
+    
+    # Casos de prueba
+    echo "Probando con número válido (10):"
+    time_function "funcion_con_errores" funcion_con_errores 10
+    
+    echo
+    echo "Probando con número inválido (abc):"
+    time_function "funcion_con_errores" funcion_con_errores "abc" || echo "Error capturado correctamente"
+    
+    echo
+    echo "Probando con múltiplo de 7 (14):"
+    time_function "funcion_con_errores" funcion_con_errores 14 || echo "Error simulado capturado"
+    
+    echo
+    echo -e "${YELLOW}3️⃣ Función recursiva con tracing:${NC}"
+    echo "Calculando factorial de 5:"
+    resultado=$(time_function "factorial" funcion_recursiva 5)
+    echo "Factorial de 5 = $resultado"
+    
+    echo
+    echo -e "${YELLOW}4️⃣ Stack trace de ejemplo:${NC}"
+    stack_trace
+    
+    echo
+    echo -e "${GREEN}✅ Demo de debugging completada${NC}"
+}
+
+# Ejecutar demo
+demo_debugging
+EOF
+
+chmod +x debugging_avanzado.sh
+echo ""
+echo "🎯 EJECUTANDO DEBUGGING AVANZADO:"
+./debugging_avanzado.sh
+```
+
+### 💡 Mejores Prácticas de Debugging
+
+**[PANTALLA: Checklist de debugging profesional]**
+
+> "Estrategias profesionales de debugging:
+> 1. **Logging estructurado**: Niveles, timestamps, contexto
+> 2. **Debugging condicional**: Solo cuando es necesario
+> 3. **Breakpoints estratégicos**: En puntos críticos del código
+> 4. **Profiling sistemático**: Medir antes de optimizar
+> 5. **Error handling robusto**: Capturar, registrar, recuperar
+> 6. **Testing automatizado**: Prevenir problemas antes que ocurran"
 
 ---
+
+## 🚀 PARTE 6: PROYECTO FINAL - SISTEMA DE BACKUP AVANZADO (15 minutos)
+
+### 🎤 Introducción al Proyecto
+
+**[PANTALLA: Arquitectura del sistema de backup]**
+
+> "Llegamos al momento culminante: construir un sistema de backup empresarial que integre todo lo aprendido. Este no es solo un script, es una solución completa que podrías implementar en producción real."
+
+### 🏗️ Arquitectura del Sistema
+
+**[PANTALLA: Diagrama de componentes]**
+
+> "Nuestro sistema tendrá arquitectura modular:
+> - 🔧 **Motor de backup**: Estrategias intercambiables (completo, incremental, diferencial)
+> - 📊 **Sistema de monitoreo**: Métricas, alertas, reportes
+> - 🔐 **Seguridad**: Encriptación, verificación de integridad
+> - 🌐 **Sincronización**: Local, remoto, nube
+> - 📝 **Logging avanzado**: Auditoría completa
+> - 🎛️ **Interfaz de gestión**: CLI profesional con múltiples comandos"
+
+### 💻 Implementación Completa
+
+**[DEMOSTRACIÓN DEL PROYECTO FINAL]**
+
+```bash
+cat > sistema_backup_avanzado.sh << 'EOF'
+#!/bin/bash
+set -euo pipefail
+
+# ================================
+# SISTEMA DE BACKUP EMPRESARIAL v2.0
+# Proyecto Final - Módulo 4
+# ================================
+
+readonly SCRIPT_NAME="backup_system"
+readonly SCRIPT_VERSION="2.0"
+readonly CONFIG_DIR="${HOME}/.backup_system"
+readonly CONFIG_FILE="${CONFIG_DIR}/config.conf"
+readonly LOG_DIR="${CONFIG_DIR}/logs"
+readonly BACKUP_INDEX="${CONFIG_DIR}/backup_index.db"
+
+# Colores y formatos
+readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
+readonly YELLOW='\033[1;33m'
+readonly BLUE='\033[0;34m'
+readonly PURPLE='\033[0;35m'
+readonly CYAN='\033[0;36m'
+readonly BOLD='\033[1m'
+readonly NC='\033[0m'
+
+# ================================
+# CONFIGURACIÓN Y VARIABLES GLOBALES
+# ================================
+
+# Configuración por defecto
+declare -A CONFIG=(
+    ["backup_dir"]="${HOME}/backups"
+    ["compression"]="gzip"
+    ["encryption"]="false"
+    ["retention_days"]="30"
+    ["max_parallel"]="4"
+    ["verify_integrity"]="true"
+    ["email_alerts"]="false"
+    ["remote_sync"]="false"
+    ["log_level"]="INFO"
+)
+
+# Arrays para gestión
+declare -a BACKUP_QUEUE
+declare -A BACKUP_STATS
+declare -A ACTIVE_JOBS
+
+# ================================
+# SISTEMA DE LOGGING EMPRESARIAL
+# ================================
+
+init_logging() {
+    mkdir -p "$LOG_DIR"
+    local log_file="${LOG_DIR}/backup_$(date +%Y%m%d).log"
+    
+    # Rotar logs si es necesario
+    if [[ -f "$log_file" && $(stat -f%z "$log_file" 2>/dev/null || stat -c%s "$log_file") -gt 10485760 ]]; then
+        mv "$log_file" "${log_file}.$(date +%H%M%S)"
+    fi
+    
+    exec 3>>"$log_file"
+}
+
+log() {
+    local level="$1"
+    shift
+    local message="$*"
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    local caller="${BASH_SOURCE[2]##*/}:${BASH_LINENO[1]}"
+    
+    # Formatear mensaje
+    local log_entry="[$timestamp] [$level] [$caller] $message"
+    
+    # Escribir a archivo
+    echo "$log_entry" >&3
+    
+    # Mostrar en consola según nivel
+    case $level in
+        "DEBUG") [[ "${CONFIG[log_level]}" == "DEBUG" ]] && echo -e "${CYAN}[DEBUG] $message${NC}" ;;
+        "INFO")  echo -e "${BLUE}[INFO] $message${NC}" ;;
+        "WARN")  echo -e "${YELLOW}[WARN] $message${NC}" ;;
+        "ERROR") echo -e "${RED}[ERROR] $message${NC}" >&2 ;;
+        "FATAL") echo -e "${PURPLE}[FATAL] $message${NC}" >&2; exit 1 ;;
+    esac
+}
+
+# ================================
+# GESTIÓN DE CONFIGURACIÓN
+# ================================
+
+load_config() {
+    if [[ -f "$CONFIG_FILE" ]]; then
+        log "DEBUG" "Cargando configuración desde $CONFIG_FILE"
+        
+        while IFS='=' read -r key value; do
+            [[ -n "$key" && ! "$key" =~ ^# ]] && CONFIG["$key"]="$value"
+        done < "$CONFIG_FILE"
+    else
+        log "INFO" "Configuración no encontrada, usando valores por defecto"
+        save_config
+    fi
+}
+
+save_config() {
+    mkdir -p "$CONFIG_DIR"
+    log "DEBUG" "Guardando configuración en $CONFIG_FILE"
+    
+    {
+        echo "# Configuración del Sistema de Backup v$SCRIPT_VERSION"
+        echo "# Generado: $(date)"
+        echo
+        for key in "${!CONFIG[@]}"; do
+            echo "$key=${CONFIG[$key]}"
+        done
+    } > "$CONFIG_FILE"
+}
+
+show_config() {
+    echo -e "${PURPLE}⚙️ CONFIGURACIÓN ACTUAL${NC}"
+    echo "=================================="
+    
+    for key in "${!CONFIG[@]}"; do
+        printf "%-20s: %s\n" "$key" "${CONFIG[$key]}"
+    done
+}
+
+# ================================
+# ESTRATEGIAS DE BACKUP
+# ================================
+
+# Estrategia: Backup completo
+backup_full() {
+    local source="$1"
+    local target="$2"
+    local job_id="$3"
+    
+    log "INFO" "Iniciando backup completo: $source -> $target"
+    
+    local start_time=$(date +%s)
+    local files_processed=0
+    local total_size=0
+    
+    # Crear directorio de destino
+    mkdir -p "$target"
+    
+    # Copiar archivos con verificación
+    while IFS= read -r -d '' file; do
+        local relative_path="${file#$source/}"
+        local target_file="$target/$relative_path"
+        local target_dir="$(dirname "$target_file")"
+        
+        mkdir -p "$target_dir"
+        
+        if cp "$file" "$target_file"; then
+            ((files_processed++))
+            local file_size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file")
+            total_size=$((total_size + file_size))
+            
+            # Actualizar estadísticas
+            BACKUP_STATS["${job_id}_files"]=$files_processed
+            BACKUP_STATS["${job_id}_size"]=$total_size
+            
+            # Progress cada 100 archivos
+            if ((files_processed % 100 == 0)); then
+                log "DEBUG" "Backup $job_id: $files_processed archivos procesados"
+            fi
+        else
+            log "ERROR" "Error copiando: $file"
+        fi
+    done < <(find "$source" -type f -print0 2>/dev/null)
+    
+    local end_time=$(date +%s)
+    local duration=$((end_time - start_time))
+    
+    log "INFO" "Backup completo finalizado: $files_processed archivos, $(format_size $total_size), ${duration}s"
+    
+    # Registrar en índice
+    echo "$(date +%s)|FULL|$source|$target|$files_processed|$total_size|$duration" >> "$BACKUP_INDEX"
+}
+
+# Estrategia: Backup incremental
+backup_incremental() {
+    local source="$1"
+    local target="$2"
+    local job_id="$3"
+    local since_days="${4:-1}"
+    
+    log "INFO" "Iniciando backup incremental: $source (últimos $since_days días)"
+    
+    local start_time=$(date +%s)
+    local files_processed=0
+    local total_size=0
+    
+    mkdir -p "$target"
+    
+    # Buscar archivos modificados
+    while IFS= read -r -d '' file; do
+        local relative_path="${file#$source/}"
+        local target_file="$target/$relative_path"
+        local target_dir="$(dirname "$target_file")"
+        
+        mkdir -p "$target_dir"
+        
+        if cp "$file" "$target_file"; then
+            ((files_processed++))
+            local file_size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file")
+            total_size=$((total_size + file_size))
+            
+            BACKUP_STATS["${job_id}_files"]=$files_processed
+            BACKUP_STATS["${job_id}_size"]=$total_size
+        fi
+    done < <(find "$source" -type f -mtime -$since_days -print0 2>/dev/null)
+    
+    local end_time=$(date +%s)
+    local duration=$((end_time - start_time))
+    
+    log "INFO" "Backup incremental finalizado: $files_processed archivos, $(format_size $total_size), ${duration}s"
+    
+    echo "$(date +%s)|INCREMENTAL|$source|$target|$files_processed|$total_size|$duration" >> "$BACKUP_INDEX"
+}
+
+# Estrategia: Backup diferencial
+backup_differential() {
+    local source="$1"
+    local target="$2"
+    local job_id="$3"
+    
+    log "INFO" "Iniciando backup diferencial: $source"
+    
+    # Buscar último backup completo
+    local last_full_backup=""
+    if [[ -f "$BACKUP_INDEX" ]]; then
+        last_full_backup=$(grep "|FULL|$source|" "$BACKUP_INDEX" | tail -1 | cut -d'|' -f1)
+    fi
+    
+    if [[ -n "$last_full_backup" ]]; then
+        local days_since=$(( ($(date +%s) - last_full_backup) / 86400 ))
+        log "INFO" "Último backup completo hace $days_since días"
+        backup_incremental "$source" "$target" "$job_id" "$days_since"
+    else
+        log "WARN" "No se encontró backup completo previo, realizando backup completo"
+        backup_full "$source" "$target" "$job_id"
+    fi
+}
+
+# ================================
+# SISTEMA DE COMPRESIÓN Y ENCRIPTACIÓN
+# ================================
+
+compress_backup() {
+    local backup_path="$1"
+    local compression="${CONFIG[compression]}"
+    
+    log "INFO" "Comprimiendo backup con $compression"
+    
+    case $compression in
+        "gzip")
+            if command -v tar &> /dev/null; then
+                tar -czf "${backup_path}.tar.gz" -C "$(dirname "$backup_path")" "$(basename "$backup_path")"
+                rm -rf "$backup_path"
+                echo "${backup_path}.tar.gz"
+            fi
+            ;;
+        "bzip2")
+            if command -v tar &> /dev/null; then
+                tar -cjf "${backup_path}.tar.bz2" -C "$(dirname "$backup_path")" "$(basename "$backup_path")"
+                rm -rf "$backup_path"
+                echo "${backup_path}.tar.bz2"
+            fi
+            ;;
+        "none")
+            echo "$backup_path"
+            ;;
+    esac
+}
+
+encrypt_backup() {
+    local backup_file="$1"
+    
+    if [[ "${CONFIG[encryption]}" == "true" ]]; then
+        log "INFO" "Encriptando backup"
+        
+        if command -v gpg &> /dev/null; then
+            gpg --symmetric --cipher-algo AES256 --compress-algo 2 --s2k-mode 3 \
+                --s2k-digest-algo SHA512 --s2k-count 65536 --quiet \
+                --output "${backup_file}.gpg" "$backup_file"
+            rm "$backup_file"
+            echo "${backup_file}.gpg"
+        else
+            log "WARN" "GPG no disponible, backup sin encriptar"
+            echo "$backup_file"
+        fi
+    else
+        echo "$backup_file"
+    fi
+}
+
+# ================================
+# VERIFICACIÓN DE INTEGRIDAD
+# ================================
+
+verify_backup() {
+    local backup_file="$1"
+    
+    if [[ "${CONFIG[verify_integrity]}" == "true" ]]; then
+        log "INFO" "Verificando integridad del backup"
+        
+        # Calcular checksum
+        local checksum
+        if command -v sha256sum &> /dev/null; then
+            checksum=$(sha256sum "$backup_file" | cut -d' ' -f1)
+        elif command -v shasum &> /dev/null; then
+            checksum=$(shasum -a 256 "$backup_file" | cut -d' ' -f1)
+        else
+            log "WARN" "No se puede verificar integridad: sha256sum no disponible"
+            return 0
+        fi
+        
+        # Guardar checksum
+        echo "$checksum  $backup_file" > "${backup_file}.sha256"
+        log "INFO" "Checksum guardado: ${backup_file}.sha256"
+        
+        return 0
+    fi
+}
+
+# ================================
+# GESTIÓN DE TRABAJOS PARALELOS
+# ================================
+
+start_backup_job() {
+    local source="$1"
+    local strategy="$2"
+    local job_id="backup_$(date +%s)_$$"
+    
+    log "INFO" "Iniciando trabajo de backup: $job_id"
+    
+    # Crear directorio de destino
+    local timestamp=$(date +%Y%m%d_%H%M%S)
+    local target="${CONFIG[backup_dir]}/${timestamp}_${strategy}"
+    
+    # Ejecutar backup en background
+    (
+        ACTIVE_JOBS["$job_id"]="RUNNING"
+        
+        case $strategy in
+            "full")
+                backup_full "$source" "$target" "$job_id"
+                ;;
+            "incremental")
+                backup_incremental "$source" "$target" "$job_id"
+                ;;
+            "differential")
+                backup_differential "$source" "$target" "$job_id"
+                ;;
+        esac
+        
+        # Post-procesamiento
+        local final_backup="$target"
+        final_backup=$(compress_backup "$final_backup")
+        final_backup=$(encrypt_backup "$final_backup")
+        verify_backup "$final_backup"
+        
+        ACTIVE_JOBS["$job_id"]="COMPLETED"
+        log "INFO" "Trabajo $job_id completado: $final_backup"
+        
+    ) &
+    
+    local pid=$!
+    ACTIVE_JOBS["$job_id"]="$pid"
+    
+    echo "$job_id"
+}
+
+# ================================
+# FUNCIONES DE UTILIDAD
+# ================================
+
+format_size() {
+    local bytes="$1"
+    
+    if ((bytes < 1024)); then
+        echo "${bytes} B"
+    elif ((bytes < 1048576)); then
+        echo "$((bytes / 1024)) KB"
+    elif ((bytes < 1073741824)); then
+        echo "$((bytes / 1048576)) MB"
+    else
+        echo "$((bytes / 1073741824)) GB"
+    fi
+}
+
+show_banner() {
+    cat << 'BANNER'
+╔══════════════════════════════════════════════════════════════╗
+║                    SISTEMA DE BACKUP EMPRESARIAL             ║
+║                           v2.0                               ║
+║                                                              ║
+║  🚀 Backup completo, incremental y diferencial               ║
+║  🔐 Encriptación y compresión avanzada                       ║
+║  📊 Monitoreo y reportes en tiempo real                      ║
+║  🌐 Sincronización local y remota                            ║
+╚══════════════════════════════════════════════════════════════╝
+BANNER
+}
+
+show_help() {
+    cat << 'HELP'
+USO: backup_system <comando> [opciones]
+
+COMANDOS:
+  backup <directorio> [estrategia]     Crear backup (full/incremental/differential)
+  restore <backup_file> <destino>      Restaurar backup
+  list                                 Listar backups disponibles
+  status                               Ver estado de trabajos activos
+  config [clave] [valor]               Ver/modificar configuración
+  verify <backup_file>                 Verificar integridad
+  cleanup                              Limpiar backups antiguos
+  report                               Generar reporte detallado
+
+ESTRATEGIAS:
+  full          Backup completo de todos los archivos
+  incremental   Solo archivos modificados recientemente
+  diferencial  Archivos modificados desde último backup completo
+
+EJEMPLOS:
+  backup_system backup /home/usuario full
+  backup_system backup /etc incremental
+  backup_system restore backup_20231201.tar.gz /tmp/restore
+  backup_system config retention_days 60
+  backup_system cleanup
+HELP
+}
+
+# ================================
+# COMANDOS PRINCIPALES
+# ================================
+
+cmd_backup() {
+    local source="$1"
+    local strategy="${2:-full}"
+    
+    if [[ ! -d "$source" ]]; then
+        log "ERROR" "Directorio fuente no existe: $source"
+        return 1
+    fi
+    
+    log "INFO" "Solicitando backup $strategy de: $source"
+    
+    # Verificar límite de trabajos paralelos
+    local active_count=0
+    for job in "${ACTIVE_JOBS[@]}"; do
+        [[ "$job" =~ ^[0-9]+$ ]] && kill -0 "$job" 2>/dev/null && ((active_count++))
+    done
+    
+    if ((active_count >= CONFIG[max_parallel])); then
+        log "WARN" "Límite de trabajos paralelos alcanzado ($active_count/${CONFIG[max_parallel]})"
+        return 1
+    fi
+    
+    local job_id
+    job_id=$(start_backup_job "$source" "$strategy")
+    echo "Trabajo iniciado: $job_id"
+}
+
+cmd_list() {
+    echo -e "${BLUE}📋 HISTORIAL DE BACKUPS${NC}"
+    echo "=================================="
+    
+    if [[ ! -f "$BACKUP_INDEX" ]]; then
+        echo "No hay backups registrados"
+        return 0
+    fi
+    
+    printf "%-12s %-12s %-25s %-8s %-10s %-8s\n" "FECHA" "TIPO" "ORIGEN" "ARCHIVOS" "TAMAÑO" "TIEMPO"
+    echo "------------------------------------------------------------------------"
+    
+    while IFS='|' read -r timestamp tipo origen destino archivos tamaño tiempo; do
+        local fecha=$(date -r "$timestamp" '+%Y-%m-%d %H:%M' 2>/dev/null || echo "N/A")
+        printf "%-12s %-12s %-25s %-8s %-10s %-8ss\n" \
+            "$fecha" "$tipo" "$(basename "$origen")" "$archivos" "$(format_size "$tamaño")" "$tiempo"
+    done < "$BACKUP_INDEX"
+}
+
+cmd_status() {
+    echo -e "${BLUE}📊 ESTADO DE TRABAJOS ACTIVOS${NC}"
+    echo "=================================="
+    
+    if [[ ${#ACTIVE_JOBS[@]} -eq 0 ]]; then
+        echo "No hay trabajos activos"
+        return 0
+    fi
+    
+    for job_id in "${!ACTIVE_JOBS[@]}"; do
+        local status="${ACTIVE_JOBS[$job_id]}"
+        echo "  $job_id: $status"
+        
+        # Mostrar estadísticas si están disponibles
+        if [[ -n "${BACKUP_STATS[${job_id}_files]:-}" ]]; then
+            echo "    Archivos: ${BACKUP_STATS[${job_id}_files]}"
+            echo "    Tamaño: $(format_size "${BACKUP_STATS[${job_id}_size]}")"
+        fi
+    done
+}
+
+cmd_cleanup() {
+    local retention_days="${CONFIG[retention_days]}"
+    log "INFO" "Limpiando backups antiguos (>$retention_days días)"
+    
+    local cleanup_count=0
+    
+    find "${CONFIG[backup_dir]}" -type f -mtime +$retention_days -name "*.tar.*" -o -name "*.gpg" | while read -r file; do
+        log "INFO" "Eliminando backup antiguo: $(basename "$file")"
+        rm "$file"
+        ((cleanup_count++))
+    done
+    
+    echo "Backups eliminados: $cleanup_count"
+}
+
+# ================================
+# PROGRAMA PRINCIPAL
+# ================================
+
+main() {
+    # Inicialización
+    init_logging
+    load_config
+    mkdir -p "${CONFIG[backup_dir]}"
+    
+    # Verificar argumentos
+    if [[ $# -eq 0 ]]; then
+        show_banner
+        echo
+        show_help
+        exit 0
+    fi
+    
+    local command="$1"
+    shift
+    
+    case $command in
+        "backup")
+            [[ $# -lt 1 ]] && { echo "Error: Se requiere directorio fuente"; exit 1; }
+            cmd_backup "$@"
+            ;;
+        "list")
+            cmd_list
+            ;;
+        "status")
+            cmd_status
+            ;;
+        "config")
+            if [[ $# -eq 0 ]]; then
+                show_config
+            elif [[ $# -eq 2 ]]; then
+                CONFIG["$1"]="$2"
+                save_config
+                echo "Configuración actualizada: $1 = $2"
+            else
+                echo "Uso: config [clave] [valor]"
+            fi
+            ;;
+        "cleanup")
+            cmd_cleanup
+            ;;
+        "help"|"-h"|"--help")
+            show_help
+            ;;
+        *)
+            echo "Comando desconocido: $command"
+            echo "Use 'help' para ver comandos disponibles"
+            exit 1
+            ;;
+    esac
+}
+
+# Ejecutar si se llama directamente
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi
+EOF
+
+chmod +x sistema_backup_avanzado.sh
+
+echo -e "${PURPLE}🎉 SISTEMA DE BACKUP EMPRESARIAL CREADO${NC}"
+echo "============================================"
+echo
+echo "📚 DEMOSTRACIONES DEL SISTEMA:"
+echo
+
+# Demo 1: Mostrar ayuda y configuración
+echo "1️⃣ Interfaz y configuración:"
+./sistema_backup_avanzado.sh help
+echo
+./sistema_backup_avanzado.sh config
+
+echo
+echo "2️⃣ Creando estructura de prueba:"
+mkdir -p demo_backup_source/{docs,images,code}
+echo "Documento importante" > demo_backup_source/docs/importante.txt
+echo "Código de ejemplo" > demo_backup_source/code/script.sh
+echo "Imagen de prueba" > demo_backup_source/images/foto.jpg
+
+echo "3️⃣ Ejecutando backup de prueba:"
+./sistema_backup_avanzado.sh backup demo_backup_source full
+
+sleep 2
+
+echo
+echo "4️⃣ Verificando resultados:"
+./sistema_backup_avanzado.sh list
+./sistema_backup_avanzado.sh status
+
+# Limpiar
+rm -rf demo_backup_source
+
+echo
+echo -e "${GREEN}✅ PROYECTO FINAL COMPLETADO EXITOSAMENTE${NC}"
+```
+
+### 🎯 Características Implementadas
+
+**[PANTALLA: Checklist de funcionalidades]**
+
+> "Nuestro sistema de backup incluye:
+> 
+> **🏗️ Arquitectura Empresarial:**
+> - Configuración centralizada y persistente
+> - Logging estructurado con rotación automática
+> - Gestión de trabajos paralelos
+> - Índice de backups para auditoría
+> 
+> **🔧 Funcionalidades Avanzadas:**
+> - Tres estrategias de backup (completo, incremental, diferencial)
+> - Compresión múltiple (gzip, bzip2)
+> - Encriptación con GPG
+> - Verificación de integridad con checksums
+> 
+> **🎛️ Interfaz Profesional:**
+> - CLI con múltiples comandos
+> - Reportes detallados
+> - Limpieza automática por retención
+> - Monitoreo de estado en tiempo real"
+
+### 💡 Lecciones del Proyecto
+
+**[PANTALLA: Principios aplicados]**
+
+> "Este proyecto demuestra principios profesionales:
+> 
+> ✅ **Modularidad**: Cada funcionalidad en su módulo específico
+> ✅ **Configurabilidad**: Comportamiento adaptable sin modificar código
+> ✅ **Escalabilidad**: Diseño que soporta crecimiento y nuevas funcionalidades
+> ✅ **Robustez**: Manejo de errores y recuperación ante fallos
+> ✅ **Observabilidad**: Logging y métricas para operaciones transparentes
+> ✅ **Usabilidad**: Interfaz intuitiva y documentación integrada"
+
+---
+
+## 🎬 CIERRE Y DESPEDIDA (7 minutos)
+
+### 📚 Resumen de Logros
+
+**[PANTALLA: Mapa mental de todo lo aprendido]**
+
+> "¡Increíble recorrido! Has dominado el arte de crear software modular en bash:
+> 
+> ✅ **Funciones avanzadas**: De simples bloques a componentes reutilizables
+> ✅ **Arrays y estructuras**: Manejo de datos complejos como un profesional
+> ✅ **Patrones de diseño**: Factory, Observer, Strategy aplicados a bash
+> ✅ **Debugging sistemático**: Herramientas para diagnosticar y optimizar
+> ✅ **Proyecto empresarial**: Sistema de backup que podrías usar en producción"
+
+### 🚀 Evolución de tu Perfil
+
+**[PANTALLA: Antes vs Después]**
+
+> "**ANTES del Módulo 4:** Escribías scripts lineales
+> **DESPUÉS del Módulo 4:** Diseñas arquitecturas de software
+> 
+> **ANTES:** Un problema, un script desde cero
+> **DESPUÉS:** Bibliotecas reutilizables y patrones probados
+> 
+> **ANTES:** Scripts que funcionan 'a veces'
+> **DESPUÉS:** Sistemas robustos con logging y recovery"
+
+### 🎯 Próximo Nivel: Módulo 5
+
+**[PANTALLA: Preview del Módulo 5]**
+
+> "El Módulo 5 te llevará al nivel de arquitecto de automatización:
+> - 🌐 **Integración con APIs** y servicios web
+> - 🔄 **Pipelines de CI/CD** automatizados
+> - 📊 **Análisis de datos** con herramientas bash
+> - 🛡️ **Seguridad avanzada** y hardening
+> - 🎯 **Proyecto final**: Sistema de monitoreo distribuido"
+
+### 💪 Desafío Maestro
+
+**[PANTALLA: Reto personalizado]**
+
+> "🏆 **DESAFÍO MAESTRO DEL MÓDULO 4:**
+> 
+> Extiende el sistema de backup con:
+> 1. **Sincronización con la nube** (AWS S3, Google Drive)
+> 2. **Notificaciones inteligentes** (Slack, Discord, Email)
+> 3. **Dashboard web** para monitoreo visual
+> 4. **Restauración selectiva** de archivos específicos
+> 5. **Políticas de backup automáticas** basadas en patrones
+> 
+> ¡Comparte tu implementación y conviértete en referente de la comunidad!"
+
+### 🤝 Comunidad y Próximos Pasos
+
+> "💬 **TU VIAJE CONTINÚA:**
+> - 📝 **Documenta tus bibliotecas** para futuros proyectos
+> - 🔄 **Contribuye a proyectos** open source en bash
+> - 🎓 **Mentoriza a otros** compartiendo tu conocimiento
+> - 🚀 **Construye tu portafolio** con herramientas bash profesionales
+> 
+> **¡Nos vemos en el Módulo 5! Sigue construyendo el futuro, una función a la vez.**"
+
+**[PANTALLA FINAL: Logo con animación de código modular conectándose]**
+
+---
+
+## 📋 NOTAS DE PRODUCCIÓN
+
+### ⏱️ Control de Tiempo
+
+- **PARTE 1**: 15 minutos - Funciones avanzadas y bibliotecas
+- **PARTE 2**: 12 minutos - Arrays y estructuras de datos
+- **PARTE 3**: 13 minutos - Patrones de diseño
+- **PARTE 4**: 10 minutos - Manejo de archivos avanzado
+- **PARTE 5**: 8 minutos - Logging y debugging
+- **PARTE 6**: 15 minutos - Proyecto final
+- **CIERRE**: 7 minutos - Resumen y próximos pasos
+
+**TOTAL**: ~80 minutos
+
+### 🎥 Elementos Visuales Clave
+
+1. **Diagramas de arquitectura** para patrones de diseño
+2. **Animaciones de arrays** y estructuras de datos
+3. **Debugger en vivo** mostrando técnicas avanzadas
+4. **Dashboard del sistema de backup** funcionando
+5. **Comparativas antes/después** del código
+6. **Network diagrams** para sincronización
+
+### 📝 Scripts de Apoyo
+
+- `funciones_avanzadas.sh` - Demostración de funciones profesionales
+- `lib_utils.sh` - Biblioteca reutilizable completa
+- `arrays_fundamentales.sh` - Operaciones básicas con arrays
+- `arrays_asociativos.sh` - Diccionarios y mapas
+- `algoritmos_arrays.sh` - Algoritmos de ordenamiento y búsqueda
+- `patron_factory.sh` - Implementación del patrón Factory
+- `patron_observer.sh` - Sistema de eventos y notificaciones
+- `patron_strategy.sh` - Algoritmos intercambiables
+- `manejo_archivos_avanzado.sh` - Operaciones de archivos profesionales
+- `sistema_logging.sh` - Logging empresarial completo
+- `debugging_avanzado.sh` - Técnicas de debugging
+- `sistema_backup_avanzado.sh` - Proyecto final completo
+
+### 🛠️ Configuración Técnica
+
+- **Resolución**: 1920x1080 con zoom apropiado
+- **Terminal**: Configuración con syntax highlighting
+- **Herramientas**: jq, rsync, gpg para demostraciones completas
+- **Datos de prueba**: Estructuras realistas para demos
+
+### 📚 Recursos Adicionales
+
+- Repositorio con todas las bibliotecas y patrones
+- Documentación de APIs para cada módulo
+- Ejercicios progresivos con soluciones
+- Templates para proyectos nuevos
+- Checklist de mejores prácticas
+
+---
+
+> **¡GUIÓN MÓDULO 4 COMPLETADO Y LISTO PARA PRODUCCIÓN!** 🎬✨
