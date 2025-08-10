@@ -134,3 +134,6 @@ config/secrets.json
 config/private.json
 .config/secrets
 .secrets/
+
+
+_docs/*
